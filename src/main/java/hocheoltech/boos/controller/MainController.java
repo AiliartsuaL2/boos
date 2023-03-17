@@ -1,23 +1,27 @@
 package hocheoltech.boos.controller;
 
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.exception.DuplicateMemberIdException;
 import hocheoltech.boos.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MainController {
 
     private final MemberService memberService;
 
-    @PostMapping("/member")
-    @ResponseBody
+    @PostMapping("/api/v1/member")
     public String createMember(@RequestBody Members members){
         memberService.saveMember(members);
+        return "ok";
+    }
+
+    @PostMapping("/api/v1/login")
+    public String login(@RequestBody Members members){
+        memberService.loginMember(members);
         return "ok";
     }
 

@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberMapper {
-    int insertMembers(Members members);
+    int insertMember(Members members);
+    int getMemberNum(String id);
+
+    int findByIdPwd(Members members);
 }

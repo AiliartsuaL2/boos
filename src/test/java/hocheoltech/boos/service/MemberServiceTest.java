@@ -17,7 +17,7 @@ class MemberServiceTest {
     @Test
 void save() {
 	//given
-    Members members = new Members("juho","qw1621","이주호","요식업","3561184855593","20220205");
+    Members members = new Members("ailiartsua","qw1621","이주호","요식업","3561184855593","20220205");
 
     //when
         memberService.saveMember(members);
