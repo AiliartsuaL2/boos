@@ -17,11 +17,15 @@ class MemberServiceTest {
     @Test
 void save() {
 	//given
-    Members members = new Members("ailiartsua","qw1621","이주호","요식업","3561184855593","20220205");
-
+    Members members = new Members();
+    members.setId("sadf");
+    members.setName("이주옹");
+    members.setPassword("qweqe");
+    members.setNickname("ailasr");
+    members.setBusinessRegNum("123123123");
+    members.setBusinessCategory("사업");
     //when
         memberService.saveMember(members);
-
     //then
 
 }

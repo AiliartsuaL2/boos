@@ -20,10 +20,10 @@ public class MemberService {
         if(memberMapper.getMemberNum(members.getId()) == 1){ // 중복회원 있을경우
             throw new DuplicateMemberIdException("use another id");
         }
-        memberMapper.insertMember(members);
+        memberMapper.createMember(members);
     }
 
-
+    // 로그인
     public void loginMember(Members members) {
         if(memberMapper.findByIdPwd(members) == 0){
             throw new NoMatchedMemberInfoException("id and password do not match");

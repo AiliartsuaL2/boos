@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hocheoltech.boos.mapper.BoardMapper">
+
+    <resultMap id="BoardResult" type="hocheoltech.boos.domain.Board">
+        <id property="seq" column="seq"/>
+        <result property="category" column="category"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="regId" column="reg_id"/>
+        <result property="modifyYn" column="modify_yn"/>
+        <result property="modifyTime" column="modify_time"/>
+    </resultMap>
+
+    <insert id="createBoard">
+        INSERT INTO BOARD(
+                            CATEGORY
+                          , TITLE
+                          , CONTENT
+                          , REG_TIME
+                          , REG_ID
+                          , MODIFY_YN
+        )
+            VALUES(
+                        #{category}
+                      , #{title}
+                      , #{content}
+                      , NOW()
+                      , #{regId}
+                      , 'N'
+                  )
+    </insert>
+
+    <select id="getBoardList" resultMap="BoardResult">
+        SELECT *
+          FROM BOARD as b left outer join MEMBERS m ON m.seq = (
+                SELECT seq
+                  FROM BOARD as b2
+                 WHERE b2.REG_ID = m.ID
+                 LIMIT 1
+                 )
+          WHERE 1=1
+        <if test="searchText != null and searchText != ''">
+            <if test="searchDiv != null and searchDiv == 'TitleContent'"> <!-- 제목+내용으로 검색시 -->
+                AND (b.title LIKE CONCAT('%',#{searchText},'%') OR b.content  LIKE CONCAT('%',#{searchText},'%'))
+            </if>
+            <if test="searchRegNickName != null and searchRegId != ''"> <!-- 작성자로 검색시 -->
+                AND b.REG_ID = m.NICKNAME
+            </if>
+        </if>
+         LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getBoardListCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM BOARD as b left outer join MEMBERS m ON m.seq = (
+        SELECT seq
+        FROM BOARD as b2
+        WHERE b2.REG_ID = m.ID
+        LIMIT 1
+        )
+        WHERE 1=1
+        <if test="searchText != null and searchText != ''">
+            <if test="searchDiv != null and searchDiv == 'TitleContent'"> <!-- 제목+내용으로 검색시 -->
+                AND (b.title LIKE CONCAT('%',#{searchText},'%') OR b.content  LIKE CONCAT('%',#{searchText},'%'))
+            </if>
+            <if test="searchRegNickName != null and searchRegId != ''"> <!-- 작성자로 검색시 -->
+                AND b.REG_ID = m.NICKNAME
+            </if>
+        </if>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="getBoardDetail" resultMap="BoardResult">
+        SELECT *
+        FROM BOARD
+        WHERE SEQ = #{seq}
+    </select>
+
+    <update id="updateBoard">
+        UPDATE BOARD
+        SET CATEGORY = #{category}
+          , TITLE = #{title}
+          , CONTENT = #{content}
+          , MODIFY_YN = 'Y'
+          , MODIFY_TIME = NOW()
+        WHERE SEQ = #{seq}
+    </update>
+
+    <delete id="deleteBoard">
+        DELETE FROM BOARD
+        WHERE SEQ = #{seq}
+    </delete>
+
+
+</mapper>

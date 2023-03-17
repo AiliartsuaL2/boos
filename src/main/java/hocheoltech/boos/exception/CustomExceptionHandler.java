@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice("hocheoltech.boos.controller")
+@RestControllerAdvice("hocheoltech.boos.controller") // exception 스코프를 패키지 레벨로
 public class CustomExceptionHandler {
 
     @ExceptionHandler(DuplicateMemberIdException.class)
