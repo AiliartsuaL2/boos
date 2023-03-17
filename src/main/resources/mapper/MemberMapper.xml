@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hocheoltech.boos.mapper.MemberMapper">
+
+    <insert id="insertMembers">
+        insert into MEMBERS(
+                              ID
+                            , PASSWORD
+                            , NAME
+                            , BUSINESS_CATEGORY
+                            , BUSINESS_REG_NUM
+                            , OPEN_TIME
+                            , JOIN_TIME
+        )
+        values(
+                  #{id}
+                , #{password}
+                , #{name}
+                , #{businessCategory}
+                , #{businessRegNum}
+                , STR_TO_DATE(#{openTime},'%Y%m%d')
+                , NOW()
+              )
+    </insert>
+
+</mapper>
