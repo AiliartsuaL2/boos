@@ -3,12 +3,18 @@ package hocheoltech.boos.domain;
 
 import lombok.*;
 
-@Getter
-@Setter
-@ToString
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Getter @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity @Table(name="MEMBERS")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Members {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long seq;
 
     private String id;
 
@@ -20,9 +26,9 @@ public class Members {
 
     private String businessRegNum;
 
-    private String openTime;
+    private Date openTime;
 
-    private String joinTime;
+    private LocalDateTime joinTime;
 
     private String nickname;
 

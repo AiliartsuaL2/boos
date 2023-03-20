@@ -1,15 +1,17 @@
 package hocheoltech.boos.domain;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@Setter
-@ToString
+import javax.persistence.*;
+
+@Getter @Builder
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Category {
     // 순번
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
     // 부모 카테고리 순번

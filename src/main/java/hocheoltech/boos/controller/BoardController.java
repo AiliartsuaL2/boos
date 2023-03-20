@@ -26,7 +26,6 @@ public class BoardController {
 
     @GetMapping("/v1/boardList")
     public String getBoardList(@RequestBody JSONObject reqData ){
-        reqData.
 //        int limit = Integer.parseInt(reqData.getString("limit"));
 //        int offset = Integer.parseInt(reqData.getString("offset"));
 //        HashMap<String, Object> map = new HashMap<>();
@@ -38,7 +37,8 @@ public class BoardController {
 //        Gson gson = new Gson();
 //        String s = gson.toJson(boardList);
 
-        return s;
+//        return s;
+        return "";
     }
 
 

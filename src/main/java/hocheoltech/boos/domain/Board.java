@@ -1,16 +1,18 @@
 package hocheoltech.boos.domain;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@Setter
-@ToString
+import javax.persistence.*;
+
+@Getter @Builder
+@Entity @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Table(name="BOARD")
 public class Board {
     
     // 순번
+    @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
     
     // 카테고리

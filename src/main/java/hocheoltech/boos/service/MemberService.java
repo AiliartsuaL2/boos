@@ -5,6 +5,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.exception.DuplicateMemberIdException;
 import hocheoltech.boos.exception.NoMatchedMemberInfoException;
 import hocheoltech.boos.mapper.MemberMapper;
+import hocheoltech.boos.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +13,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberMapper memberMapper;
+//    private final MemberMapper memberMapper;
+    private final MemberRepository memberRepository;
 
 
     // 회원가입
-    public void saveMember(Members members){
-        if(memberMapper.getMemberNum(members.getId()) == 1){ // 중복회원 있을경우
+    public Members saveMember(Members members){
+        if(memberRepository.findById(members.getId())!=null){
             throw new DuplicateMemberIdException("use another id");
         }
-        memberMapper.createMember(members);
+        return memberRepository.save(members);
     }
 
     // 로그인
     public void loginMember(Members members) {
-        if(memberMapper.findByIdPwd(members) == 0){
-            throw new NoMatchedMemberInfoException("id and password do not match");
-        }
+//        if(memberMapper.findByIdPwd(members) == 0){
+//            throw new NoMatchedMemberInfoException("id and password do not match");
+//        }
     }
 }
