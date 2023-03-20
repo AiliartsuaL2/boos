@@ -15,10 +15,8 @@ public class BlackList {
     private long seq;
 
     // 차단한 ID
-    @ManyToOne()
     private String blockId;
 
-    @ManyToOne
     // 차단당한 ID
     private String blockedId;
 

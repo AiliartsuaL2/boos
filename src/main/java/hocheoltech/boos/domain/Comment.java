@@ -3,10 +3,9 @@ package hocheoltech.boos.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Builder
 @Entity
@@ -27,10 +26,15 @@ public class Comment {
     // 작성일시
     private String regTime;
 
-    //작성자 id
-    private String regId;
-
     //익명 여부
     private String anonymouseYn;
+
+    @ManyToOne
+    @JoinColumn(name="BOARD_ID") // 외래키가 있는쪽이 연관관계 주인
+    private Board board;
+
+    @ManyToOne
+    @JoinColumn(name="MEMBERS_ID") // 외래키가 있는쪽이 연관관계 주인
+    private Members members;
 
 }

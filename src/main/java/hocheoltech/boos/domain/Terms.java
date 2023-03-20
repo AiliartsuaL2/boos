@@ -3,10 +3,7 @@ package hocheoltech.boos.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter @Builder
 @Entity
@@ -18,9 +15,6 @@ public class Terms {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-    // 회원 id
-    private String membersId;
-
     // 약관 종류
     private String termsCategory;
 
@@ -29,4 +23,8 @@ public class Terms {
 
     // 동의 일시
     private String agreeTime;
+
+    @ManyToOne
+    @JoinColumn(name="MEMBERS_ID")
+    private Members members;
 }

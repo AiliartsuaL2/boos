@@ -7,7 +7,7 @@ spring:
     password: 1705914joo!
   jpa:
     hibernate:
-      ddl-auto : update # DDL 정의시 DB의 고유 기능 사용 가능.
+      ddl-auto : create # DDL 정의시 DB의 고유 기능 사용 가능.
     show-sql: true # SQL 쿼리 확인
     properties:
       hibernate:
