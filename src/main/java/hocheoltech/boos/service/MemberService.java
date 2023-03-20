@@ -17,9 +17,10 @@ public class MemberService {
 
     // 회원가입
     public Members saveMember(Members members){
-        if(membersRepository.findById(members.getId())!=null){
+        if(!membersRepository.existById(members.getId())){
             throw new DuplicateMemberIdException("use another id");
         }
+
         return membersRepository.save(members);
     }
 
