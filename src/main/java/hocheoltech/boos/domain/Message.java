@@ -3,10 +3,8 @@ package hocheoltech.boos.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter @Builder
 @Entity
@@ -19,12 +17,18 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
+
     // 발신자 id
-    private String senderId;
+    @ManyToOne
+    @JoinColumn(name = "MEMBERS_ID")
+    private Members senderId;
+
 
     // 수신자 id
-    private String recipientId;
+    @ManyToOne
+    @JoinColumn(name = "MEMBERS_ID")
+    private Members recipientId;
 
     // 발신일시
-    private String sendTime;
+    private LocalDateTime sendTime;
 }

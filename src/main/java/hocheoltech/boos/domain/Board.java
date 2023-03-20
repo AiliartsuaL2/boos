@@ -14,8 +14,6 @@ import java.util.List;
 @Table(name="BOARD")
 public class Board {
 
-    @OneToMany(mappedBy = "board") //mappedBy 옵션 :  매핑된 컬럼의 변수명
-    private List<Comment> comments = new ArrayList<>(); // 관례상 초기화해줌 (add시 NPE 방지)
 
     // 순번
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +41,10 @@ public class Board {
     private LocalDateTime modifyTime;
 
     @OneToMany(mappedBy = "board")
-    private List<MemberBoard> memberBoards = new ArrayList<>();
+    private List<MembersBoard> membersBoards = new ArrayList<>();
 
+    // 댓글
+    @OneToMany(mappedBy = "board") //mappedBy 옵션 :  매핑된 컬럼의 변수명
+    private List<Comment> comments = new ArrayList<>(); // 관례상 초기화해줌 (add시 NPE 방지)
 
 }

@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemberBoard {
+public class MembersBoard {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 

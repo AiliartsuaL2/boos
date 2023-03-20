@@ -1,16 +1,16 @@
 package hocheoltech.boos.service;
 
-import hocheoltech.boos.domain.MemberBoard;
-import hocheoltech.boos.repository.MemberBoardRepository;
+import hocheoltech.boos.domain.MembersBoard;
+import hocheoltech.boos.repository.MembersBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberBoardService {
-    private final MemberBoardRepository memberBoardRepository;
+    private final MembersBoardRepository memberBoardRepository;
 
-    public void createMemberBoard(MemberBoard memberBoard){
-        memberBoardRepository.save(memberBoard);
+    public void createMemberBoard(MembersBoard membersBoard){
+        memberBoardRepository.save(membersBoard);
     }
 }

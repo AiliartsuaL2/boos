@@ -2,9 +2,8 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
-import hocheoltech.boos.domain.MemberBoard;
+import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.domain.Members;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,11 +11,13 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import static java.time.LocalDate.parse;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -30,6 +31,7 @@ class BoardServiceTest {
     @Transactional
     void createBoard() {
         //given
+        LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         Members members = Members.builder()
                 .id("jpajpajpa")
@@ -37,6 +39,7 @@ class BoardServiceTest {
                 .password("qwqwqw1212")
                 .nickname("asdfsadf")
                 .joinTime(LocalDateTime.now())
+                .openTime(openDate)
                 .businessCategory("사업")
                 .businessRegNum("202303020")
                 .build();
@@ -44,7 +47,6 @@ class BoardServiceTest {
         Category category = Category.builder()
                 .category_name("jpa 카테골이")
                 .build();
-
 
         Board board = Board.builder()
                 .title("jpa제목")
@@ -54,7 +56,7 @@ class BoardServiceTest {
                 .modifyYn("N")
                 .build();
 
-        MemberBoard memberBoard = MemberBoard.builder()
+        MembersBoard membersBoard = MembersBoard.builder()
                 .members(members)
                 .board(board)
                 .build();

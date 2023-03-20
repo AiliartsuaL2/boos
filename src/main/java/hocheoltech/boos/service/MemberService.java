@@ -3,9 +3,7 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.exception.DuplicateMemberIdException;
-import hocheoltech.boos.exception.NoMatchedMemberInfoException;
-import hocheoltech.boos.mapper.MemberMapper;
-import hocheoltech.boos.repository.MemberRepository;
+import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +12,15 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
 //    private final MemberMapper memberMapper;
-    private final MemberRepository memberRepository;
+    private final MembersRepository membersRepository;
 
 
     // 회원가입
     public Members saveMember(Members members){
-        if(memberRepository.findById(members.getId())!=null){
+        if(membersRepository.findById(members.getId())!=null){
             throw new DuplicateMemberIdException("use another id");
         }
-        return memberRepository.save(members);
+        return membersRepository.save(members);
     }
 
     // 로그인

@@ -4,9 +4,9 @@ package hocheoltech.boos.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter @Builder
@@ -29,7 +29,7 @@ public class Members {
 
     private String businessRegNum;
 
-    private Date openTime;
+    private LocalDate openTime;
 
     private LocalDateTime joinTime;
 
@@ -39,9 +39,21 @@ public class Members {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "members")
-    private List<MemberBoard> memberBoards = new ArrayList<>();
+    private List<MembersBoard> membersBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "members")
     private List<Terms> terms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "senderId")
+    private List<Message> sendMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipientId")
+    private List<Message> recipientMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "blockId")
+    private List<BlackList> blockList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "blockedId")
+    private List<BlackList> blockedList = new ArrayList<>();
 
 }

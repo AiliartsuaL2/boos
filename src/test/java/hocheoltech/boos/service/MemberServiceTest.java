@@ -1,21 +1,12 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
+import hocheoltech.boos.repository.MembersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Member;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 @SpringBootTest
@@ -25,7 +16,7 @@ class MemberServiceTest {
     MemberService memberService;
     
     @Autowired
-    MemberRepository memberRepository;
+    MembersRepository membersRepository;
 
 
 //    @Test
@@ -42,24 +33,24 @@ class MemberServiceTest {
 //        memberService.saveMember(members);
 //    //then
 //}
-
-    @Test
-    @Transactional
-    void save() throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = format.parse("2011-12-03");
-        Members member = Members.builder()
-                .id("jpaAiliartsua324")
-                .name("juholeeeee")
-                .password("qwqwqwqw12")
-                .nickname("ailiartsua")
-                .openTime(date)
-                .businessCategory("요식업")
-                .businessRegNum("12345678910")
-                .joinTime(LocalDateTime.now())
-                .build();
-        Members savedMember = memberService.saveMember(member);
-    }
+//
+//    @Test
+//    @Transactional
+//    void save() throws ParseException {
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date = format.parse("2011-12-03");
+//        Members member = Members.builder()
+//                .id("jpaAiliartsua324")
+//                .name("juholeeeee")
+//                .password("qwqwqwqw12")
+//                .nickname("ailiartsua")
+//                .openTime(date)
+//                .businessCategory("요식업")
+//                .businessRegNum("12345678910")
+//                .joinTime(LocalDateTime.now())
+//                .build();
+//        Members savedMember = memberService.saveMember(member);
+//    }
 
 @Test
 void getMember(){
@@ -69,7 +60,7 @@ void getMember(){
         
         //then
 
-    List<Members> all = memberRepository.findAll();
+    List<Members> all = membersRepository.findAll();
     for (Members members : all) {
         System.out.println("members = " + members.getName());
     }

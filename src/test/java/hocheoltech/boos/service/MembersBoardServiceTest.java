@@ -2,7 +2,7 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
-import hocheoltech.boos.domain.MemberBoard;
+import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.domain.Members;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static java.time.LocalDate.parse;
 
 @SpringBootTest
 @Commit
-class MemberBoardServiceTest {
+class MembersBoardServiceTest {
     @Autowired
     MemberBoardService memberBoardService;
 
@@ -24,12 +26,16 @@ class MemberBoardServiceTest {
     @Transactional
     void save(){
 
+        //given
+        LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
         Members members = Members.builder()
                 .id("jpajpajpa")
                 .name("이증오")
                 .password("qwqwqw1212")
                 .nickname("asdfsadf")
                 .joinTime(LocalDateTime.now())
+                .openTime(openDate)
                 .businessCategory("사업")
                 .businessRegNum("202303020")
                 .build();
@@ -47,12 +53,12 @@ class MemberBoardServiceTest {
                 .modifyYn("N")
                 .build();
 
-        MemberBoard memberBoard = MemberBoard.builder()
+        MembersBoard membersBoard = MembersBoard.builder()
                 .members(members)
                 .board(board)
                 .build();
 
-        memberBoardService.createMemberBoard(memberBoard);
+        memberBoardService.createMemberBoard(membersBoard);
     }
 
 }

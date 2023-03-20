@@ -4,6 +4,7 @@ package hocheoltech.boos.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter @Builder
 @Entity
@@ -22,8 +23,9 @@ public class Terms {
     private String agreeYn;
 
     // 동의 일시
-    private String agreeTime;
+    private LocalDateTime agreeTime;
 
+    // 약관 동의자
     @ManyToOne
     @JoinColumn(name="MEMBERS_ID")
     private Members members;
