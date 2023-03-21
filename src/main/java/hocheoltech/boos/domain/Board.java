@@ -40,11 +40,13 @@ public class Board {
     // 수정 일시
     private LocalDateTime modifyTime;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<MembersBoard> membersBoards = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="MEMBERS_SEQ") // 외래키가 있는쪽이 연관관계 주인
+    private Members members;
 
     // 댓글
-    @OneToMany(mappedBy = "board") //mappedBy 옵션 :  매핑된 컬럼의 변수명
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL) //mappedBy 옵션 :  매핑된 컬럼의 변수명
     private List<Comment> comments = new ArrayList<>(); // 관례상 초기화해줌 (add시 NPE 방지)
 
 }

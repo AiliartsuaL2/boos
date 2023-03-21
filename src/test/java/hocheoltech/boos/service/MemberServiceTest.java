@@ -66,4 +66,10 @@ class MemberServiceTest {
         //then
 
     }
+
+    @Test
+    void findMember() {
+        Members member = memberService.findMember(2L);
+        member.getName();
+    }
 }

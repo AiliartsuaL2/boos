@@ -39,9 +39,9 @@ public class Members {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "members")
-    private List<MembersBoard> membersBoards = new ArrayList<>();
+    private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "members")
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     private List<Terms> terms = new ArrayList<>();
 
     @OneToMany(mappedBy = "senderId")

@@ -34,15 +34,13 @@ public class BoardService {
     }
 
     // 게시판리스트 조회
-    public List<Board> getBoardList(HashMap<String,Object> map){
+    public List<Board> getBoardList(){
         return boardRepository.findAll();
-//        return boardMapper.getBoardList(map);
     }
 
     // 게시판 상세 조회
     public Optional<Board> getBoardDetail(long seq){
         return boardRepository.findById(seq);
-//        return boardMapper.getBoardDetail(seq);
     }
 
 }

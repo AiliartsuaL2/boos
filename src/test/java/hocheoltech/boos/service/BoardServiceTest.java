@@ -2,8 +2,8 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
-import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,13 +11,9 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
-
-import static java.time.LocalDate.parse;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -27,46 +23,32 @@ class BoardServiceTest {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    MemberService memberService;
+
     @Test
     @Transactional
     void createBoard() {
         //given
-        LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+        Category category = categoryOptional.get();
 
-        Members members = Members.builder()
-                .id("jpajpajpa")
-                .name("이증오")
-                .password("qwqwqw1212")
-                .nickname("asdfsadf")
-                .joinTime(LocalDateTime.now())
-                .openTime(openDate)
-                .businessCategory("사업")
-                .businessRegNum("202303020")
-                .build();
-
-        Category category = Category.builder()
-                .categoryName("jpa 카테골이")
-                .build();
+        Members member = memberService.findMember(2L);
 
         Board board = Board.builder()
-                .title("jpa제목")
-                .content("jpa내용")
+                .title("jpa제목1")
+                .content("jpa내용2")
                 .regTime(LocalDateTime.now())
                 .category(category)
+                .members(member)
                 .modifyYn("N")
                 .build();
 
-        MembersBoard membersBoard = MembersBoard.builder()
-                .members(members)
-                .board(board)
-                .build();
-        //when
-
-        boardService.createBoard(board);
-
+        Board createdBoard = boardService.createBoard(board);
         //then
-
-
     }
 
     @Test
@@ -86,6 +68,10 @@ class BoardServiceTest {
 
     @Test
     void getBoardList() {
+        List<Board> boardList = boardService.getBoardList();
+        for (Board board : boardList) {
+            System.out.println("board = " + board.getContent());
+        }
     }
 
     @Test

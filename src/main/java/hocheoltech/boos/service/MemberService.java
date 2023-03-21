@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,4 +35,14 @@ public class MemberService {
         }
         log.info("로그인 성공 로그인 id = {}",members.getId());
     }
+
+    public Members findMember(Long id){
+        Optional<Members> members1 = membersRepository.findById(id);
+        Members result = null;
+        if(members1.isPresent()){
+            result = members1.get();
+        }
+        return result;
+    }
+
 }
