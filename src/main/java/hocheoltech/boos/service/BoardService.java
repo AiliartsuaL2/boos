@@ -1,14 +1,21 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.exception.DuplicateMemberIdException;
 import hocheoltech.boos.exception.NotExistBoard;
+import hocheoltech.boos.exception.NotExistMemberException;
 import hocheoltech.boos.repository.BoardRepository;
+import hocheoltech.boos.repository.MembersBoardRepository;
+import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -17,11 +24,18 @@ public class BoardService {
 
 //    private final BoardMapper boardMapper;
     private final BoardRepository boardRepository;
+    private final MembersRepository membersRepository;
+    private final MembersBoardRepository membersBoardRepository;
 
     // 게시글 등록
-    public Board createBoard(Board board){
-        Board savedBoard = boardRepository.save(board);
-        return savedBoard;
+    public Board createBoard(Board board, Long membersId){
+        Members members = membersRepository.findById(membersId).orElseThrow(
+                () -> new NotExistMemberException("사용자가 존재하지 않습니다"));
+        MembersBoard membersBoard = MembersBoard.builder()
+                                         .board(board)
+                                         .members(members)
+                                         .build();
+        return membersBoardRepository.save(membersBoard).getBoard();
     }
 
     // 게시글 삭제

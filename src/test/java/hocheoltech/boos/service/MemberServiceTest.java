@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-@Commit
+@Transactional
 class MemberServiceTest {
 
     @Autowired
@@ -29,7 +29,7 @@ class MemberServiceTest {
     LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
     @Test
-    @Transactional
+    @Commit
     void save(){
         Members savedMember = Members.builder()
                 .id("abce")
@@ -73,16 +73,6 @@ class MemberServiceTest {
     @Test
     @Transactional
     void findMember() {
-        Members member = memberService.findMember(2L);
-        System.out.println("-----------------------------1"); // 지연로딩으로 앞에선 프록시 객체만 조회하고
-        List<Board> boards = member.getBoards(); // 이 땐 프록시이고
-        System.out.println("-----------------------------2"); // 지연로딩으로 앞에선 프록시 객체만 조회하고
-        for (Board board : boards) { //이렇게 실제로 값을 꺼내올 때 프록시 객체를 초기화하며 쿼리를날림
-            System.out.println("-----------------------------3"); // 지연로딩으로 앞에선 프록시 객체만 조회하고
-            String content = board.getContent();
-            System.out.println("content = " + content);
-        }
-        System.out.println("-----------------------------4");
     }
 
     @Test

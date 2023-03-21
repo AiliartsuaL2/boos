@@ -17,12 +17,12 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-
     // 발신자 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members senderId;
 
+    private String content;
 
     // 수신자 id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,4 +31,12 @@ public class Message {
 
     // 발신일시
     private LocalDateTime sendTime;
+
+    @Builder
+    public Message(Members sender, Members recipient){
+        this.senderId = sender;
+        this.recipientId = recipient;
+        this.senderId.getSendMessages().add(this);
+        this.recipientId.getRecipientMessages().add(this);
+    }
 }

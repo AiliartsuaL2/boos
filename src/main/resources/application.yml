@@ -1,7 +1,6 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    mapper-locations: classpath:/mapper/*.xml
     url: jdbc:mysql://database-1.cjwbmziqc77f.ap-northeast-2.rds.amazonaws.com:3306/boosdb?serverTimezone=Asia/Seoul
     username: root
     password: 1705914joo!
@@ -15,10 +14,3 @@ spring:
 
 
 #swagger
-
-
-
-
-# mybatis
-#mybatis:
-#  mapper-locations : classpath:mapper/*.xml

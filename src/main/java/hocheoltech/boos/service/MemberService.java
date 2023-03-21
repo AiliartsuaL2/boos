@@ -6,6 +6,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.exception.DuplicateMemberIdException;
 import hocheoltech.boos.exception.IncorrectLoginInfoException;
 import hocheoltech.boos.repository.BoardRepository;
+import hocheoltech.boos.repository.MembersBoardRepository;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class MemberService {
 
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
-    private final BoardRepository boardRepository;
+    private final MembersBoardRepository membersBoardRepository;
 
 
     // 회원가입

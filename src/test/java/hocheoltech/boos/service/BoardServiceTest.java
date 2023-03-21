@@ -4,7 +4,6 @@ import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.repository.CategoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-@Transactional
+@Commit
 class BoardServiceTest {
 
     @Autowired
@@ -33,13 +32,11 @@ class BoardServiceTest {
     MemberService memberService;
 
     @Test
+    @Transactional
     void createBoard() {
         //given
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
-
-        Members member = memberService.findMember(3L);
-
 
         Board board = Board.builder()
                 .title("새로운 데이터")
@@ -49,10 +46,8 @@ class BoardServiceTest {
                 .modifyYn("Y")
                 .build();
 
-        Board createdBoard = boardService.createBoard(board);
-        //then
-
-
+        Board createdBoard = boardService.createBoard(board,2L);
+        createdBoard.toString();
     }
 
     @Test
@@ -97,9 +92,9 @@ class BoardServiceTest {
                 .content("랍니다")
                 .regTime(LocalDateTime.now())
                 .category(category)
-                .members(member)
                 .modifyYn("Y")
                 .build();
+
         //when
         boardService.updateBoard(seq,board);
         Board boardDetail = boardService.getBoardDetail(seq);

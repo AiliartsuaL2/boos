@@ -29,4 +29,10 @@ public class Terms {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBERS_SEQ")
     private Members members;
+
+    @Builder
+    public Terms(Members members){
+        this.members = members;
+        this.members.getTerms().add(this);
+    }
 }

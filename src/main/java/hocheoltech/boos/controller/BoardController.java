@@ -29,7 +29,7 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
     })
     public ResponseEntity<Board> createBoard(@RequestBody Board board){
-        Board createdBoard = boardService.createBoard(board);
+        Board createdBoard = boardService.createBoard(board,2L);
         return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
     }
 
