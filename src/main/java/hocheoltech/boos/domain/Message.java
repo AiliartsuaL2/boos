@@ -19,13 +19,13 @@ public class Message {
 
 
     // 발신자 id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members senderId;
 
 
     // 수신자 id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members recipientId;
 

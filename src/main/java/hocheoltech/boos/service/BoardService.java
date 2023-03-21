@@ -17,9 +17,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     // 게시글 등록
-    public void createBoard(Board board){
+    public Board createBoard(Board board){
 //        boardMapper.createBoard(board);
-        boardRepository.save(board);
+        return boardRepository.save(board);
     }
 
     // 게시글 삭제

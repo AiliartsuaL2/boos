@@ -26,7 +26,7 @@ public class Terms {
     private LocalDateTime agreeTime;
 
     // 약관 동의자
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBERS_SEQ")
     private Members members;
 }

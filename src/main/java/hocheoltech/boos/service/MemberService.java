@@ -23,7 +23,6 @@ public class MemberService {
         if(membersRepository.existsById(members.getId())){
             throw new DuplicateMemberIdException("use another id");
         }
-
         return membersRepository.save(members);
     }
 

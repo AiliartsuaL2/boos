@@ -16,12 +16,12 @@ public class MembersBoard {
     @Column(name="seq")
     private Long seq;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBERS_SEQ")
     private Members members;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="BOARD_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="BOARD_SEQ")
     private Board board;
 
 }

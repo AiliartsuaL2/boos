@@ -13,6 +13,12 @@ spring:
       hibernate:
         format_sql: true #Hibernate가 SQL 가독성 높여줌
 
+
+#swagger
+
+
+
+
 # mybatis
 #mybatis:
 #  mapper-locations : classpath:mapper/*.xml

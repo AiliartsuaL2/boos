@@ -45,7 +45,7 @@ class BoardServiceTest {
                 .build();
 
         Category category = Category.builder()
-                .category_name("jpa 카테골이")
+                .categoryName("jpa 카테골이")
                 .build();
 
         Board board = Board.builder()

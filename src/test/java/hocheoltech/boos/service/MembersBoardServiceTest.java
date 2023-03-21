@@ -21,6 +21,12 @@ import static java.time.LocalDate.parse;
 class MembersBoardServiceTest {
     @Autowired
     MemberBoardService memberBoardService;
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    BoardService boardService;
+    @Autowired
+    CategoryService categoryService;
 
     @Test
     @Transactional
@@ -29,7 +35,7 @@ class MembersBoardServiceTest {
         //given
         LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        Members members = Members.builder()
+        Members newMember = Members.builder()
                 .id("jpajpajpa")
                 .name("이증오")
                 .password("qwqwqw1212")
@@ -40,12 +46,13 @@ class MembersBoardServiceTest {
                 .businessRegNum("202303020")
                 .build();
 
-        Category category = Category.builder()
-                .category_name("jpa 카테골이")
+        Category newCategory = Category.builder()
+                .categoryName("jpa 카테골이2")
                 .build();
 
+        Category category = categoryService.createCategory(newCategory);
 
-        Board board = Board.builder()
+        Board newBoard = Board.builder()
                 .title("jpa제목")
                 .content("jpa내용")
                 .regTime(LocalDateTime.now())
@@ -53,8 +60,13 @@ class MembersBoardServiceTest {
                 .modifyYn("N")
                 .build();
 
+        Board board = boardService.createBoard(newBoard);
+
+        Members savedMember = memberService.saveMember(newMember);
+
+
         MembersBoard membersBoard = MembersBoard.builder()
-                .members(members)
+                .members(savedMember)
                 .board(board)
                 .build();
 

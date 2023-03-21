@@ -16,12 +16,12 @@ public class BlackList {
     private long seq;
 
     // 차단한 ID
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members blockId;
 
     // 차단당한 ID
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members blockedId;
 

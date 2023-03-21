@@ -28,12 +28,12 @@ public class Comment {
     private String anonymouseYn;
 
     // 게시판
-    @ManyToOne
-    @JoinColumn(name="BOARD_ID") // 외래키가 있는쪽이 연관관계 주인
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="BOARD_SEQ") // 외래키가 있는쪽이 연관관계 주인
     private Board board;
 
     // 작성자
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBERS_SEQ") // 외래키가 있는쪽이 연관관계 주인
     private Members members;
 

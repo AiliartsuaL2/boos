@@ -17,12 +17,12 @@ public class Board {
 
     // 순번
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOARD_ID")
+    @Column(name = "BOARD_SEQ")
     private long seq;
     
     // 카테고리
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="CATEGORY_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="CATEGORY_SEQ")
     private Category category;
 
     // 제목
@@ -40,7 +40,7 @@ public class Board {
     // 수정 일시
     private LocalDateTime modifyTime;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MembersBoard> membersBoards = new ArrayList<>();
 
     // 댓글
