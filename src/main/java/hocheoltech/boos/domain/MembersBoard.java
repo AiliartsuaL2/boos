@@ -13,10 +13,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class MembersBoard {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="seq")
     private Long seq;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="MEMBERS_ID")
+    @JoinColumn(name="MEMBERS_SEQ")
     private Members members;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -29,9 +29,9 @@ class MemberServiceTest {
     @Transactional
     void save(){
         Members savedMember = Members.builder()
+                .id("jpajpajpa")
                 .businessCategory("요식업")
                 .businessRegNum("123123123")
-                .id("jpajpajpa")
                 .joinTime(LocalDateTime.now())
                 .name("쥬후")
                 .nickname("AIliartsua")
@@ -41,4 +41,29 @@ class MemberServiceTest {
         memberService.saveMember(savedMember);
     }
 
+    @Test
+    void successLogin() {
+        //given
+        Members correctMember = Members.builder()
+                .id("jpajpajpa")
+                .password("123123")
+                .build();
+        //when
+        memberService.loginMember(correctMember);
+
+        //then
+
+    }
+    @Test
+    void failedLogin(){
+        //given
+        Members inCorrectMember = Members.builder()
+                .id("jpajpajpa")
+                .password("1231234")
+                .build();
+        //when
+        memberService.loginMember(inCorrectMember);
+        //then
+
+    }
 }

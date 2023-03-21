@@ -16,10 +16,9 @@ import java.util.List;
 public class Members {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "MEMBERS_SEQ")
     private Long seq;
 
-    @Column(name = "id")
     private String id;
 
     private String password;

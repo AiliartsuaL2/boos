@@ -17,12 +17,12 @@ public class BlackList {
 
     // 차단한 ID
     @ManyToOne
-    @JoinColumn(name= "MEMBERS_ID" , insertable = false, updatable = false)
+    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members blockId;
 
     // 차단당한 ID
     @ManyToOne
-    @JoinColumn(name= "MEMBERS_ID" , insertable = false, updatable = false)
+    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members blockedId;
 
     // 차단 일시

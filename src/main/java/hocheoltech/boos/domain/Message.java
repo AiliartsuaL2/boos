@@ -20,13 +20,13 @@ public class Message {
 
     // 발신자 id
     @ManyToOne
-    @JoinColumn(name= "MEMBERS_ID" , insertable = false, updatable = false)
+    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members senderId;
 
 
     // 수신자 id
     @ManyToOne
-    @JoinColumn(name= "MEMBERS_ID" , insertable = false, updatable = false)
+    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
     private Members recipientId;
 
     // 발신일시

@@ -27,6 +27,6 @@ public class Terms {
 
     // 약관 동의자
     @ManyToOne
-    @JoinColumn(name="MEMBERS_ID")
+    @JoinColumn(name="MEMBERS_SEQ")
     private Members members;
 }

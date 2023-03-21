@@ -34,7 +34,7 @@ public class Comment {
 
     // 작성자
     @ManyToOne
-    @JoinColumn(name="MEMBERS_ID") // 외래키가 있는쪽이 연관관계 주인
+    @JoinColumn(name="MEMBERS_SEQ") // 외래키가 있는쪽이 연관관계 주인
     private Members members;
 
 }
