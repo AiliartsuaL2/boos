@@ -41,19 +41,43 @@ public class Members {
     @OneToMany(mappedBy = "members")
     private List<Board> boards = new ArrayList<>();
 
+    public void addBoards(Board board){
+        boards.add(board);
+    }
+
+    public void removeBoards(Board board){
+        boards.remove(board);
+    }
+
+
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     private List<Terms> terms = new ArrayList<>();
 
     @OneToMany(mappedBy = "senderId")
     private List<Message> sendMessages = new ArrayList<>();
+    public void addSendMessage(Message message){
+        sendMessages.add(message);
+    }
 
     @OneToMany(mappedBy = "recipientId")
     private List<Message> recipientMessages = new ArrayList<>();
+    public void addRecipientMessages(Message message){
+        recipientMessages.add(message);
+    }
+
 
     @OneToMany(mappedBy = "blockId")
     private List<BlackList> blockList = new ArrayList<>();
+    public void addBlockList(BlackList blackList){
+        blockList.add(blackList);
+    }
 
     @OneToMany(mappedBy = "blockedId")
     private List<BlackList> blockedList = new ArrayList<>();
-
+    public void addBlockedList(BlackList blackList){
+        blockedList.add(blackList);
+    }
+    public void deleteBlockedList(BlackList blackList){
+        blockedList.remove(blackList);
+    }
 }

@@ -4,6 +4,7 @@ import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.repository.CategoryRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +16,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @SpringBootTest
-@Commit
+@Transactional
 class BoardServiceTest {
 
     @Autowired
@@ -30,25 +33,26 @@ class BoardServiceTest {
     MemberService memberService;
 
     @Test
-    @Transactional
     void createBoard() {
         //given
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
 
-        Members member = memberService.findMember(2L);
+        Members member = memberService.findMember(3L);
+
 
         Board board = Board.builder()
-                .title("jpa제목1")
-                .content("jpa내용2")
+                .title("새로운 데이터")
+                .content("입니다")
                 .regTime(LocalDateTime.now())
                 .category(category)
-                .members(member)
-                .modifyYn("N")
+                .modifyYn("Y")
                 .build();
 
         Board createdBoard = boardService.createBoard(board);
         //then
+
+
     }
 
     @Test
@@ -60,7 +64,7 @@ class BoardServiceTest {
         boardService.deleteBoard(seq);
 
         //then
-        Optional<Board> boardDetail = boardService.getBoardDetail(seq);
+        Board boardDetail = boardService.getBoardDetail(seq);
 
         Assert.isNull(boardDetail);
 
@@ -74,13 +78,32 @@ class BoardServiceTest {
         }
     }
 
+    public static void main(String[] args) {
+
+    }
+
     @Test
-    void getBoardDetail() {
+    void updateBoard() {
         //given
-        long seq = 5;
+        long seq = 6L;
+
+        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+        Category category = categoryOptional.get();
+
+        Members member = memberService.findMember(3L);
+
+        Board board = Board.builder()
+                .title("수정된 데이터")
+                .content("랍니다")
+                .regTime(LocalDateTime.now())
+                .category(category)
+                .members(member)
+                .modifyYn("Y")
+                .build();
         //when
-        Optional<Board> boardDetail = boardService.getBoardDetail(seq);
+        boardService.updateBoard(seq,board);
+        Board boardDetail = boardService.getBoardDetail(seq);
         //then
-//        assertThat(boardDetail.getSeq()).isEqualTo(5);
+        assertThat(boardDetail.getContent()).isEqualTo("랍니다");
     }
 }

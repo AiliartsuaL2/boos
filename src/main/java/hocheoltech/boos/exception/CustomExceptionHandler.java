@@ -14,7 +14,7 @@ public class CustomExceptionHandler {
         return "중복된 아이디입니다";
     }
 
-    @ExceptionHandler(NoMatchedMemberInfoException.class)
+    @ExceptionHandler(IncorrectLoginInfoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String NoMatchedMemberInfoException() {
         return "아이디 또는 비밀번호가 일치하지 않습니다.";

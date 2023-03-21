@@ -37,4 +37,5 @@ public class Comment {
     @JoinColumn(name="MEMBERS_SEQ") // 외래키가 있는쪽이 연관관계 주인
     private Members members;
 
+
 }

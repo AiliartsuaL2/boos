@@ -23,12 +23,20 @@ public class Category {
     private Category parentCategorySeq; // null 허용
 
 
-    @OneToMany(mappedBy = "parentCategorySeq")
-    private List<Category> child = new ArrayList<>();
+    @OneToMany(mappedBy = "parentCategorySeq", cascade = CascadeType.ALL)
+    private List<Category> childCategories = new ArrayList<>();
+
+    public void addChildCategory(Category childCategory){
+        childCategories.add(childCategory);
+    }
 
     // 카테고리 명
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
     private List<Board> boards = new ArrayList<>();
+    public void addBoards(Board board){
+        boards.add(board);
+    }
+
 }

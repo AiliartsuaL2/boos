@@ -49,4 +49,17 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL) //mappedBy 옵션 :  매핑된 컬럼의 변수명
     private List<Comment> comments = new ArrayList<>(); // 관례상 초기화해줌 (add시 NPE 방지)
 
+    // 댓글추가
+    public void addComment(Comment comment){
+        comments.add(comment);
+    }
+
+    // 게시판 제목, 내용 , 카테고리 수정
+    public void updateBoard(String title, String content, Category category){
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.modifyYn = "Y";
+        this.modifyTime = LocalDateTime.now();
+    }
 }
