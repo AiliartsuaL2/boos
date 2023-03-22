@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@Commit
 class MemberServiceTest {
 
     @Autowired
@@ -31,17 +32,19 @@ class MemberServiceTest {
     @Test
     @Commit
     void save(){
-        Members savedMember = Members.builder()
-                .id("abce")
-                .businessCategory("요식업")
-                .businessRegNum("123123123")
-                .joinTime(LocalDateTime.now())
-                .name("2쥬후")
-                .nickname("AIliartsua")
-                .openTime(openDate)
-                .password("123123")
-                .build();
-        memberService.saveMember(savedMember);
+        for (int i = 0; i < 100; i++) {
+            Members savedMember = Members.builder()
+                    .id("ab"+String.valueOf(i))
+                    .businessCategory("요식업")
+                    .businessRegNum("123123123")
+                    .joinTime(LocalDateTime.now())
+                    .name("2쥬후")
+                    .nickname("AIliartsua")
+                    .openTime(openDate)
+                    .password("123123")
+                    .build();
+            memberService.saveMember(savedMember);
+        }
     }
 
     @Test
@@ -78,7 +81,7 @@ class MemberServiceTest {
     @Test
     void deleteMember() {
         //given
-        long seq = 3;
+        long seq = 2;
         //when
         memberService.deleteMember(seq);
         //then

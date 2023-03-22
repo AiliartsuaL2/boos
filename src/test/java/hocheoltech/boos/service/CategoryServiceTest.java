@@ -20,7 +20,7 @@ class CategoryServiceTest {
     @Commit
     void createCategory() {
         Category category = Category.builder()
-                .categoryName("자유게시판")
+                .categoryName("비밀 게시판")
                 .build();
 
         categoryService.createCategory(category);

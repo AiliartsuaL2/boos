@@ -5,19 +5,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice("hocheoltech.boos.controller") // exception 스코프를 패키지 레벨로
 public class CustomExceptionHandler {
-
-    @ExceptionHandler(DuplicateMemberIdException.class)
+    @ExceptionHandler(DuplicateIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String DuplicateMemberIdException() {
-        return "중복된 아이디입니다";
+    public String DuplicateIdException(String message) {
+        return message;
+    }
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String NoSuchElementInfoException(String message) {
+        return message;
     }
 
-    @ExceptionHandler(IncorrectLoginInfoException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String NoMatchedMemberInfoException() {
-        return "아이디 또는 비밀번호가 일치하지 않습니다.";
+    public String IllegalArgumentException(String message) {
+        return message;
     }
 
 }

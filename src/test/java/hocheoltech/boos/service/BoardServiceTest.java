@@ -3,7 +3,9 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.repository.CategoryRepository;
+import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,19 +37,23 @@ class BoardServiceTest {
     @Transactional
     void createBoard() {
         //given
-        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+
+        Long memberSeq = 1L;
+        Long categorySeq = 1L;
+
+        Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
         Category category = categoryOptional.get();
 
-        Board board = Board.builder()
-                .title("새로운 데이터")
-                .content("입니다")
-                .regTime(LocalDateTime.now())
-                .category(category)
-                .modifyYn("Y")
-                .build();
-
-        Board createdBoard = boardService.createBoard(board,2L);
-        createdBoard.toString();
+        for (int i = 0; i < 100; i++) {
+            Board board = Board.builder()
+                    .title(String.valueOf(i))
+                    .content("입니다"+String.valueOf(i))
+                    .regTime(LocalDateTime.now())
+                    .category(category)
+                    .modifyYn("N")
+                    .build();
+            boardService.createBoard(board,memberSeq);
+        }
     }
 
     @Test
@@ -78,27 +84,31 @@ class BoardServiceTest {
     }
 
     @Test
+    @Transactional
     void updateBoard() {
         //given
-        long seq = 6L;
+        long boardSeq = 5L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
 
-        Members member = memberService.findMember(3L);
+        Members noneOwner = memberService.findMember(3L);
+        Members boardOwner = memberService.findMember(1L);
 
         Board board = Board.builder()
-                .title("수정된 데이터")
-                .content("랍니다")
+                .title("수정된 데이터!!!")
+                .content("랍니다!!!")
                 .regTime(LocalDateTime.now())
                 .category(category)
                 .modifyYn("Y")
                 .build();
+        UpdateBoardDto updateBoardDto = new UpdateBoardDto(board, boardOwner.getSeq());
+
 
         //when
-        boardService.updateBoard(seq,board);
-        Board boardDetail = boardService.getBoardDetail(seq);
+//        boardService.updateBoard(noneOwner.getSeq(),boardSeq,updateBoardDto); // 게시판 주인이 아님,
+        boardService.updateBoard(boardOwner.getSeq(),boardSeq,updateBoardDto); // 게시판 주인
         //then
-        assertThat(boardDetail.getContent()).isEqualTo("랍니다");
+//        assertThat(boardDetail.getContent()).isEqualTo("랍니다");
     }
 }

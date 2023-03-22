@@ -1,8 +1,7 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Category;
-import hocheoltech.boos.exception.DuplicateCategoryNameException;
-import hocheoltech.boos.exception.DuplicateMemberIdException;
+import hocheoltech.boos.exception.DuplicateIdException;
 import hocheoltech.boos.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ public class CategoryService {
 
     public Category createCategory(Category category){
         if(categoryRepository.existsCategoryByCategoryName(category.getCategoryName())){
-            throw new DuplicateCategoryNameException("use another category name");
+            throw new DuplicateIdException("중복된 카테고리 이름입니다.");
         }
         return categoryRepository.save(category);
     }

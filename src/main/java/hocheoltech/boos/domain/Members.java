@@ -39,7 +39,7 @@ public class Members {
     // 연관관계 설정
     @OneToMany(mappedBy = "members")
     private List<Comment> comments = new ArrayList<>();
-    @OneToMany(mappedBy = "members")
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     private List<MembersBoard> membersBoards = new ArrayList<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     private List<Terms> terms = new ArrayList<>();

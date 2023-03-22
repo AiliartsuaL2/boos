@@ -3,20 +3,16 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
-import hocheoltech.boos.exception.DuplicateMemberIdException;
-import hocheoltech.boos.exception.NotExistBoard;
-import hocheoltech.boos.exception.NotExistMemberException;
+import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.repository.BoardRepository;
 import hocheoltech.boos.repository.MembersBoardRepository;
+import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +26,7 @@ public class BoardService {
     // 게시글 등록
     public Board createBoard(Board board, Long membersId){
         Members members = membersRepository.findById(membersId).orElseThrow(
-                () -> new NotExistMemberException("사용자가 존재하지 않습니다"));
+                () -> new NoSuchElementException("사용자가 존재하지 않습니다"));
         MembersBoard membersBoard = MembersBoard.builder()
                                          .board(board)
                                          .members(members)
@@ -41,18 +37,21 @@ public class BoardService {
     // 게시글 삭제
     public void deleteBoard(long seq){
         if(!boardRepository.existsById(seq)){
-            throw new NotExistBoard("There are no board matching the seq : "+seq);
+            throw new NoSuchElementException("일치하는 게시판이 없습니다 seq : "+seq);
         }
         boardRepository.deleteById(seq);
     }
 
     // 게시글 수정
-    public void updateBoard(Long seq, Board board){
-        if(!boardRepository.existsById(seq)){
-            throw new NotExistBoard("There are no board matching the seq : "+seq);
+    public void updateBoard(Long membersSeq, Long boardSeq, UpdateBoardDto updateBoardDto){
+        Board existBoard = boardRepository.findById(boardSeq).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
+                () -> new NoSuchElementException("일치하는 게시판이 없습니다 seq : " + boardSeq));
+        UpdateBoardDto updatedBoard = membersBoardRepository.findMembersBoard(membersSeq, boardSeq); // DB에 있는값 이걸 업데이트를 쳐줘야함,
+        if(updatedBoard == null){ // 본인 게시물이 아닌경우
+            throw new IllegalArgumentException("해당 게시물에 대해 수정 권한이 없습니다.");
         }
-        Board existBoard = boardRepository.findById(seq).get();
-        existBoard.updateBoard(board.getTitle(),board.getContent(),board.getCategory()); // 영속성 프레임워크에 의한 자동 update
+        updatedBoard.setUpdateDto(updateBoardDto); // 수정값으로 업데이트처리
+        existBoard.updateBoard(updatedBoard); // 기존 보드에 값을 업데이트 ,, 더티 체킹으로 자동 쿼리
     }
 
     // 게시판리스트 조회
@@ -63,7 +62,7 @@ public class BoardService {
     // 게시판 상세 조회
     public Board getBoardDetail(long seq){
         if(!boardRepository.existsById(seq)){
-            throw new NotExistBoard("There are no board matching the seq : "+seq);
+            throw new NoSuchElementException("일치하는 게시판이 없습니다 seq : "+seq);
         }
         return boardRepository.findById(seq).get();
     }
