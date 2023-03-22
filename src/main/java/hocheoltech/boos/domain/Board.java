@@ -13,6 +13,7 @@ import java.util.List;
 @Entity @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="BOARD")
+@ToString
 public class Board {
 
     // 순번

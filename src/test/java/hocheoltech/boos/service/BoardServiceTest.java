@@ -79,9 +79,24 @@ class BoardServiceTest {
         }
     }
 
-    public static void main(String[] args) {
+    @Test
+    void getBoardDetail(){
+        long seq = 2;
+        Board boardDetail1 = boardService.getBoardDetail1(seq);
+//        String categoryName = boardDetail1.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
+//        System.out.println("categoryName = " + categoryName); // 현재 Lazy Loading이라 프록시 객체로 되어있음,
+
+
+        System.out.println("==================2=================");
+        Board boardDetail2 = boardService.getBoardDetail(seq);
+        System.out.println("==================2=================");
+        String categoryName1 = boardDetail2.getCategory().getCategoryName();
+        System.out.println("==================2=================");
+        System.out.println("categoryName1 = " + categoryName1);
+        System.out.println("==================2=================");
 
     }
+
 
     @Test
     @Transactional

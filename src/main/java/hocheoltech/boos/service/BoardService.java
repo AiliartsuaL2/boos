@@ -60,11 +60,19 @@ public class BoardService {
     }
 
     // 게시판 상세 조회
+    public Board getBoardDetail1(long seq){
+        Board board = boardRepository.findById(seq).orElseThrow(
+                () -> new NoSuchElementException("일치하는 게시판이 없습니다. seq : " + seq)
+        );
+        return board;
+    }
+
     public Board getBoardDetail(long seq){
-        if(!boardRepository.existsById(seq)){
+        Board board = boardRepository.findBoardWithCategory(seq);
+        if(board == null){
             throw new NoSuchElementException("일치하는 게시판이 없습니다 seq : "+seq);
         }
-        return boardRepository.findById(seq).get();
+        return board;
     }
 
 }
