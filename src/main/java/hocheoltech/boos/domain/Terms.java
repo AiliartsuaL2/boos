@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Terms {
     // 순번
     @Id
@@ -30,7 +31,10 @@ public class Terms {
     private Members members;
 
     @Builder
-    public Terms(Members members){
+    public Terms(String termsCategory, String agreeYn, Members members){
+        this.termsCategory = termsCategory;
+        this.agreeYn = agreeYn;
+        this.agreeTime = LocalDateTime.now();
         this.members = members;
         this.members.getTerms().add(this);
     }

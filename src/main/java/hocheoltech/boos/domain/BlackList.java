@@ -6,9 +6,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter @Builder
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 public class BlackList {
 
     // 순번
@@ -27,5 +28,13 @@ public class BlackList {
 
     // 차단 일시
     private LocalDateTime blockedTime;
+
+    @Builder
+    public BlackList(Members blockId, Members blockedId){
+        this.blockId = blockId;
+        this.blockedId = blockedId;
+        this.blockedTime = LocalDateTime.now();
+    }
+
 
 }

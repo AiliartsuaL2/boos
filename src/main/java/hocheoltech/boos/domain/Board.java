@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @Builder
 @Entity @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="BOARD")
-@ToString
+@AllArgsConstructor
 public class Board {
 
     // 순번
@@ -41,12 +41,13 @@ public class Board {
     private LocalDateTime modifyTime;
 
 
-    @Builder
-    public Board(Category category){
+    public Board(String title, String content, Category category){
+        this.title = title;
+        this.content = content;
+        this.regTime = LocalDateTime.now();
         this.category = category;
         this.category.getBoards().add(this);
     }
-
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MembersBoard> membersBoards;
 

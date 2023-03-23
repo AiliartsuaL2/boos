@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface MembersBoardRepository extends JpaRepository<MembersBoard, Long>, MembersBoardRepositoryCustom {
     UpdateBoardDto findMembersBoard(Long membersSeq, Long boardSeq);
+    boolean existsByMembersSeqAndBoardSeq(long membersSeq, long boardSeq);
 }

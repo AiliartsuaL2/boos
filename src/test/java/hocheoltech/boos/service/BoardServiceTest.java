@@ -5,6 +5,7 @@ import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.repository.CategoryRepository;
+import org.assertj.core.api.Assertions;
 import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,34 +39,31 @@ class BoardServiceTest {
     void createBoard() {
         //given
 
-        Long memberSeq = 1L;
+        Long memberSeq = 3L;
         Long categorySeq = 1L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
         Category category = categoryOptional.get();
 
-        for (int i = 0; i < 100; i++) {
             Board board = Board.builder()
-                    .title(String.valueOf(i))
-                    .content("입니다"+String.valueOf(i))
-                    .regTime(LocalDateTime.now())
+                    .title("제목")
+                    .content("입니다")
                     .category(category)
-                    .modifyYn("N")
                     .build();
             boardService.createBoard(board,memberSeq);
-        }
     }
 
     @Test
     void deleteBoard() {
         //given
-        long seq = 4;
+        long boardSeq = 104L;
+        long membersSeq = 3L;
 
         //when
-        boardService.deleteBoard(seq);
+        boardService.deleteBoard(membersSeq,boardSeq);
 
         //then
-        Board boardDetail = boardService.getBoardDetail(seq);
+        Board boardDetail = boardService.getBoardDetail(boardSeq);
 
         Assert.isNull(boardDetail);
 
@@ -81,20 +79,13 @@ class BoardServiceTest {
 
     @Test
     void getBoardDetail(){
+        //given
         long seq = 2;
-        Board boardDetail1 = boardService.getBoardDetail1(seq);
-//        String categoryName = boardDetail1.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
-//        System.out.println("categoryName = " + categoryName); // 현재 Lazy Loading이라 프록시 객체로 되어있음,
-
-
-        System.out.println("==================2=================");
-        Board boardDetail2 = boardService.getBoardDetail(seq);
-        System.out.println("==================2=================");
-        String categoryName1 = boardDetail2.getCategory().getCategoryName();
-        System.out.println("==================2=================");
-        System.out.println("categoryName1 = " + categoryName1);
-        System.out.println("==================2=================");
-
+        //when
+        Board boardDetail = boardService.getBoardDetail(seq);
+        String categoryName = boardDetail.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
+        //then
+        assertThat(categoryName).isEqualTo("비밀 게시판");
     }
 
 
@@ -113,9 +104,7 @@ class BoardServiceTest {
         Board board = Board.builder()
                 .title("수정된 데이터!!!")
                 .content("랍니다!!!")
-                .regTime(LocalDateTime.now())
                 .category(category)
-                .modifyYn("Y")
                 .build();
         UpdateBoardDto updateBoardDto = new UpdateBoardDto(board, boardOwner.getSeq());
 

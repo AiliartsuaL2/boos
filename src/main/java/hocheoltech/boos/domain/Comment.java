@@ -8,9 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Comment {
     // 순번
     @Id
@@ -21,11 +22,14 @@ public class Comment {
     // 작성일시
     private LocalDateTime regTime;
     //익명 여부
-    private String anonymouseYn;
+    private String anonymousYn;
 
 
     @Builder
-    public Comment(Board board, Members members) {
+    public Comment(String content, String anonymousYN, Board board, Members members) {
+        this.content = content;
+        this.anonymousYn = anonymousYN;
+        this.regTime = LocalDateTime.now();
         this.board = board;
         this.board.getComments().add(this);
         this.members = members;

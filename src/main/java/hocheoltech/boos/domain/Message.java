@@ -6,9 +6,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Getter @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Message {
 
     // 순번
@@ -32,7 +33,9 @@ public class Message {
     private LocalDateTime sendTime;
 
     @Builder
-    public Message(Members sender, Members recipient){
+    public Message(Members sender, String content ,Members recipient){
+        this.content = content;
+        this.sendTime = LocalDateTime.now();
         this.senderId = sender;
         this.recipientId = recipient;
         this.senderId.getSendMessages().add(this);

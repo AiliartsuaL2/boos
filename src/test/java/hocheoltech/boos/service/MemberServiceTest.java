@@ -32,19 +32,16 @@ class MemberServiceTest {
     @Test
     @Commit
     void save(){
-        for (int i = 0; i < 100; i++) {
             Members savedMember = Members.builder()
-                    .id("ab"+String.valueOf(i))
+                    .id("aiolasrfas")
                     .businessCategory("요식업")
                     .businessRegNum("123123123")
-                    .joinTime(LocalDateTime.now())
                     .name("2쥬후")
                     .nickname("AIliartsua")
                     .openTime(openDate)
                     .password("123123")
                     .build();
             memberService.saveMember(savedMember);
-        }
     }
 
     @Test

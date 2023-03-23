@@ -7,9 +7,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
+@Getter @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Category {
     // 순번
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,8 @@ public class Category {
     private Category parent;
 
     @Builder
-    public Category(Category parent){
+    public Category(String categoryName, Category parent){
+        this.categoryName = categoryName;
         this.parent = parent;
         this.parent.children.add(this);
     }
