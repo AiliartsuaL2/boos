@@ -4,6 +4,7 @@ import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.dto.UpdateBoardDto;
+import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BoardRepository;
 import hocheoltech.boos.repository.MembersBoardRepository;
 import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
@@ -26,7 +27,7 @@ public class BoardService {
     // 게시글 등록
     public Board createBoard(Board board, Long membersId){
         Members members = membersRepository.findById(membersId).orElseThrow(
-                () -> new NoSuchElementException("사용자가 존재하지 않습니다"));
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         MembersBoard membersBoard = MembersBoard.builder()
                                          .board(board)
                                          .members(members)

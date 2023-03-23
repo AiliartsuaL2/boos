@@ -9,10 +9,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity @Table(name="MEMBERS")
-@AllArgsConstructor
 public class Members {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

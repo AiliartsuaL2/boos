@@ -7,10 +7,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Category {
     // 순번
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
