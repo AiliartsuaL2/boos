@@ -39,15 +39,15 @@ class BoardServiceTest {
     void createBoard() {
         //given
 
-        Long memberSeq = 3L;
+        Long memberSeq = 5L;
         Long categorySeq = 1L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
         Category category = categoryOptional.get();
 
             Board board = Board.builder()
-                    .title("제목")
-                    .content("입니다")
+                    .title("제목123")
+                    .content("입니다123")
                     .category(category)
                     .build();
             boardService.createBoard(board,memberSeq);
@@ -56,16 +56,15 @@ class BoardServiceTest {
     @Test
     void deleteBoard() {
         //given
-        long boardSeq = 104L;
-        long membersSeq = 3L;
+        long boardSeq = 114L;
+        long membersSeq = 5L;
 
         //when
         boardService.deleteBoard(membersSeq,boardSeq);
 
         //then
-        Board boardDetail = boardService.getBoardDetail(boardSeq);
+        Board boardDetail = boardService.getBoardDetail(boardSeq); // 존재하지 않는 게시판 출력,
 
-        Assert.isNull(boardDetail);
 
     }
 

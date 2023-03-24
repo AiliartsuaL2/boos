@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +38,11 @@ public class BoardService {
 
     // TODO 게시글 삭제 이상함;; 쿼리 다시짜야할듯.
     public void deleteBoard(long membersSeq, long boardSeq){
-        if(!membersBoardRepository.existsByMembersSeqAndBoardSeq(membersSeq, boardSeq)){
-            throw new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg());
+        MembersBoard membersBoard = membersBoardRepository.findMembersBoardByMembersSeqAndBoardSeq(membersSeq, boardSeq);
+        if(membersBoard == null){
+            throw new NoSuchElementException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
         }
-        boardRepository.deleteById(boardSeq);
+        membersBoardRepository.delete(membersBoard);
     }
 
     // 게시글 수정
