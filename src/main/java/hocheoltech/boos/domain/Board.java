@@ -41,6 +41,7 @@ public class Board {
     private LocalDateTime modifyTime;
 
 
+    @Builder
     public Board(String title, String content, Category category){
         this.title = title;
         this.content = content;

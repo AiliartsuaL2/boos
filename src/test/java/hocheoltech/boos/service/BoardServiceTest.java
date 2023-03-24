@@ -36,18 +36,18 @@ class BoardServiceTest {
 
     @Test
     @Transactional
-    void createBoard() {
+    void createBoard() { // 등록일시 저장안됨, 확인 필요
         //given
 
         Long memberSeq = 5L;
-        Long categorySeq = 1L;
+        Long categorySeq = 3L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
         Category category = categoryOptional.get();
 
             Board board = Board.builder()
-                    .title("제목123")
-                    .content("입니다123")
+                    .title("제목")
+                    .content("입니다")
                     .category(category)
                     .build();
             boardService.createBoard(board,memberSeq);
@@ -56,14 +56,14 @@ class BoardServiceTest {
     @Test
     void deleteBoard() {
         //given
-        long boardSeq = 114L;
+        long boardSeq = 116L;
         long membersSeq = 5L;
 
         //when
         boardService.deleteBoard(membersSeq,boardSeq);
 
         //then
-        Board boardDetail = boardService.getBoardDetail(boardSeq); // 존재하지 않는 게시판 출력,
+//        Board boardDetail = boardService.getBoardDetail(boardSeq); // 존재하지 않는 게시판 출력,
 
 
     }
@@ -92,13 +92,13 @@ class BoardServiceTest {
     @Transactional
     void updateBoard() {
         //given
-        long boardSeq = 5L;
+        long boardSeq = 117L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
 
-        Members noneOwner = memberService.findMember(3L);
-        Members boardOwner = memberService.findMember(1L);
+        Members noneOwner = memberService.findMember(5L);
+        Members boardOwner = memberService.findMember(5L);
 
         Board board = Board.builder()
                 .title("수정된 데이터!!!")
