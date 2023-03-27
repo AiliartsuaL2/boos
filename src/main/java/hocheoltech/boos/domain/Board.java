@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder
+@Getter
 @Entity @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="BOARD")
 @AllArgsConstructor
@@ -41,14 +41,6 @@ public class Board {
     private LocalDateTime modifyTime;
 
 
-    @Builder
-    public Board(String title, String content, Category category){
-        this.title = title;
-        this.content = content;
-        this.regTime = LocalDateTime.now();
-        this.category = category;
-        this.category.getBoards().add(this);
-    }
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MembersBoard> membersBoards;
 
@@ -56,6 +48,17 @@ public class Board {
     @OneToMany(mappedBy = "board") //mappedBy 옵션 :  매핑된 컬럼의 변수명
     private List<Comment> comments = new ArrayList<>(); // 관례상 초기화해줌 (add시 NPE 방지)
 
+
+    @Builder
+    public Board(String title, String content, Category category){
+        this.title = title;
+        this.content = content;
+        this.regTime = LocalDateTime.now();
+        this.category = category;
+        this.category.getBoards().add(this);
+        this.membersBoards = new ArrayList<>();
+        this.comments = new ArrayList<>();
+    }
     // 게시판 제목, 내용 , 카테고리 수정
     public void updateBoard(UpdateBoardDto updateBoardDto){
         this.title = updateBoardDto.getBoardTitle();

@@ -10,6 +10,8 @@ import hocheoltech.boos.repository.MembersBoardRepository;
 import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,6 +63,13 @@ public class BoardService {
     public List<Board> getBoardList(){
         return boardRepository.findAll();
     }
+
+    // 게시판리스트 조회
+    public Page<Board> getBoardListByMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable){
+        Page<Board> boardList = boardRepository.findBoardListByMembersSeq(membersSeq, categorySeq, pageable);
+        return boardList;
+    }
+
 
     public Board getBoardDetail(long seq){
         Board board = boardRepository.findBoardWithCategory(seq);

@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter @Builder
+@Getter
 @NoArgsConstructor
 @Entity
 @AllArgsConstructor
@@ -34,6 +34,8 @@ public class BlackList {
         this.blockId = blockId;
         this.blockedId = blockedId;
         this.blockedTime = LocalDateTime.now();
+        this.blockId.getBlockList().add(this);
+        this.blockedId.getBlockedList().add(this);
     }
 
 

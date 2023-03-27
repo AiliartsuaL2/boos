@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Getter @Builder // 빌더를 생성자 레벨에 두면, NPE 발생,, 클래스 레벨에 두려면 NoAgs,AllArgs를 안쓰던가, 둘다 쓰던가 해야함
+@Getter// 빌더를 생성자 레벨에 두면, NPE 발생,, 클래스 레벨에 두려면 NoAgs,AllArgs를 안쓰던가, 둘다 쓰던가 해야함
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @AllArgsConstructor

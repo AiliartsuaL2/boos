@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -29,6 +29,8 @@ public class Category {
     public Category(String categoryName, Category parent){
         this.categoryName = categoryName;
         this.parent = parent;
+        this.children = new ArrayList<>();
+        this.boards = new ArrayList<>();
         this.parent.children.add(this);
     }
 

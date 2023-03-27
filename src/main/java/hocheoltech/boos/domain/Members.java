@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity @Table(name="MEMBERS")
 @AllArgsConstructor
@@ -44,8 +44,16 @@ public class Members {
         this.businessCategory = businessCategory;
         this.businessRegNum = businessRegNum;
         this.openTime = openTime;
-        this.joinTime = LocalDateTime.now();
         this.nickname = nickname;
+        this.joinTime = LocalDateTime.now();
+        this.comments = new ArrayList<>();
+        this.membersBoards = new ArrayList<>();
+        this.terms = new ArrayList<>();
+        this.sendMessages = new ArrayList<>();
+        this.recipientMessages = new ArrayList<>();
+        this.blockList = new ArrayList<>();
+        this.blockedList = new ArrayList<>();
+
     }
 
     public void updateMemberInfo(String password, String name, String nickname){

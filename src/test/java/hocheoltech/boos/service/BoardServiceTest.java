@@ -10,6 +10,8 @@ import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -46,8 +48,8 @@ class BoardServiceTest {
         Category category = categoryOptional.get();
 
             Board board = Board.builder()
-                    .title("제목")
-                    .content("입니다")
+                    .title("테스트 제목3")
+                    .content("테스트 내용12")
                     .category(category)
                     .build();
             boardService.createBoard(board,memberSeq);
@@ -56,7 +58,7 @@ class BoardServiceTest {
     @Test
     void deleteBoard() {
         //given
-        long boardSeq = 116L;
+        long boardSeq = 132L;
         long membersSeq = 5L;
 
         //when
@@ -68,23 +70,28 @@ class BoardServiceTest {
 
     }
 
+
     @Test
-    void getBoardList() {
-        List<Board> boardList = boardService.getBoardList();
+    void getBoardListByMemberSeq() {
+        PageRequest pageRequest = PageRequest.of(1,5);
+
+        Page<Board> boardList = boardService.getBoardListByMembersSeq(5L, null, pageRequest);
         for (Board board : boardList) {
-            System.out.println("board = " + board.getContent());
+            System.out.println("board = " + board.getSeq());
+//            System.out.println("category = "+board.getCategory().getCategoryName());
         }
     }
 
     @Test
     void getBoardDetail(){
         //given
-        long seq = 2;
+        long seq = 131;
         //when
         Board boardDetail = boardService.getBoardDetail(seq);
-        String categoryName = boardDetail.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
+//        String categoryName = boardDetail.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
         //then
-        assertThat(categoryName).isEqualTo("비밀 게시판");
+        assertThat(boardDetail.getTitle()).isEqualTo("수정된 데이터!!!");
+//        assertThat(categoryName).isEqualTo("비밀 게시판");
     }
 
 
@@ -92,12 +99,12 @@ class BoardServiceTest {
     @Transactional
     void updateBoard() {
         //given
-        long boardSeq = 117L;
+        long boardSeq = 131L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
 
-        Members noneOwner = memberService.findMember(5L);
+        Members noneOwner = memberService.findMember(7L);
         Members boardOwner = memberService.findMember(5L);
 
         Board board = Board.builder()
@@ -109,8 +116,7 @@ class BoardServiceTest {
 
 
         //when
-//        boardService.updateBoard(noneOwner.getSeq(),boardSeq,updateBoardDto); // 게시판 주인이 아님,
-        boardService.updateBoard(boardOwner.getSeq(),boardSeq,updateBoardDto); // 게시판 주인
+        boardService.updateBoard(updateBoardDto.getMembersSeq(),boardSeq,updateBoardDto); // 게시판 주인
         //then
 //        assertThat(boardDetail.getContent()).isEqualTo("랍니다");
     }
