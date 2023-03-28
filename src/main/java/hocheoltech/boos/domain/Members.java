@@ -56,7 +56,7 @@ public class Members {
 
     }
 
-    public void updateMemberInfo(String password, String name, String nickname){
+    public void updateMemberInfo(String password, String nickname){
         this.password = password;
         this.name = name;
         this.nickname = nickname;

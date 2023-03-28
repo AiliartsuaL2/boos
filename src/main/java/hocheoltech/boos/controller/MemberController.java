@@ -67,6 +67,7 @@ public class MemberController {
             JSONObject reqParams = new JSONObject();
             String serviceKey = "l4IHDu4VTbgvSp00Vn3%2F10HrD8u1rxJrdx4dxR5Aw%2Br5Evz6I%2FCIRbFJRiNEt%2BL2BTLZsP5cSwGHC5EGQHM11Q%3D%3D";
             String openApiUrl = "http://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey="+serviceKey;
+
             OpenApiCallDto apiMemberDto = OpenApiCallDto.builder()
                     .b_no(membersJoinDto.getBusinessRegNum())
                     .p_nm(membersJoinDto.getName())

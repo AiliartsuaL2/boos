@@ -3,6 +3,7 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.MembersBoardRepository;
 import hocheoltech.boos.repository.MembersRepository;
@@ -49,6 +50,13 @@ public class MemberService {
             throw new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg());
         }
         membersRepository.deleteById(id);
+    }
+
+    public void modifyMember(Long id, UpdateMembersDto updateMembersDto){
+        Members members = membersRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
+        );
+        members.updateMemberInfo(updateMembersDto.getPassword(),updateMembersDto.getNickname());
     }
 
 }

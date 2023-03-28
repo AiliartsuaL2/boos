@@ -2,6 +2,7 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.repository.MembersRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,6 @@ class MemberServiceTest {
     LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
     @Test
-    @Commit
     void save(){
             Members savedMember = Members.builder()
                     .id("aiolasrfas")
@@ -83,7 +83,20 @@ class MemberServiceTest {
         memberService.deleteMember(seq);
         //then
 //        memberService.findMember(seq);
-
+    }
+    @Test
+    void updateMember(){
+        //given
+        long seq = 2;
+        //when
+        UpdateMembersDto updateMembersDto = UpdateMembersDto.builder()
+                .password("qw1621")
+                .nickname("nyeonge")
+                .build();
+        memberService.modifyMember(2L,updateMembersDto);
+        Members member = memberService.findMember(2L);
+        //then
+        assertThat(member.getPassword()).isEqualTo("qw1621");
 
     }
 }
