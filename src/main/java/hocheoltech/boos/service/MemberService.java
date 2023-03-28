@@ -20,8 +20,6 @@ public class MemberService {
 
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
-    private final MembersBoardRepository membersBoardRepository;
-
 
     // 회원가입
     public Members saveMember(Members members){
@@ -30,6 +28,7 @@ public class MemberService {
         }
         return membersRepository.save(members);
     }
+
 
     // 로그인
     public void loginMember(Members members) {

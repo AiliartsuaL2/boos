@@ -7,6 +7,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.OpenApiCallDto;
 import hocheoltech.boos.exception.ErrorMessage;
+import hocheoltech.boos.repository.MembersRepository;
 import hocheoltech.boos.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,6 +42,7 @@ import java.util.concurrent.RejectedExecutionException;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MembersRepository membersRepository;
 
     @PostMapping("/v1/member")
     @Operation(summary = "회원가입 메서드", description = "회원가입 메서드입니다.")
@@ -55,8 +57,12 @@ public class MemberController {
 //            개업일자(필수)	  1) YYYYMMDD 포맷의 날짜로 입력('-' 등의 기호 반드시 제거 후 호출)
 //                            2) 사업자등록증에 표기된 개업연월일 날짜로
 //            server에서는 decoding key, browser에서는 encoding key 사용 >> 아님 server에서도 encoding key 사용
+        if(membersRepository.existsByBusinessRegNum(membersJoinDto.getBusinessRegNum())){
+            throw new RejectedExecutionException(ErrorMessage.DUPLICATE_BUSINESS_REG_NUM.getMsg());
+        }
 
         String resultValid = "";
+
         try{
             JSONObject reqParams = new JSONObject();
             String serviceKey = "l4IHDu4VTbgvSp00Vn3%2F10HrD8u1rxJrdx4dxR5Aw%2Br5Evz6I%2FCIRbFJRiNEt%2BL2BTLZsP5cSwGHC5EGQHM11Q%3D%3D";
@@ -103,7 +109,7 @@ public class MemberController {
 
         }
         if("02".equals(resultValid)){ // 사업자 진위 확인 상태값,, 01이 true 02는 false
-            throw new RejectedExecutionException(ErrorMessage.NOT_REGISTED_BUSINESS_NUM.getMsg()); // 에러 발생시 사업자가 잘못된 것 ,
+            throw new RejectedExecutionException(ErrorMessage.NOT_REGISTED_BUSINESS_REG_NUM.getMsg()); // 에러 발생시 사업자가 잘못된 것 ,
         }
 
         LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
