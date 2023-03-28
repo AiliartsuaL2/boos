@@ -10,7 +10,9 @@ public enum ErrorMessage {
     NOT_EXIST_BOARD(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."),
     UNAUTHORIZED_PERMISSION(HttpStatus.FORBIDDEN, "해당 작업에 대해 권한이 없습니다."),
     DUPLICATE_MEMBER_ID(HttpStatus.BAD_REQUEST,"중복된 사용자 ID 입니다."),
-    DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "중복된 카테고리 ID 입니다.");
+    DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "중복된 카테고리 ID 입니다."),
+    NOT_REGISTED_BUSINESS_NUM(HttpStatus.BAD_REQUEST, "진위 확인이 되지 않는 사업자 정보 입니다."),
+    INCORRECT_ARGUMENTS_TO_OPENAPI(HttpStatus.BAD_REQUEST, "진위 확인을 위한 인자가 잘못되었습니다.");
 
 
     private final String msg;

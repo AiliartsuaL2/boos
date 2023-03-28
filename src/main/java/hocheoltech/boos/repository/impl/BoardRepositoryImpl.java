@@ -38,7 +38,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public Page<Board> findBoardListByMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable) {
+    public Page<Board> findBoardListByCategoryOrMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable) {
         List<Board> boardList = queryFactory.selectFrom(board)
                 .join(board.membersBoards, membersBoard).fetchJoin()
                 .join(board.category, category).fetchJoin()

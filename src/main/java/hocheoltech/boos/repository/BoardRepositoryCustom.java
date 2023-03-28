@@ -11,6 +11,6 @@ public interface BoardRepositoryCustom {
 
     Board findBoardWithCategory(Long boardSeq);
 
-    Page<Board> findBoardListByMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable);
+    Page<Board> findBoardListByCategoryOrMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable);
 
 }

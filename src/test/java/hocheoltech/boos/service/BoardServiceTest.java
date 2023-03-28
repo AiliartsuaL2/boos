@@ -75,7 +75,7 @@ class BoardServiceTest {
     void getBoardListByMemberSeq() {
         PageRequest pageRequest = PageRequest.of(1,5);
 
-        Page<Board> boardList = boardService.getBoardListByMembersSeq(5L, null, pageRequest);
+        Page<Board> boardList = boardService.getBoardList(5L, null, pageRequest);
         for (Board board : boardList) {
             System.out.println("board = " + board.getSeq());
 //            System.out.println("category = "+board.getCategory().getCategoryName());

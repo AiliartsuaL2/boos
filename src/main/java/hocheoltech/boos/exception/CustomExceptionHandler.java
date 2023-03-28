@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.RejectedExecutionException;
 
@@ -26,17 +27,19 @@ public class CustomExceptionHandler {
 
 
     @ExceptionHandler(NoSuchElementException.class)
-    public String NoSuchElementException(NoSuchElementException ex,ErrorMessage errorMessage) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String NoSuchElementException(NoSuchElementException ex) {
         StackTraceElement[] stackTraceElements = ex.getStackTrace();
-        String message = errorMessage.getMsg();
+        String message = ex.getMessage();
         log.error(message,stackTraceElements[0]);
         return message;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public String IllegalArgumentException(IllegalArgumentException ex,ErrorMessage errorMessage) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String IllegalArgumentException(IllegalArgumentException ex) {
         StackTraceElement[] stackTraceElements = ex.getStackTrace();
-        String message = errorMessage.getMsg();
+        String message =  ex.getMessage();
         log.error(message,stackTraceElements[0]);
         return message;
     }
