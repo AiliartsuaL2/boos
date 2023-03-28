@@ -60,11 +60,10 @@ public class BoardService {
     }
 
     // 게시판리스트 조회
-    public Page<Board> getBoardList(Long membersSeq, Long categorySeq, Pageable pageable){
-        Page<Board> boardList = boardRepository.findBoardListByCategoryOrMembersSeq(membersSeq, categorySeq, pageable);
+    public Page<Board> getBoardList(Long membersSeq, Long categorySeq, String boardTitle, String boardContent ,Pageable pageable){
+        Page<Board> boardList = boardRepository.findBoardListPaging(membersSeq, categorySeq, boardTitle, boardContent , pageable);
         return boardList;
     }
-
 
     public Board getBoardDetail(long seq){
         Board board = boardRepository.findBoardWithCategory(seq);

@@ -38,12 +38,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public Page<Board> findBoardListByCategoryOrMembersSeq(Long membersSeq, Long categorySeq, Pageable pageable) {
+    public Page<Board> findBoardListPaging(Long membersSeq, Long categorySeq, String boardTitle, String boardContent , Pageable pageable) {
         List<Board> boardList = queryFactory.selectFrom(board)
                 .join(board.membersBoards, membersBoard).fetchJoin()
                 .join(board.category, category).fetchJoin()
                 .where(membersSeqEq(membersSeq)
-                        .and(categorySeqEq(categorySeq)))
+                        .and(categorySeqEq(categorySeq))
+                        .and(boardTitleContains(boardTitle))
+                        .and(boardContentContains(boardContent)))
                 .orderBy(membersBoard.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -52,8 +54,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .join(board.membersBoards, membersBoard).fetchJoin()
                 .join(board.category, category).fetchJoin()
                 .where(membersSeqEq(membersSeq)
-                        .and(categorySeqEq(categorySeq)));
-
+                        .and(categorySeqEq(categorySeq))
+                        .and(boardTitleContains(boardTitle))
+                        .and(boardContentContains(boardContent)));
         return PageableExecutionUtils.getPage(boardList,pageable,() -> countQuery.fetchCount());
 
     }
@@ -66,4 +69,13 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private BooleanExpression membersSeqEq(Long membersSeq) {
         return membersSeq != null ? membersBoard.members.seq.eq(membersSeq) : null;
     }
+
+    private BooleanExpression boardTitleContains(String boardTitle) {
+        return boardTitle != null ? board.title.contains(boardTitle) : null;
+    }
+
+    private BooleanExpression boardContentContains(String boardContent) {
+        return boardContent != null ? board.content.contains(boardContent) : null;
+    }
+
 }

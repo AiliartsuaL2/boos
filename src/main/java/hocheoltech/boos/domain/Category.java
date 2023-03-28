@@ -31,7 +31,9 @@ public class Category {
         this.parent = parent;
         this.children = new ArrayList<>();
         this.boards = new ArrayList<>();
-        this.parent.children.add(this);
+        if(this.parent != null){
+            this.parent.children.add(this);
+        }
     }
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)

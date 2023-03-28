@@ -2,6 +2,7 @@ package hocheoltech.boos.controller;
 
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,8 +29,8 @@ public class BoardController {
             @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
     })
-    public ResponseEntity<Board> createBoard(@RequestBody Board board){
-        Board createdBoard = boardService.createBoard(board,2L);
+    public ResponseEntity<Board> createBoard(@RequestBody Board board, @RequestBody Members members){ // members 세션 or 토큰 확인 필요,,
+        Board createdBoard = boardService.createBoard(board, members.getSeq());
         return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
     }
 

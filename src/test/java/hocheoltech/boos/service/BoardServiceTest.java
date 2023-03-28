@@ -41,18 +41,22 @@ class BoardServiceTest {
     void createBoard() { // 등록일시 저장안됨, 확인 필요
         //given
 
-        Long memberSeq = 5L;
-        Long categorySeq = 3L;
+        Long memberSeq = 1L;
+        Long categorySeq = 1L;
 
         Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
         Category category = categoryOptional.get();
 
+        for (int i = 0; i < 200; i++) {
             Board board = Board.builder()
-                    .title("테스트 제목3")
-                    .content("테스트 내용12")
+                    .title("테스트 제목"+i)
+                    .content("테스트 내용"+i)
                     .category(category)
                     .build();
             boardService.createBoard(board,memberSeq);
+
+        }
+
     }
 
     @Test
@@ -73,9 +77,9 @@ class BoardServiceTest {
 
     @Test
     void getBoardListByMemberSeq() {
-        PageRequest pageRequest = PageRequest.of(1,5);
+        PageRequest pageRequest = PageRequest.of(0,5);
 
-        Page<Board> boardList = boardService.getBoardList(5L, null, pageRequest);
+        Page<Board> boardList = boardService.getBoardList(1L, null, "5", null ,pageRequest);
         for (Board board : boardList) {
             System.out.println("board = " + board.getSeq());
 //            System.out.println("category = "+board.getCategory().getCategoryName());
