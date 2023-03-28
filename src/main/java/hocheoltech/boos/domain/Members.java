@@ -2,18 +2,21 @@ package hocheoltech.boos.domain;
 
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity @Table(name="MEMBERS")
 @AllArgsConstructor
-public class Members {
+public class Members implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBERS_SEQ")
@@ -53,7 +56,7 @@ public class Members {
         this.recipientMessages = new ArrayList<>();
         this.blockList = new ArrayList<>();
         this.blockedList = new ArrayList<>();
-
+        this.roles = new ArrayList<>();
     }
 
     public void updateMemberInfo(String password, String nickname){
@@ -79,4 +82,37 @@ public class Members {
     @OneToMany(mappedBy = "blockedId")
     private List<BlackList> blockedList = new ArrayList<>();
 
+    // 시큐리티 설정
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return id;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

@@ -3,6 +3,7 @@ package hocheoltech.boos.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,5 +44,15 @@ public class CustomExceptionHandler {
         log.error(message,stackTraceElements[0]);
         return message;
     }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String UsernameNotFoundException(UsernameNotFoundException ex) {
+        StackTraceElement[] stackTraceElements = ex.getStackTrace();
+        String message =  ex.getMessage();
+        log.error(message,stackTraceElements[0]);
+        return message;
+    }
+
 
 }

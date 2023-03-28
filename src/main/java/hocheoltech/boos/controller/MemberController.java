@@ -5,8 +5,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.internal.LinkedTreeMap;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
+import hocheoltech.boos.dto.MembersLoginDto;
 import hocheoltech.boos.dto.OpenApiCallDto;
 import hocheoltech.boos.exception.ErrorMessage;
+import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.repository.MembersRepository;
 import hocheoltech.boos.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -39,10 +42,12 @@ import java.util.concurrent.RejectedExecutionException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
     private final MembersRepository membersRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/v1/member")
     @Operation(summary = "회원가입 메서드", description = "회원가입 메서드입니다.")
@@ -133,9 +138,13 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
     })
-    public ResponseEntity login(@RequestBody Members members){
-        memberService.loginMember(members);
-        return new ResponseEntity(HttpStatus.OK);
+    public String login(@RequestBody MembersLoginDto membersLoginDto){
+        log.info("user Id = {}", membersLoginDto.getId());
+        Members loginMembers = membersRepository.findById(membersLoginDto.getId())
+                .orElseThrow(
+                        () -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
+                );
+        return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
     }
 
 

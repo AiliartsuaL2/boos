@@ -9,15 +9,19 @@ import hocheoltech.boos.repository.MembersBoardRepository;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
@@ -59,4 +63,10 @@ public class MemberService {
         members.updateMemberInfo(updateMembersDto.getPassword(),updateMembersDto.getNickname());
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        return membersRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+
+    }
 }
