@@ -36,7 +36,10 @@ public class Board {
     
     // 수정 여부
     private String modifyYn;
-    
+
+    //작성자
+    private String writer;
+
     // 수정 일시
     private LocalDateTime modifyTime;
 
@@ -50,11 +53,12 @@ public class Board {
 
 
     @Builder
-    public Board(String title, String content, Category category){
+    public Board(String title, String content, Category category, String writer){
         this.title = title;
         this.content = content;
         this.regTime = LocalDateTime.now();
         this.category = category;
+        this.writer = writer;
         this.category.getBoards().add(this);
         this.membersBoards = new ArrayList<>();
         this.comments = new ArrayList<>();

@@ -146,7 +146,4 @@ public class MemberController {
                 );
         return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
     }
-
-
-
 }

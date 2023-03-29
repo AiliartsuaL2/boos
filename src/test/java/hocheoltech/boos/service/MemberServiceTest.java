@@ -32,16 +32,19 @@ class MemberServiceTest {
 
     @Test
     void save(){
+        for (int i = 3; i < 50; i++) {
             Members savedMember = Members.builder()
-                    .id("aiolasrfas")
-                    .businessCategory("요식업")
-                    .businessRegNum("123123123")
-                    .name("2쥬후")
-                    .nickname("AIliartsua")
+                    .id("luvsole"+i)
+                    .businessCategory("쇼핑몰")
+                    .businessRegNum("5678910212")
+                    .name("김정아")
+                    .nickname("luvsole"+i)
                     .openTime(openDate)
                     .password("123123")
                     .build();
             memberService.saveMember(savedMember);
+
+        }
     }
 
     @Test
@@ -79,8 +82,12 @@ class MemberServiceTest {
     void deleteMember() {
         //given
         long seq = 2;
+        for (long i = 6; i <54; i++) {
+            memberService.deleteMember(i);
+
+
+        }
         //when
-        memberService.deleteMember(seq);
         //then
 //        memberService.findMember(seq);
     }

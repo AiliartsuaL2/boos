@@ -2,6 +2,7 @@ package hocheoltech.boos.repository;
 
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.dto.BoardListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +12,6 @@ public interface BoardRepositoryCustom {
 
     Board findBoardWithCategory(Long boardSeq);
 
-    Page<Board> findBoardListPaging(Long membersSeq,Long categorySeq, String boardTitle, String boardContent ,  Pageable pageable);
+    Page<BoardListDto> findBoardListPaging(String nickname, String categoryName, String boardTitle, String boardContent , Pageable pageable);
 
 }

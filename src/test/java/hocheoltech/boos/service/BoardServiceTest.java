@@ -44,19 +44,22 @@ class BoardServiceTest {
         Long memberSeq = 1L;
         Long categorySeq = 1L;
 
-        Optional<Category> categoryOptional = categoryRepository.findById(categorySeq);
-        Category category = categoryOptional.get();
+        for(int j=0; j < 4; j++) {
+            for (int i = 1; i < 40; i++) {
+                long seq = i;
+                Optional<Category> categoryOptional = categoryRepository.findById(seq);
+                Category category = categoryOptional.get();
+                String nickname = memberService.findMember(seq + 53).getNickname();
+                Board board = Board.builder()
+                        .title("테스트 제목" + i)
+                        .content("테스트 내용" + i)
+                        .writer(nickname)
+                        .category(category)
+                        .build();
+                boardService.createBoard(board, seq + 53);
 
-        for (int i = 0; i < 200; i++) {
-            Board board = Board.builder()
-                    .title("테스트 제목"+i)
-                    .content("테스트 내용"+i)
-                    .category(category)
-                    .build();
-            boardService.createBoard(board,memberSeq);
-
+            }
         }
-
     }
 
     @Test
@@ -79,12 +82,11 @@ class BoardServiceTest {
     void getBoardListByMemberSeq() {
         PageRequest pageRequest = PageRequest.of(0,5);
 
-        Page<Board> boardList = boardService.getBoardList(1L, null, "5", null ,pageRequest);
-        for (Board board : boardList) {
-            System.out.println("board = " + board.getSeq());
+//        Page<Board> boardList = boardService.getBoardList("ailiartsua", null, "5", null ,pageRequest);
+//        for (Board board : boardList) {
+//            System.out.println("board = " + board.getSeq());
 //            System.out.println("category = "+board.getCategory().getCategoryName());
         }
-    }
 
     @Test
     void getBoardDetail(){

@@ -3,6 +3,7 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
+import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BoardRepository;
@@ -11,6 +12,7 @@ import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -60,8 +62,8 @@ public class BoardService {
     }
 
     // 게시판리스트 조회
-    public Page<Board> getBoardList(Long membersSeq, Long categorySeq, String boardTitle, String boardContent ,Pageable pageable){
-        Page<Board> boardList = boardRepository.findBoardListPaging(membersSeq, categorySeq, boardTitle, boardContent , pageable);
+    public Page<BoardListDto> getBoardList(String writer, String categoryName, String boardTitle, String boardContent , Pageable pageable){
+        Page<BoardListDto> boardList = boardRepository.findBoardListPaging(writer, categoryName, boardTitle, boardContent, pageable);
         return boardList;
     }
 
