@@ -31,7 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/test").authenticated() // authenticated : andMatchers의 URL로 요청이 오면 인증이 필요하다고 설정
                 .antMatchers("/admin/**").hasRole("ADMIN") // antMatchers : 해당 URL 요청시 설정해줌
                 .antMatchers("/user/**").hasRole("USER")// hasRole : antPatterns URL로 요청이 들어오면 권한을 확인한다.
-                .antMatchers(HttpMethod.POST,"/api/v1/login").authenticated() //  antPatterns 에 대한 HTTP POST 요청이 인증되어야 함을 말해 준다.
                 .antMatchers(HttpMethod.POST,"/api/v1/board").authenticated() //  antPatterns 에 대한 HTTP POST 요청이 인증되어야 함을 말해 준다.
                 .antMatchers("/**").permitAll()// permitAll : 다른 모든 요청들을 인증이나 권한 없이 허용
                 .and()

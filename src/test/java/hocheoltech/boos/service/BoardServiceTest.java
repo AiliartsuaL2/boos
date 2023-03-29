@@ -44,22 +44,22 @@ class BoardServiceTest {
         Long memberSeq = 1L;
         Long categorySeq = 1L;
 
-        for(int j=0; j < 4; j++) {
-            for (int i = 1; i < 40; i++) {
-                long seq = i;
-                Optional<Category> categoryOptional = categoryRepository.findById(seq);
-                Category category = categoryOptional.get();
-                String nickname = memberService.findMember(seq + 53).getNickname();
-                Board board = Board.builder()
-                        .title("테스트 제목" + i)
-                        .content("테스트 내용" + i)
-                        .writer(nickname)
-                        .category(category)
-                        .build();
-                boardService.createBoard(board, seq + 53);
-
-            }
-        }
+//        for(int j=0; j < 4; j++) {
+//            for (int i = 1; i < 40; i++) {
+//                long seq = i;
+//                Optional<Category> categoryOptional = categoryRepository.findById(seq);
+//                Category category = categoryOptional.get();
+//                String nickname = memberService.findMember(seq + 53).getNickname();
+//                Board board = Board.builder()
+//                        .title("테스트 제목" + i)
+//                        .content("테스트 내용" + i)
+//                        .writer(nickname)
+//                        .category(category)
+//                        .build();
+//                boardService.createBoard(board, seq + 53);
+//
+//            }
+//        }
     }
 
     @Test

@@ -12,6 +12,6 @@ public interface BoardRepositoryCustom {
 
     Board findBoardWithCategory(Long boardSeq);
 
-    Page<BoardListDto> findBoardListPaging(String nickname, String categoryName, String boardTitle, String boardContent , Pageable pageable);
+    Page<BoardListDto> findBoardListPaging(BoardListDto boardListDto , Pageable pageable);
 
 }

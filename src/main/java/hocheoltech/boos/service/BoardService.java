@@ -1,15 +1,13 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.repository.BoardRepository;
-import hocheoltech.boos.repository.MembersBoardRepository;
-import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
-import hocheoltech.boos.repository.MembersRepository;
+import hocheoltech.boos.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,16 +26,40 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MembersRepository membersRepository;
     private final MembersBoardRepository membersBoardRepository;
+    private final CategoryRepository categoryRepository;
+
 
     // 게시글 등록
-    public Board createBoard(Board board, long membersId){
+    public BoardListDto createBoard(BoardListDto boardListDto, String membersId){
         Members members = membersRepository.findById(membersId).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+        String categoryName = boardListDto.getCategoryName();
+        Category category = categoryRepository.findByCategoryName(categoryName).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.INCORRECT_CATEGORYNAME.getMsg()));
+
+        Board board = Board.builder()
+                .category(category)
+                .writer(members.getNickname())
+                .title(boardListDto.getTitle())
+                .content(boardListDto.getContent())
+                .build();
+
         MembersBoard membersBoard = MembersBoard.builder()
                                          .board(board)
                                          .members(members)
                                          .build();
-        return membersBoardRepository.save(membersBoard).getBoard();
+        Board result = membersBoardRepository.save(membersBoard).getBoard();
+        BoardListDto resultDto = BoardListDto.builder()
+                .seq(result.getSeq())
+                .writer(result.getWriter())
+                .title(result.getTitle())
+                .categoryName(result.getCategory().getCategoryName())
+                .content(result.getContent())
+                .regTime(result.getRegTime())
+                .modifyYn(result.getModifyYn())
+                .modifyTime(result.getModifyTime())
+                .build();
+        return resultDto;
     }
 
     // TODO 게시글 삭제 이상함;; 쿼리 다시짜야할듯.
@@ -62,8 +84,8 @@ public class BoardService {
     }
 
     // 게시판리스트 조회
-    public Page<BoardListDto> getBoardList(String writer, String categoryName, String boardTitle, String boardContent , Pageable pageable){
-        Page<BoardListDto> boardList = boardRepository.findBoardListPaging(writer, categoryName, boardTitle, boardContent, pageable);
+    public Page<BoardListDto> getBoardList(BoardListDto boardListDto , Pageable pageable){
+        Page<BoardListDto> boardList = boardRepository.findBoardListPaging(boardListDto, pageable);
         return boardList;
     }
 

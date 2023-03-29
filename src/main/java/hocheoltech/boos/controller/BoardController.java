@@ -5,6 +5,7 @@ import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.PageRequest;
+import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,8 +28,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class BoardController {
-
     private final BoardService boardService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/v1/board")
     @Operation(summary = "게시글 작성 메서드", description = "게시글 작성 메서드입니다.")
@@ -35,30 +37,35 @@ public class BoardController {
             @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
     })
-    public ResponseEntity<Board> createBoard(@RequestBody Board board, @RequestBody Members members){
-        Board createdBoard = boardService.createBoard(board, members.getSeq());
-        return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
+    public ResponseEntity<BoardListDto> createBoard(@RequestBody BoardListDto boardListDto,
+                                                    @RequestHeader(value = "Authorization") String jwtToken
+                                                    ){
+        // 헤더를 이용해서 membersSeq를 확인해야함
+        String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+
+        BoardListDto board = boardService.createBoard(boardListDto, membersId);
+        return new ResponseEntity<>(board, HttpStatus.CREATED);
     }
 
+
+    /**
+     *
+     * @param pageRequest - 페이징 조건(page(페이지 쪽), size(한 번에 가져올 페이지 개수), direction(차순 ASC,DESC) , properties(정렬할 컬럼명)
+     * @param boardListDto - 검색 조건 (writer(작성자), title(제목), content(내용), categoryName(카테고리명))
+     * @return Json
+     */
     @GetMapping("/v1/boardList")
+    @Operation(summary = "게시판 불러오기", description = "게시판 리스트 불러오는 메서드입니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
+    })
     public Page<BoardListDto> getBoardList(PageRequest pageRequest,
                                            @RequestBody BoardListDto boardListDto){
-        //Long membersSeq, Long categorySeq, String boardTitle, String boardContent , Pageable pageable
-        // reqData : 검색필터(작성자,카테고리,제목,내용)
-        String writer = boardListDto.getWriter();
-        String title = boardListDto.getTitle();
-        String content = boardListDto.getContent();
-        String categoryName = boardListDto.getCategoryName();
 
         Pageable pageable = pageRequest.of();
 
-        Sort sort = pageable.getSort();
-        for (Sort.Order order : sort) {
-            System.out.println("property = " + order.getProperty());
-            System.out.println("direction = " + order.getDirection());
-        }
-
-        Page<BoardListDto> boardList = boardService.getBoardList(writer, categoryName, title, content, pageable);
+        Page<BoardListDto> boardList = boardService.getBoardList(boardListDto, pageable);
         return boardList;
     }
 }

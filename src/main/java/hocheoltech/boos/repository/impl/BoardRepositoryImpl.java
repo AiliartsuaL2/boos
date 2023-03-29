@@ -40,14 +40,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public PageImpl<BoardListDto> findBoardListPaging(String nickname, String categoryName, String title, String boardContent , Pageable pageable) {
+    public PageImpl<BoardListDto> findBoardListPaging(BoardListDto boardListDto , Pageable pageable) {
         List<Board> boardList = queryFactory.selectFrom(board)
                 .join(board.membersBoards, membersBoard).fetchJoin()
                 .join(board.category, category).fetchJoin()
-                .where(membersNicknameContains(nickname)
-                        .and(categoryNameContains(categoryName))
-                        .and(boardTitleContains(title))
-                        .and(boardContentContains(boardContent)))
+                .where(membersNicknameContains(boardListDto.getWriter())
+                        .and(categoryNameContains(boardListDto.getCategoryName()))
+                        .and(boardTitleContains(boardListDto.getTitle()))
+                        .and(boardContentContains(boardListDto.getContent())))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(boardSort(pageable))
@@ -56,10 +56,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .from(board)
                 .join(board.membersBoards, membersBoard)
                 .join(board.category, category)
-                .where(membersNicknameContains(nickname)
-                        .and(categoryNameContains(categoryName))
-                        .and(boardTitleContains(title))
-                        .and(boardContentContains(boardContent)))
+                .where(membersNicknameContains(boardListDto.getWriter())
+                        .and(categoryNameContains(boardListDto.getCategoryName()))
+                        .and(boardTitleContains(boardListDto.getTitle()))
+                        .and(boardContentContains(boardListDto.getContent())))
                 .fetchOne();
 
         List<BoardListDto> collect = boardList.stream()
