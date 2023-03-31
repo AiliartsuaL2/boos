@@ -31,6 +31,13 @@ public class BoardController {
     private final BoardService boardService;
     private final JwtTokenProvider jwtTokenProvider;
 
+
+    /**
+     *
+     * @param boardListDto : 화면에서 받아온 게시물 정보
+     * @param jwtToken : 로그인시 인가된 jwt 헤더 정보, 추출해서 members Seq 확인에 사용
+     * @return
+     */
     @PostMapping("/v1/board")
     @Operation(summary = "게시글 작성 메서드", description = "게시글 작성 메서드입니다.")
     @ApiResponses(value = {
@@ -38,9 +45,7 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
     })
     public ResponseEntity<BoardListDto> createBoard(@RequestBody BoardListDto boardListDto,
-                                                    @RequestHeader(value = "Authorization") String jwtToken
-                                                    ){
-        // 헤더를 이용해서 membersSeq를 확인해야함
+                                                    @RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
 
         BoardListDto board = boardService.createBoard(boardListDto, membersId);
