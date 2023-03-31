@@ -81,12 +81,10 @@ class MemberServiceTest {
     @Test
     void deleteMember() {
         //given
-        long seq = 2;
-        for (long i = 6; i <54; i++) {
-            memberService.deleteMember(i);
+        long seq = 106;
+        memberService.deleteMember(seq);
 
 
-        }
         //when
         //then
 //        memberService.findMember(seq);

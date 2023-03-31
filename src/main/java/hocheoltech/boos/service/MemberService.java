@@ -3,6 +3,7 @@ package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.MembersBoardRepository;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
@@ -27,11 +29,21 @@ public class MemberService implements UserDetailsService {
     private final MembersRepository membersRepository;
 
     // 회원가입
-    public Members saveMember(Members members){
+    public MembersJoinDto saveMember(Members members){
         if(membersRepository.existsById(members.getId())){
             throw new RejectedExecutionException(ErrorMessage.DUPLICATE_MEMBER_ID.getMsg());
         }
-        return membersRepository.save(members);
+        Members savedMembers = membersRepository.save(members);
+        String openTime = savedMembers.getOpenTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        MembersJoinDto membersDto = MembersJoinDto.builder()
+                .id(savedMembers.getId())
+                .name(savedMembers.getName())
+                .nickname(savedMembers.getNickname())
+                .businessRegNum(savedMembers.getBusinessRegNum())
+                .businessCategory(savedMembers.getBusinessCategory())
+                .openTime(openTime)
+                .build();
+        return membersDto;
     }
 
 
@@ -63,6 +75,7 @@ public class MemberService implements UserDetailsService {
         members.updateMemberInfo(updateMembersDto.getPassword(),updateMembersDto.getNickname());
     }
 
+    // jwt 인증,,
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         return membersRepository.findById(id)

@@ -55,7 +55,7 @@ public class MemberController {
             @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
     })
-    public ResponseEntity<Members> createMember(@RequestBody MembersJoinDto membersJoinDto) throws Exception, RuntimeException {
+    public ResponseEntity<MembersJoinDto> createMember(@RequestBody MembersJoinDto membersJoinDto) throws Exception, RuntimeException {
 
 //            사업자등록번호(필수)	숫자로 이루어진 10자리 값만 가능 ('-' 등의 기호 반드시 제거 후 호출)
 //            대표자성명(필수)	외국인 사업자의 경우에는 영문명 입력
@@ -128,7 +128,8 @@ public class MemberController {
                 .nickname(membersJoinDto.getNickname())
                 .openTime(openTime)
                 .build();
-        Members savedMember = memberService.saveMember(members);
+        MembersJoinDto savedMember = memberService.saveMember(members);
+
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
 

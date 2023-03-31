@@ -12,6 +12,8 @@ public class OpenApiCallDto {
     // 대표자 이름
     private String p_nm;
 
+    private String corp_no;
+
     // 개업일자
     private String start_dt;
 }
