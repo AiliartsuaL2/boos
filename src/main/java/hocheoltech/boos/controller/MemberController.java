@@ -62,6 +62,7 @@ public class MemberController {
 //            개업일자(필수)	  1) YYYYMMDD 포맷의 날짜로 입력('-' 등의 기호 반드시 제거 후 호출)
 //                            2) 사업자등록증에 표기된 개업연월일 날짜로
 //            server에서는 decoding key, browser에서는 encoding key 사용 >> 아님 server에서도 encoding key 사용
+
         if(membersRepository.existsByBusinessRegNum(membersJoinDto.getBusinessRegNum())){
             throw new RejectedExecutionException(ErrorMessage.DUPLICATE_BUSINESS_REG_NUM.getMsg());
         }
@@ -142,9 +143,7 @@ public class MemberController {
     public String login(@RequestBody MembersLoginDto membersLoginDto){
         log.info("user Id = {}", membersLoginDto.getId());
         Members loginMembers = membersRepository.findById(membersLoginDto.getId())
-                .orElseThrow(
-                        () -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
-                );
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
     }
 }

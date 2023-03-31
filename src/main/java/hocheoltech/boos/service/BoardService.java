@@ -62,7 +62,6 @@ public class BoardService {
         return resultDto;
     }
 
-    // TODO 게시글 삭제 이상함;; 쿼리 다시짜야할듯.
     public void deleteBoard(long membersSeq, long boardSeq){
         MembersBoard membersBoard = membersBoardRepository.findMembersBoardByMembersSeqAndBoardSeq(membersSeq, boardSeq);
         if(membersBoard == null){
@@ -72,10 +71,10 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void updateBoard(long membersSeq, long boardSeq, UpdateBoardDto updateBoardDto){
-        Board existBoard = boardRepository.findById(boardSeq).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
+    public void updateBoard(UpdateBoardDto updateBoardDto){
+        Board existBoard = boardRepository.findById(updateBoardDto.getBoardSeq()).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-        UpdateBoardDto updatedBoard = membersBoardRepository.findMembersBoard(membersSeq, boardSeq); // DB에 있는값 이걸 업데이트를 쳐줘야함,
+        UpdateBoardDto updatedBoard = membersBoardRepository.findMembersBoard(updateBoardDto.getMembersSeq(), updateBoardDto.getBoardSeq()); // DB에 있는값 이걸 업데이트를 쳐줘야함,
         if(updatedBoard == null){ // 본인 게시물이 아닌경우
             throw new NoSuchElementException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
         }

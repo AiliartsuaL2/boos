@@ -7,7 +7,6 @@ import hocheoltech.boos.repository.MembersBoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,15 +20,24 @@ public class MembersBoardRepositoryImpl implements MembersBoardRepositoryCustom 
 
     private final JPAQueryFactory queryFactory;
     @Override
-    public UpdateBoardDto findMembersBoard(Long membersSeq, Long boardSeq) {
+    public UpdateBoardDto findMembersBoard(UpdateBoardDto updateBoardDto) {
         List<Board> resultQuery = queryFactory.selectFrom(board)
                 .leftJoin(board.membersBoards, membersBoard).fetchJoin()
                 .leftJoin(membersBoard.members, members).fetchJoin()
-                .where(members.seq.eq(membersSeq)
-                .and (board.seq.eq(boardSeq)))
+                .where(members.seq.eq(updateBoardDto.getMembersSeq())
+                .and (board.seq.eq(updateBoardDto.getBoardSeq())))
                 .fetch();
+        
+        // 리팩토링 다시하기
 
-        List<UpdateBoardDto> resultList = resultQuery.stream().map(p -> new UpdateBoardDto(p, membersSeq)).collect(Collectors.toList());
+        List<UpdateBoardDto> resultList = resultQuery.stream()
+                .map(p -> UpdateBoardDto.builder()
+                        .boardSeq(p.getSeq())
+                        .boardTitle(p.getTitle())
+                        .boardContent(p.getContent())
+                        .boardCategory(p.getCategory())
+                        .build()).collect(Collectors.toList());
+
         if(resultList.size() == 0){ // 일치하는 값이 없으면.. 사용자가 일치하지않음
             return null;
         }

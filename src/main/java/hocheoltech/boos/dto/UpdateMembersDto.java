@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMembersDto {
+    private String id;
     private String password;
     private String nickname;
 }

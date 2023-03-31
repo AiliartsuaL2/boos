@@ -110,19 +110,20 @@ class BoardServiceTest {
         Optional<Category> categoryOptional = categoryRepository.findById(2L);
         Category category = categoryOptional.get();
 
-        Members noneOwner = memberService.findMember(7L);
-        Members boardOwner = memberService.findMember(5L);
+        Members noneOwner = memberService.findMember("ailiartsua");
+        Members boardOwner = memberService.findMember("luvsole");
 
-        Board board = Board.builder()
-                .title("수정된 데이터!!!")
-                .content("랍니다!!!")
-                .category(category)
+        UpdateBoardDto updateBoardDto = UpdateBoardDto.builder()
+                .boardCategory(category)
+                .boardSeq(boardSeq)
+                .boardTitle("수정된 제목")
+                .boardContent("수정된 내용")
+                .membersSeq(boardOwner.getSeq())
                 .build();
-        UpdateBoardDto updateBoardDto = new UpdateBoardDto(board, boardOwner.getSeq());
 
 
         //when
-        boardService.updateBoard(updateBoardDto.getMembersSeq(),boardSeq,updateBoardDto); // 게시판 주인
+        boardService.updateBoard(updateBoardDto); // 게시판 주인
         //then
 //        assertThat(boardDetail.getContent()).isEqualTo("랍니다");
     }

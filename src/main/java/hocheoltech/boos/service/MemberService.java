@@ -46,16 +46,7 @@ public class MemberService implements UserDetailsService {
         return membersDto;
     }
 
-
-    // 로그인
-    public void loginMember(Members members) {
-        if(!membersRepository.existsByIdAndPassword(members.getId(), members.getPassword())){
-            throw new NoSuchElementException(ErrorMessage.INCORRECT_MEMBER_INFO.getMsg());
-        }
-        log.info("로그인 성공 로그인 id = {}",members.getId());
-    }
-
-    public Members findMember(Long id){
+    public Members findMember(String id){
         Members members = membersRepository.findById(id).orElseThrow( // 해당 사용자가 없으면 Throw
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         return members;
@@ -68,8 +59,8 @@ public class MemberService implements UserDetailsService {
         membersRepository.deleteById(id);
     }
 
-    public void modifyMember(Long id, UpdateMembersDto updateMembersDto){
-        Members members = membersRepository.findById(id).orElseThrow(
+    public void modifyMember(UpdateMembersDto updateMembersDto){
+        Members members = membersRepository.findById(updateMembersDto.getId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
         );
         members.updateMemberInfo(updateMembersDto.getPassword(),updateMembersDto.getNickname());

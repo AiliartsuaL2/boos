@@ -48,32 +48,6 @@ class MemberServiceTest {
     }
 
     @Test
-    void successLogin() {
-        //given
-        Members correctMember = Members.builder()
-                .id("jpajpajpa")
-                .password("123123")
-                .build();
-        //when
-        memberService.loginMember(correctMember);
-
-        //then
-
-    }
-    @Test
-    void failedLogin(){
-        //given
-        Members inCorrectMember = Members.builder()
-                .id("jpajpajpa")
-                .password("1231234")
-                .build();
-        //when
-        memberService.loginMember(inCorrectMember);
-        //then
-
-    }
-
-    @Test
     @Transactional
     void findMember() {
     }
@@ -95,11 +69,12 @@ class MemberServiceTest {
         long seq = 2;
         //when
         UpdateMembersDto updateMembersDto = UpdateMembersDto.builder()
+                .id("ailiartsua")
                 .password("qw1621")
                 .nickname("nyeonge")
                 .build();
-        memberService.modifyMember(2L,updateMembersDto);
-        Members member = memberService.findMember(2L);
+        memberService.modifyMember(updateMembersDto);
+        Members member = memberService.findMember("ailiartsua");
         //then
         assertThat(member.getPassword()).isEqualTo("qw1621");
 
