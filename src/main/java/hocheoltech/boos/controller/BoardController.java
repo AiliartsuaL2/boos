@@ -76,8 +76,9 @@ public class BoardController {
 
     @DeleteMapping("/v1/board")
     @ResponseStatus(HttpStatus.OK)
-    public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken) {
+    public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken, String boardSeq) {
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+        boardService.deleteBoard(Long.parseLong(boardSeq),membersId);
         return "게시판이 성공적으로 삭제되었습니다.";
     }
 
