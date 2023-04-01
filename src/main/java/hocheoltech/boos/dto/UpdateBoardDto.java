@@ -15,6 +15,7 @@ public class UpdateBoardDto {
     private String boardTitle;
     private String boardContent;
     private Category boardCategory;
+    private String writer;
 
     public void setUpdateDto(UpdateBoardDto updateBoardDto){
         this.boardTitle = updateBoardDto.getBoardTitle();

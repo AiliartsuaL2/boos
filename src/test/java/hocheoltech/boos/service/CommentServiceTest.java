@@ -41,7 +41,7 @@ class CommentServiceTest {
         //given
 
         CommentDto co = CommentDto.builder()
-                .boardSeq(249L)
+                .boardSeq("249")
                 .writerId("juho123")
                 .anonymousYn("N")
                 .content("댓글 테스트")

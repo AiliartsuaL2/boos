@@ -62,24 +62,17 @@ public class BoardService {
         return resultDto;
     }
 
-    public void deleteBoard(long membersSeq, long boardSeq){
-        MembersBoard membersBoard = membersBoardRepository.findMembersBoardByMembersSeqAndBoardSeq(membersSeq, boardSeq);
-        if(membersBoard == null){
-            throw new NoSuchElementException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
-        }
-        membersBoardRepository.delete(membersBoard);
+    public void deleteBoard(long boardSeq, String membersId){
+        Board board = boardRepository.findBoardBySeqAndWriter(boardSeq, membersId).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
+        boardRepository.delete(board);
     }
 
     // 게시글 수정
     public void updateBoard(UpdateBoardDto updateBoardDto){
-        Board existBoard = boardRepository.findById(updateBoardDto.getBoardSeq()).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
+        Board existBoard = boardRepository.findBoardBySeqAndWriter(updateBoardDto.getBoardSeq(),updateBoardDto.getWriter()).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-        UpdateBoardDto updatedBoard = membersBoardRepository.findMembersBoard(updateBoardDto.getMembersSeq(), updateBoardDto.getBoardSeq()); // DB에 있는값 이걸 업데이트를 쳐줘야함,
-        if(updatedBoard == null){ // 본인 게시물이 아닌경우
-            throw new NoSuchElementException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
-        }
-        updatedBoard.setUpdateDto(updateBoardDto); // 수정값으로 업데이트처리
-        existBoard.updateBoard(updatedBoard); // 기존 보드에 값을 업데이트 ,, 더티 체킹으로 자동 쿼리
+        existBoard.updateBoard(updateBoardDto); // 기존 보드에 값을 업데이트 ,, 더티 체킹으로 자동 업데이트 쿼리
     }
 
     // 게시판리스트 조회

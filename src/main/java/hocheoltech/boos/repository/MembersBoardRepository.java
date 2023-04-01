@@ -5,7 +5,7 @@ import hocheoltech.boos.dto.UpdateBoardDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface MembersBoardRepository extends JpaRepository<MembersBoard, Long>, MembersBoardRepositoryCustom {
-    UpdateBoardDto findMembersBoard(Long membersSeq, Long boardSeq);
-    MembersBoard findMembersBoardByMembersSeqAndBoardSeq(Long membersSeq, Long boardSeq);
+import java.util.Optional;
+
+public interface MembersBoardRepository extends JpaRepository<MembersBoard, Long>{
 }

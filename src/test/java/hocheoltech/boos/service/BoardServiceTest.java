@@ -65,11 +65,11 @@ class BoardServiceTest {
     @Test
     void deleteBoard() {
         //given
-        long boardSeq = 132L;
-        long membersSeq = 5L;
+        long boardSeq = 250L;
+        String membersId = "luvsole4";
 
         //when
-        boardService.deleteBoard(membersSeq,boardSeq);
+        boardService.deleteBoard(boardSeq,membersId);
 
         //then
 //        Board boardDetail = boardService.getBoardDetail(boardSeq); // 존재하지 않는 게시판 출력,
@@ -105,20 +105,21 @@ class BoardServiceTest {
     @Transactional
     void updateBoard() {
         //given
-        long boardSeq = 131L;
+        long boardSeq = 249L;
 
-        Optional<Category> categoryOptional = categoryRepository.findById(2L);
+        Optional<Category> categoryOptional = categoryRepository.findById(3L);
         Category category = categoryOptional.get();
 
         Members noneOwner = memberService.findMember("ailiartsua");
-        Members boardOwner = memberService.findMember("luvsole");
+        Members boardOwner = memberService.findMember("luvsole3");
 
         UpdateBoardDto updateBoardDto = UpdateBoardDto.builder()
                 .boardCategory(category)
                 .boardSeq(boardSeq)
                 .boardTitle("수정된 제목")
                 .boardContent("수정된 내용")
-                .membersSeq(boardOwner.getSeq())
+//                .membersSeq(boardOwner.getSeq())
+                .membersSeq(noneOwner.getSeq()) // 권한관련 throw exception 발생
                 .build();
 
 
