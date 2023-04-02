@@ -82,10 +82,8 @@ public class BoardService {
     }
 
     public Board getBoardDetail(long seq){
-        Board board = boardRepository.findBoardWithCategory(seq);
-        if(board == null){
-            throw new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg());
-        }
+        Board board = boardRepository.findBoardWithCategory(seq).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
         return board;
     }
 

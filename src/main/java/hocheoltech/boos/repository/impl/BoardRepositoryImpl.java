@@ -18,6 +18,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hocheoltech.boos.domain.QBoard.board;
@@ -31,12 +32,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Board findBoardWithCategory(Long boardSeq){
+    public Optional<Board> findBoardWithCategory(Long boardSeq){
         Board resultBoard = queryFactory.selectFrom(board)
                 .join(board.category, category).fetchJoin()
                 .where(board.seq.eq(boardSeq))
                 .fetchOne();
-        return resultBoard;
+        return Optional.ofNullable(resultBoard);
     }
 
     @Override

@@ -91,12 +91,12 @@ class BoardServiceTest {
     @Test
     void getBoardDetail(){
         //given
-        long seq = 131;
+        long seq = 249L;
         //when
         Board boardDetail = boardService.getBoardDetail(seq);
 //        String categoryName = boardDetail.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
         //then
-        assertThat(boardDetail.getTitle()).isEqualTo("수정된 데이터!!!");
+        assertThat(boardDetail.getTitle()).isEqualTo("수정된 제목");
 //        assertThat(categoryName).isEqualTo("비밀 게시판");
     }
 

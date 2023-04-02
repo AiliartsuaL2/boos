@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.RejectedExecutionException;
 
 @RequiredArgsConstructor
 @Service
@@ -39,5 +40,13 @@ public class CommentService {
         return commentDto;
     }
 
+    public void deleteComment(CommentDto commentDto){
+        Members members = membersRepository.findById(commentDto.getWriterId()).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+        int result = commentRepository.deleteBySeqAndMembersSeq(Long.parseLong(commentDto.getSeq()), members.getSeq());
+        if(result == 0){
+            throw new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
+        }
+    }
 
 }

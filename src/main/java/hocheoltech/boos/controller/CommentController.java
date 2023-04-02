@@ -33,7 +33,7 @@ public class CommentController {
             @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
     })
-    public ResponseEntity<CommentDto> createBoard(@RequestBody CommentDto commentDto,
+    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto,
                                                   @RequestHeader(value = "Authorization") String jwtToken){
         // 헤더를 이용해서 membersSeq를 확인해야함
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
@@ -41,5 +41,16 @@ public class CommentController {
         commentDto.setWriterId(membersId);
         CommentDto comment = commentService.createComment(commentDto);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/v1/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteComment(@RequestBody CommentDto commentDto,
+                                @RequestHeader(value = "Authorization") String jwtToken){
+        String membersId = jwtTokenProvider.getUserPk(jwtToken);
+        commentDto.setWriterId(membersId);
+
+        commentService.deleteComment(commentDto);
+        return "댓글이 정상적으로 삭제되었습니다.";
     }
 }
