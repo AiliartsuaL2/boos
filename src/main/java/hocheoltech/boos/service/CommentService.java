@@ -11,6 +11,7 @@ import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.RejectedExecutionException;
@@ -18,11 +19,13 @@ import java.util.concurrent.RejectedExecutionException;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class CommentService {
     private final CommentRepository commentRepository;
     private final MembersRepository membersRepository;
     private final BoardRepository boardRepository;
 
+    @Transactional// CUD 상세 레벨엔 readOnly false(default)
     public CommentDto createComment(CommentDto commentDto){
         Members members = membersRepository.findById(commentDto.getWriterId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
@@ -40,6 +43,7 @@ public class CommentService {
         return commentDto;
     }
 
+    @Transactional
     public void deleteComment(CommentDto commentDto){
         Members members = membersRepository.findById(commentDto.getWriterId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));

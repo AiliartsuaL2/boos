@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
@@ -23,12 +24,14 @@ import java.util.concurrent.RejectedExecutionException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberService implements UserDetailsService {
 
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
 
     // 회원가입
+    @Transactional
     public MembersJoinDto saveMember(Members members){
         if(membersRepository.existsById(members.getId())){
             throw new RejectedExecutionException(ErrorMessage.DUPLICATE_MEMBER_ID.getMsg());
@@ -51,14 +54,14 @@ public class MemberService implements UserDetailsService {
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         return members;
     }
-
+    @Transactional
     public void deleteMember(Long id){
         if(!membersRepository.existsById(id)){
             throw new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg());
         }
         membersRepository.deleteById(id);
     }
-
+    @Transactional
     public void modifyMember(UpdateMembersDto updateMembersDto){
         Members members = membersRepository.findById(updateMembersDto.getId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())

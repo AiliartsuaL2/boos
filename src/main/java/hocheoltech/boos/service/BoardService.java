@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class BoardService {
 
 //    private final BoardMapper boardMapper;
@@ -30,6 +32,7 @@ public class BoardService {
 
 
     // 게시글 등록
+    @Transactional
     public BoardListDto createBoard(BoardListDto boardListDto, String membersId){
         Members members = membersRepository.findById(membersId).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
@@ -62,6 +65,7 @@ public class BoardService {
         return resultDto;
     }
 
+    @Transactional
     public void deleteBoard(long boardSeq, String membersId){
         Board board = boardRepository.findBoardBySeqAndWriter(boardSeq, membersId).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
@@ -69,6 +73,7 @@ public class BoardService {
     }
 
     // 게시글 수정
+    @Transactional
     public void updateBoard(UpdateBoardDto updateBoardDto){
         Board existBoard = boardRepository.findBoardBySeqAndWriter(updateBoardDto.getBoardSeq(),updateBoardDto.getWriter()).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
