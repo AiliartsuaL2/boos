@@ -1,12 +1,16 @@
 package hocheoltech.boos.exception;
 
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,15 +45,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
     //한글 출력을 위해 getWriter() 사용
     private void setResponse(HttpServletResponse response, ErrorMessage errorMessage) throws RuntimeException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
         response.setStatus(errorMessage.getCode());
-
-        JSONObject responseJson = new JSONObject();
-        responseJson.put("msg", errorMessage.getMsg());
-        responseJson.put("httpStatus", errorMessage.getHttpStatus());
-        responseJson.put("code", errorMessage.getCode());
-
-        response.getWriter().print(responseJson);
-        response.sendRedirect("/api/exception/redirect");
+        response.getWriter().print(errorMessage.getMsg());
     }
 }
