@@ -4,6 +4,7 @@ package hocheoltech.boos.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,18 +16,21 @@ public class Message {
     // 순번
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MESSAGE_SEQ")
     private long seq;
 
     // 발신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "SENDER_SEQ" , insertable = false, updatable = false)
     private Members senderId;
 
+    // 내용
+    @Size(max=100)
     private String content;
 
     // 수신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "RECIPIENT_SEQ" , insertable = false, updatable = false)
     private Members recipientId;
 
     // 발신일시

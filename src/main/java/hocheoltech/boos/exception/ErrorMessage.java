@@ -15,7 +15,8 @@ public enum ErrorMessage {
     DUPLICATE_BUSINESS_REG_NUM(HttpStatus.BAD_REQUEST,"중복된 사업자 등록번호 입니다."),
     INCORRECT_ARGUMENTS_TO_OPENAPI(HttpStatus.BAD_REQUEST, "진위 확인을 위한 인자가 잘못되었습니다."),
     INCORRECT_CATEGORYNAME(HttpStatus.BAD_REQUEST, "해당 카테고리 이름이 존재하지 않습니다."),
-    NOT_EXIST_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글이 존재하지 않습니다.");
+    NOT_EXIST_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글이 존재하지 않습니다."),
+    NOT_EXIST_BUSINESS_CATEGORY_NAME(HttpStatus.BAD_REQUEST,"존재하지 않는 업종명 입니다.");
     private final String msg;
     private final HttpStatus httpStatus;
     private final int code;

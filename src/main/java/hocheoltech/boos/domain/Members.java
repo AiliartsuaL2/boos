@@ -1,11 +1,14 @@
 package hocheoltech.boos.domain;
 
 
+import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.common.converter.TFCodeConverter;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,24 +26,38 @@ public class Members implements UserDetails {
     private Long seq;
 
     // 아이디
+    @Size(max=20)
     private String id;
     // 비밀번호
+    @Size(max=30)
     private String password;
     // 이름
+    @Size(max=6)
     private String name;
+
     // 업종
-    private String businessCategory;
+    @ManyToOne
+    @JoinColumn(name="BUSINESS_CATEGORY")
+    private BusinessCategory businessCategory;
+
     //사업자 등록번호
+    @Size(max=10)
     private String businessRegNum;
     // 개업 일자
     private LocalDate openTime;
     // 가입 일자
     private LocalDateTime joinTime;
     // 닉네임
+    @Size(max=10)
     private String nickname;
+    // 탈퇴여부
+
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode withdrawalYn;
 
     @Builder
-    public Members(String id, String password, String name, String businessCategory, String businessRegNum, LocalDate openTime, String nickname){
+    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, LocalDate openTime, String nickname){
         this.id = id;
         this.password = password;
         this.name = name;
@@ -57,6 +74,7 @@ public class Members implements UserDetails {
         this.blockList = new ArrayList<>();
         this.blockedList = new ArrayList<>();
         this.roles = new ArrayList<>();
+        this.withdrawalYn = TFCode.FALSE;
     }
 
     public void updateMemberInfo(String password, String nickname){
@@ -78,9 +96,9 @@ public class Members implements UserDetails {
     @OneToMany(mappedBy = "recipientId")
     private List<Message> recipientMessages = new ArrayList<>();
     @OneToMany(mappedBy = "blockId")
-    private List<BlackList> blockList = new ArrayList<>();
+    private List<Blacklist> blockList = new ArrayList<>();
     @OneToMany(mappedBy = "blockedId")
-    private List<BlackList> blockedList = new ArrayList<>();
+    private List<Blacklist> blockedList = new ArrayList<>();
 
     // 시큐리티 설정
     @ElementCollection(fetch = FetchType.EAGER)

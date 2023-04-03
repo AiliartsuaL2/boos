@@ -1,8 +1,11 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
+import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,22 +31,28 @@ class MemberServiceTest {
     @Autowired
     MemberService memberService;
 
-    LocalDate openDate = parse("2022-12-06", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    @Autowired
+    BusinessCategoryRepository businessCategoryRepository;
+
 
     @Test
     void save(){
+        BusinessCategory businessCategory = BusinessCategory.builder()
+                .categoryName("쇼핑몰")
+                .build();
+        businessCategoryRepository.save(businessCategory);
+
         for (int i = 3; i < 50; i++) {
-            Members savedMember = Members.builder()
-                    .id("luvsole"+i)
+            MembersJoinDto m = MembersJoinDto.builder()
+                    .id("luvsole" + i)
                     .businessCategory("쇼핑몰")
                     .businessRegNum("5678910212")
                     .name("김정아")
-                    .nickname("luvsole"+i)
-                    .openTime(openDate)
+                    .nickname("luvsole" + i)
+                    .openTime("2022-12-06")
                     .password("123123")
                     .build();
-            memberService.saveMember(savedMember);
-
+            memberService.saveMember(m);
         }
     }
 

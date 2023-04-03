@@ -10,27 +10,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @AllArgsConstructor
-public class BlackList {
+public class Blacklist {
 
     // 순번
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BLACKLIST_SEQ")
     private long seq;
 
     // 차단한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "blocker_seq" , insertable = false, updatable = false)
     private Members blockId;
 
     // 차단당한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "MEMBERS_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "blocked_seq" , insertable = false, updatable = false)
     private Members blockedId;
 
     // 차단 일시
     private LocalDateTime blockedTime;
 
     @Builder
-    public BlackList(Members blockId, Members blockedId){
+    public Blacklist(Members blockId, Members blockedId){
         this.blockId = blockId;
         this.blockedId = blockedId;
         this.blockedTime = LocalDateTime.now();

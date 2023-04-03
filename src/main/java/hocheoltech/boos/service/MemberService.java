@@ -1,12 +1,12 @@
 package hocheoltech.boos.service;
 
 
-import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.repository.MembersBoardRepository;
+import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 
 @Service
@@ -29,23 +29,41 @@ public class MemberService implements UserDetailsService {
 
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
+    private final BusinessCategoryRepository businessCategoryRepository;
 
     // 회원가입
     @Transactional
-    public MembersJoinDto saveMember(Members members){
-        if(membersRepository.existsById(members.getId())){
+    public MembersJoinDto saveMember(MembersJoinDto membersJoinDto){
+        if(membersRepository.existsById(membersJoinDto.getId())){
             throw new RejectedExecutionException(ErrorMessage.DUPLICATE_MEMBER_ID.getMsg());
         }
+        BusinessCategory businessCategory = businessCategoryRepository.findByCategoryName(membersJoinDto.getBusinessCategory()).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BUSINESS_CATEGORY_NAME.getMsg()));
+
+
+        LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        Members members = Members.builder()
+                .id(membersJoinDto.getId())
+                .password(membersJoinDto.getPassword())
+                .name(membersJoinDto.getName())
+                .businessRegNum(membersJoinDto.getBusinessRegNum())
+                .businessCategory(businessCategory)
+                .nickname(membersJoinDto.getNickname())
+                .openTime(openTime)
+                .build();
+
         Members savedMembers = membersRepository.save(members);
-        String openTime = savedMembers.getOpenTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String openTime2 = savedMembers.getOpenTime().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         MembersJoinDto membersDto = MembersJoinDto.builder()
                 .id(savedMembers.getId())
                 .name(savedMembers.getName())
                 .nickname(savedMembers.getNickname())
                 .businessRegNum(savedMembers.getBusinessRegNum())
-                .businessCategory(savedMembers.getBusinessCategory())
-                .openTime(openTime)
+                .businessCategory(savedMembers.getBusinessCategory().getCategoryName())
+                .openTime(openTime2)
                 .build();
+
         return membersDto;
     }
 

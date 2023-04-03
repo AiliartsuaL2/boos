@@ -4,6 +4,7 @@ package hocheoltech.boos.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Category {
     private long seq;
 
     // 카테고리 명
+    @Size(max=10)
     private String categoryName;
 
     // 부모 카테고리 순번

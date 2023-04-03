@@ -2,8 +2,8 @@ package hocheoltech.boos.controller;
 
 
 import hocheoltech.boos.domain.Board;
-import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.BoardListDto;
+import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.PageRequest;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.service.BoardService;
@@ -13,12 +13,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.json.JSONObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +30,7 @@ public class BoardController {
 
     /**
      *
-     * @param boardListDto : 화면에서 받아온 게시물 정보
+     * @param createBoardDto : 화면에서 받아온 게시물 정보
      * @param jwtToken : 로그인시 인가된 jwt 헤더 정보, 추출해서 members Seq 확인에 사용
      * @return
      */
@@ -44,11 +40,11 @@ public class BoardController {
             @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
     })
-    public ResponseEntity<BoardListDto> createBoard(@RequestBody BoardListDto boardListDto,
+    public ResponseEntity<CreateBoardDto> createBoard(@RequestBody CreateBoardDto createBoardDto,
                                                     @RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
 
-        BoardListDto board = boardService.createBoard(boardListDto, membersId);
+        CreateBoardDto board = boardService.createBoard(createBoardDto, membersId);
         return new ResponseEntity<>(board, HttpStatus.CREATED);
     }
 

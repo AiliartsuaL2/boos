@@ -1,5 +1,6 @@
 package hocheoltech.boos.dto;
 
+import hocheoltech.boos.domain.BusinessCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

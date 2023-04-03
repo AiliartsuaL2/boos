@@ -47,7 +47,7 @@ public class BoardListDto {
         membersBoardList = board.getMembersBoards();
         categoryName = board.getCategory().getCategoryName();
         regTime = board.getRegTime();
-        modifyYn = board.getModifyYn();
+        modifyYn = board.getModifyYn().getValue();
         modifyTime = board.getModifyTime();
     }
 

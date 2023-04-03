@@ -1,9 +1,12 @@
 package hocheoltech.boos.domain;
 
 
+import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.common.converter.TFCodeConverter;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,19 +19,24 @@ public class Comment {
     // 순번
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "COMMENT_SEQ")
     private long seq;
     // 내용
+    @Size(max=100)
     private String content;
     // 작성일시
     private LocalDateTime regTime;
     //익명 여부
-    private String anonymousYn;
+
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode anonymousYn;
 
 
     @Builder
     public Comment(String content, String anonymousYN, Board board, Members members) {
         this.content = content;
-        this.anonymousYn = anonymousYN;
+        this.anonymousYn = "Y".equals(anonymousYN) ? TFCode.TRUE : TFCode.FALSE;
         this.regTime = LocalDateTime.now();
         this.board = board;
         this.board.getComments().add(this);

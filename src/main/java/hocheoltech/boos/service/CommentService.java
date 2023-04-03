@@ -39,7 +39,8 @@ public class CommentService {
                 .content(commentDto.getContent())
                 .anonymousYN(commentDto.getAnonymousYn())
                 .build();
-        commentRepository.save(comment);
+        Comment save = commentRepository.save(comment);
+        commentDto.setSeq(String.valueOf(save.getSeq()));
         return commentDto;
     }
 

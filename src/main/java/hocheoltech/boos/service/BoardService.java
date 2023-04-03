@@ -5,6 +5,7 @@ import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
 import hocheoltech.boos.dto.BoardListDto;
+import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.*;
@@ -33,35 +34,31 @@ public class BoardService {
 
     // 게시글 등록
     @Transactional
-    public BoardListDto createBoard(BoardListDto boardListDto, String membersId){
+    public CreateBoardDto createBoard(CreateBoardDto createBoardDto, String membersId){
         Members members = membersRepository.findById(membersId).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
-        String categoryName = boardListDto.getCategoryName();
+        String categoryName = createBoardDto.getCategoryName();
         Category category = categoryRepository.findByCategoryName(categoryName).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.INCORRECT_CATEGORYNAME.getMsg()));
 
         Board board = Board.builder()
                 .category(category)
                 .writer(members.getNickname())
-                .title(boardListDto.getTitle())
-                .content(boardListDto.getContent())
+                .title(createBoardDto.getTitle())
+                .content(createBoardDto.getContent())
                 .build();
 
-        MembersBoard membersBoard = MembersBoard.builder()
-                                         .board(board)
-                                         .members(members)
-                                         .build();
-        Board result = membersBoardRepository.save(membersBoard).getBoard();
-        BoardListDto resultDto = BoardListDto.builder()
-                .seq(result.getSeq())
-                .writer(result.getWriter())
-                .title(result.getTitle())
-                .categoryName(result.getCategory().getCategoryName())
-                .content(result.getContent())
-                .regTime(result.getRegTime())
-                .modifyYn(result.getModifyYn())
-                .modifyTime(result.getModifyTime())
+        membersBoardRepository.save(MembersBoard.builder().members(members).board(board).build()); // Members_board를 저장하며 board cascade로 저장처리
+
+        CreateBoardDto resultDto = CreateBoardDto.builder()
+                .seq(board.getSeq())
+                .writer(board.getWriter())
+                .title(board.getTitle())
+                .categoryName(board.getCategory().getCategoryName())
+                .content(board.getContent())
+                .regTime(board.getRegTime())
                 .build();
+
         return resultDto;
     }
 

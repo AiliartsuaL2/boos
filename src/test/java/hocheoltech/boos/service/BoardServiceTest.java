@@ -3,6 +3,8 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.BoardListDto;
+import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.repository.CategoryRepository;
 import org.assertj.core.api.Assertions;
@@ -41,25 +43,21 @@ class BoardServiceTest {
     void createBoard() { // 등록일시 저장안됨, 확인 필요
         //given
 
-        Long memberSeq = 1L;
-        Long categorySeq = 1L;
+        String writer = "luvsole3";
+        long seq = 1L;
 
-//        for(int j=0; j < 4; j++) {
-//            for (int i = 1; i < 40; i++) {
-//                long seq = i;
-//                Optional<Category> categoryOptional = categoryRepository.findById(seq);
-//                Category category = categoryOptional.get();
-//                String nickname = memberService.findMember(seq + 53).getNickname();
-//                Board board = Board.builder()
-//                        .title("테스트 제목" + i)
-//                        .content("테스트 내용" + i)
-//                        .writer(nickname)
-//                        .category(category)
-//                        .build();
-//                boardService.createBoard(board, seq + 53);
-//
-//            }
-//        }
+            for (int i = 1; i < 40; i++) {
+                String nickname = memberService.findMember(writer).getNickname();
+                CreateBoardDto board = CreateBoardDto.builder()
+                        .title("테스트 제목" + i)
+                        .content("테스트 내용" + i)
+                        .writer(nickname)
+                        .categoryName("테스트 게시판0")
+                        .build();
+
+
+                boardService.createBoard(board, writer);
+            }
     }
 
     @Test

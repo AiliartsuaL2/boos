@@ -1,6 +1,8 @@
 package hocheoltech.boos.domain;
 
 
+import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.common.converter.TFCodeConverter;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,13 +16,19 @@ public class Terms {
     // 순번
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TERMS_SEQ")
     private long seq;
 
     // 약관 종류
-    private String termsCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="TERMS_CATEGORY_SEQ")
+    private TermsCategory termsCategory;
 
     // 동의 여부
-    private String agreeYn;
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode agreeYn;
+
 
     // 동의 일시
     private LocalDateTime agreeTime;
@@ -31,9 +39,9 @@ public class Terms {
     private Members members;
 
     @Builder
-    public Terms(String termsCategory, String agreeYn, Members members){
+    public Terms(TermsCategory termsCategory, String agreeYn, Members members){
         this.termsCategory = termsCategory;
-        this.agreeYn = agreeYn;
+        this.agreeYn = "Y".equals(agreeYn) ? TFCode.TRUE : TFCode.FALSE;
         this.agreeTime = LocalDateTime.now();
         this.members = members;
         this.members.getTerms().add(this);

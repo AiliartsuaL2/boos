@@ -116,17 +116,8 @@ public class MemberController {
             throw new RejectedExecutionException(ErrorMessage.NOT_REGISTED_BUSINESS_REG_NUM.getMsg()); // 에러 발생시 사업자가 잘못된 것 ,
         }
 
-        LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
-        Members members = Members.builder()
-                .id(membersJoinDto.getId())
-                .password(membersJoinDto.getPassword())
-                .name(membersJoinDto.getName())
-                .businessRegNum(membersJoinDto.getBusinessRegNum())
-                .businessCategory(membersJoinDto.getBusinessCategory())
-                .nickname(membersJoinDto.getNickname())
-                .openTime(openTime)
-                .build();
-        MembersJoinDto savedMember = memberService.saveMember(members);
+
+        MembersJoinDto savedMember = memberService.saveMember(membersJoinDto);
 
         return new ResponseEntity<>(savedMember, HttpStatus.CREATED);
     }
