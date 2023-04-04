@@ -19,23 +19,23 @@ public class Blacklist {
 
     // 차단한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "blocker_seq" , insertable = false, updatable = false)
-    private Members blockId;
+    @JoinColumn(name= "blocker_id" , insertable = false, updatable = false)
+    private Members blockerId;
 
     // 차단당한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "blocked_seq" , insertable = false, updatable = false)
+    @JoinColumn(name= "blocked_id" , insertable = false, updatable = false)
     private Members blockedId;
 
     // 차단 일시
     private LocalDateTime blockedTime;
 
     @Builder
-    public Blacklist(Members blockId, Members blockedId){
-        this.blockId = blockId;
+    public Blacklist(Members blockerId, Members blockedId){
+        this.blockerId = blockerId;
         this.blockedId = blockedId;
         this.blockedTime = LocalDateTime.now();
-        this.blockId.getBlockList().add(this);
+        this.blockerId.getBlockList().add(this);
         this.blockedId.getBlockedList().add(this);
     }
 

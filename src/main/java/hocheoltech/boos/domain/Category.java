@@ -19,7 +19,7 @@ public class Category {
     private long seq;
 
     // 카테고리 명
-    @Size(max=10)
+    @Column(length = 10)
     private String categoryName;
 
     // 부모 카테고리 순번

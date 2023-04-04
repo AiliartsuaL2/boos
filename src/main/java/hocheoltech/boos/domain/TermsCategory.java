@@ -15,9 +15,9 @@ public class TermsCategory {
     @Column(name = "TERMS_CATEGORY_SEQ")
     private Long seq;
 
-    @Size(max=10)
+    @Column(length = 10)
     private String title;
 
-    @Size(max=50)
+    @Column(length = 50)
     private String content;
 }

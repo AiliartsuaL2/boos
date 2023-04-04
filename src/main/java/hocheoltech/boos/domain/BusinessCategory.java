@@ -18,6 +18,6 @@ public class BusinessCategory {
     @Column(name="BUSINESS_CATEGORY")
     private Long seq;
 
-    @Size(max=10)
+    @Column(length = 10)
     private String categoryName;
 }

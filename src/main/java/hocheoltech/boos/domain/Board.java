@@ -29,11 +29,11 @@ public class Board {
     private Category category;
 
     // 제목
-    @Size(max=20)
+    @Column(length = 20)
     private String title;
     
     // 내용
-    @Size(max=1000)
+    @Column(length = 1000)
     private String content;
     
     // 작성일시
@@ -45,7 +45,7 @@ public class Board {
     private TFCode modifyYn;
 
     //작성자(닉네임)
-    @Size(max=10)
+    @Column(length = 10)
     private String writer;
 
     // 수정 일시

@@ -21,18 +21,18 @@ import java.util.List;
 @AllArgsConstructor
 public class Members implements UserDetails {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEMBERS_SEQ")
-    private Long seq;
 
     // 아이디
-    @Size(max=20)
+    @Id
+    @Column(name = "MEMBERS_ID", length = 20)
     private String id;
+
     // 비밀번호
-    @Size(max=30)
+    @Column(length = 20)
     private String password;
+
     // 이름
-    @Size(max=6)
+    @Column(length = 6)
     private String name;
 
     // 업종
@@ -41,14 +41,17 @@ public class Members implements UserDetails {
     private BusinessCategory businessCategory;
 
     //사업자 등록번호
-    @Size(max=10)
+    @Column(length = 10)
     private String businessRegNum;
+
     // 개업 일자
     private LocalDate openTime;
+
     // 가입 일자
     private LocalDateTime joinTime;
+
     // 닉네임
-    @Size(max=10)
+    @Column(length = 10)
     private String nickname;
     // 탈퇴여부
 
@@ -95,7 +98,7 @@ public class Members implements UserDetails {
     private List<Message> sendMessages = new ArrayList<>();
     @OneToMany(mappedBy = "recipientId")
     private List<Message> recipientMessages = new ArrayList<>();
-    @OneToMany(mappedBy = "blockId")
+    @OneToMany(mappedBy = "blockerId")
     private List<Blacklist> blockList = new ArrayList<>();
     @OneToMany(mappedBy = "blockedId")
     private List<Blacklist> blockedList = new ArrayList<>();

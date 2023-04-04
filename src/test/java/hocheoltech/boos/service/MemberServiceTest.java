@@ -64,8 +64,8 @@ class MemberServiceTest {
     @Test
     void deleteMember() {
         //given
-        long seq = 106;
-        memberService.deleteMember(seq);
+        String id = "juho74";
+        memberService.deleteMember(id);
 
 
         //when

@@ -73,7 +73,7 @@ public class MemberService implements UserDetailsService {
         return members;
     }
     @Transactional
-    public void deleteMember(Long id){
+    public void deleteMember(String id){
         if(!membersRepository.existsById(id)){
             throw new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg());
         }

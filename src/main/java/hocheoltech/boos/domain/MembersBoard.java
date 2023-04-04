@@ -12,7 +12,7 @@ public class MembersBoard {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "MEMBERS_SEQ")
+    @JoinColumn(name = "MEMBERS_ID")
     private Members members;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -48,7 +48,7 @@ public class CommentService {
     public void deleteComment(CommentDto commentDto){
         Members members = membersRepository.findById(commentDto.getWriterId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
-        int result = commentRepository.deleteBySeqAndMembersSeq(Long.parseLong(commentDto.getSeq()), members.getSeq());
+        int result = commentRepository.deleteBySeqAndMembersId(Long.parseLong(commentDto.getSeq()), members.getId());
         if(result == 0){
             throw new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
         }

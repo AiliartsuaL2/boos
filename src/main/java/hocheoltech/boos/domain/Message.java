@@ -25,7 +25,7 @@ public class Message {
     private Members senderId;
 
     // 내용
-    @Size(max=100)
+    @Column(length = 100)
     private String content;
 
     // 수신자 id

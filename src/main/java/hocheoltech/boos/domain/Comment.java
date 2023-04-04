@@ -22,16 +22,28 @@ public class Comment {
     @Column(name = "COMMENT_SEQ")
     private long seq;
     // 내용
-    @Size(max=100)
+    @Column(length = 100)
     private String content;
     // 작성일시
     private LocalDateTime regTime;
-    //익명 여부
 
+    //익명 여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode anonymousYn;
 
+    //삭제 여부
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode deleteYn;
+    // 게시판
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="BOARD_SEQ") // 외래키가 있는쪽이 연관관계 주인
+    private Board board;
+    // 작성자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBERS_ID") // 외래키가 있는쪽이 연관관계 주인
+    private Members members;
 
     @Builder
     public Comment(String content, String anonymousYN, Board board, Members members) {
@@ -43,15 +55,6 @@ public class Comment {
         this.members = members;
         this.members.getComments().add(this);
     }
-
-    // 게시판
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="BOARD_SEQ") // 외래키가 있는쪽이 연관관계 주인
-    private Board board;
-    // 작성자
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="MEMBERS_SEQ") // 외래키가 있는쪽이 연관관계 주인
-    private Members members;
 
 
 }

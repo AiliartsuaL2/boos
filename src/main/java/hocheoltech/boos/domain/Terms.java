@@ -35,7 +35,7 @@ public class Terms {
 
     // 약관 동의자
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="MEMBERS_SEQ")
+    @JoinColumn(name = "MEMBERS_ID")
     private Members members;
 
     @Builder
