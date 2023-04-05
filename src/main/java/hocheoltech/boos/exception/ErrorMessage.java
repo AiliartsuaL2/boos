@@ -17,6 +17,7 @@ public enum ErrorMessage {
     INCORRECT_CATEGORYNAME(HttpStatus.BAD_REQUEST, "해당 카테고리 이름이 존재하지 않습니다."),
     NOT_EXIST_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글이 존재하지 않습니다."),
     NOT_EXIST_BUSINESS_CATEGORY_NAME(HttpStatus.BAD_REQUEST,"존재하지 않는 업종명 입니다."),
+
     UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED,"인증 토큰이 존재하지 않습니다."),
     WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED,"잘못된 토큰 정보입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"만료된 토큰 정보입니다."),

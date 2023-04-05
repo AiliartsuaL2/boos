@@ -117,7 +117,7 @@ class BoardServiceTest {
                 .boardTitle("수정된 제목")
                 .boardContent("수정된 내용")
 //                .membersSeq(boardOwner.getSeq())
-                .membersSeq(noneOwner.getSeq()) // 권한관련 throw exception 발생
+                .membersId(noneOwner.getId()) // 권한관련 throw exception 발생
                 .build();
 
 

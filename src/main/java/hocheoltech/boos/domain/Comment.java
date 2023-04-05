@@ -54,6 +54,7 @@ public class Comment {
         this.board.getComments().add(this);
         this.members = members;
         this.members.getComments().add(this);
+        this.deleteYn = TFCode.FALSE;
     }
 
 

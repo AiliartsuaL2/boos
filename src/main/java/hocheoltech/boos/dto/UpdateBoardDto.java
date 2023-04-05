@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 
 public class UpdateBoardDto {
-    private Long membersSeq;
+    private String membersId;
     private Long boardSeq;
     private String boardTitle;
     private String boardContent;

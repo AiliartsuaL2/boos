@@ -22,11 +22,10 @@ class CategoryServiceTest {
     @Test
     @Commit
     void createCategory() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             Category category1 = Category.builder()
                     .categoryName("테스트 게시판"+i)
                     .build();
-
             categoryService.createCategory(category1);
 
         }
