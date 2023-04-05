@@ -54,10 +54,6 @@ public class Members implements UserDetails {
     @Column(length = 10)
     private String nickname;
 
-    // 탈퇴여부
-    @Convert(converter = TFCodeConverter.class)
-    @Column(columnDefinition = "char")
-    private TFCode withdrawalYn;
 
     @Builder
     public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, LocalDate openTime, String nickname){
@@ -77,7 +73,6 @@ public class Members implements UserDetails {
         this.blockList = new ArrayList<>();
         this.blockedList = new ArrayList<>();
         this.roles = new ArrayList<>();
-        this.withdrawalYn = TFCode.FALSE;
     }
 
     //업데이트 처리 메서드
@@ -86,12 +81,6 @@ public class Members implements UserDetails {
         this.name = name;
         this.nickname = nickname;
     }
-
-    //탈퇴처리 메서드
-    public void withdrawalMember(){
-        withdrawalYn = TFCode.TRUE;
-    }
-
 
     // 연관관계 설정
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)

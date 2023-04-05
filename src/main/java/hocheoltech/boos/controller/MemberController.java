@@ -2,6 +2,7 @@ package hocheoltech.boos.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.MembersLoginDto;
@@ -129,9 +130,26 @@ public class MemberController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
     })
     public String login(@RequestBody MembersLoginDto membersLoginDto){
-        log.info("user Id = {}", membersLoginDto.getId());
-        Members loginMembers = membersRepository.findById(membersLoginDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+        log.info("login , user Id = {}", membersLoginDto.getId());
+        Members loginMembers = memberService.findMember(membersLoginDto.getId());
         return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
     }
+
+    @DeleteMapping("/v1/member")
+    @Operation(summary = "회원탈퇴 메서드", description = "회원탈퇴 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+    })
+    public String deleteMember(@RequestBody MembersLoginDto membersLoginDto,
+                               @RequestHeader(value = "Authorization") String jwtToken){
+
+        String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+        log.info("deleteMember , user Id = {}", membersId);
+        membersLoginDto.setId(membersId);
+
+        memberService.deleteMember(membersLoginDto);
+        return "정상적으로 탈퇴처리 되었습니다.";
+    }
+
 }

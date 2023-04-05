@@ -1,9 +1,11 @@
 package hocheoltech.boos.service;
 
 
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
+import hocheoltech.boos.dto.MembersLoginDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BusinessCategoryRepository;
@@ -73,10 +75,10 @@ public class MemberService implements UserDetailsService {
         return members;
     }
     @Transactional
-    public void deleteMember(String id){
-        Members members = membersRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
-        members.withdrawalMember(); // withdrawal컬럼(탈퇴) Y처리,,
+    public void deleteMember(MembersLoginDto membersLoginDto){
+        Members members = membersRepository.findMembersByIdAndPassword(membersLoginDto.getId(),membersLoginDto.getPassword()).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.INCORRECT_MEMBER_INFO.getMsg()));
+        membersRepository.deleteById(members.getId());
     }
     @Transactional
     public void modifyMember(UpdateMembersDto updateMembersDto){

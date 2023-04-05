@@ -1,9 +1,11 @@
 package hocheoltech.boos.service;
 
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.MembersJoinDto;
+import hocheoltech.boos.dto.MembersLoginDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;
@@ -65,12 +67,17 @@ class MemberServiceTest {
     void deleteMember() {
         //given
         String id = "cy123";
-        memberService.deleteMember(id);
+        MembersLoginDto mdto = MembersLoginDto.builder()
+                .id(id)
+                .password("qw1621")
+                .build();
 
 
         //when
+        memberService.deleteMember(mdto);
+
         //then
-//        memberService.findMember(seq);
+        Members member = memberService.findMember("cy123");
     }
     @Test
     void updateMember(){

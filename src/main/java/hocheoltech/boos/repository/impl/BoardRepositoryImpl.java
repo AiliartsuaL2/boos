@@ -50,8 +50,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
                         .and(boardContentContains(boardListDto.getContent()))
-                        .and(membersBoard.members.withdrawalYn.eq(TFCode.FALSE)) // 탈퇴처리된 회원
-                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물
+                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -65,8 +64,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
                         .and(boardContentContains(boardListDto.getContent()))
-                        .and(membersBoard.members.withdrawalYn.eq(TFCode.FALSE)) // 탈퇴처리된 회원
-                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물
+                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .fetchOne();
 
