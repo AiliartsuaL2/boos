@@ -42,7 +42,6 @@ public class MemberService implements UserDetailsService {
         BusinessCategory businessCategory = businessCategoryRepository.findByCategoryName(membersJoinDto.getBusinessCategory()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BUSINESS_CATEGORY_NAME.getMsg()));
 
-
         LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         Members members = Members.builder()
@@ -53,6 +52,7 @@ public class MemberService implements UserDetailsService {
                 .businessCategory(businessCategory)
                 .nickname(membersJoinDto.getNickname())
                 .openTime(openTime)
+                .terms(membersJoinDto.getTermsList())
                 .build();
 
         Members savedMembers = membersRepository.save(members);
