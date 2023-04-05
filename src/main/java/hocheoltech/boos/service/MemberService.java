@@ -69,8 +69,8 @@ public class MemberService implements UserDetailsService {
         return membersDto;
     }
 
-    public Members findMember(String id){
-        Members members = membersRepository.findById(id).orElseThrow( // 해당 사용자가 없으면 Throw
+    public Members findMember(MembersLoginDto membersLoginDto){
+        Members members = membersRepository.findMembersByIdAndPassword(membersLoginDto.getId(), membersLoginDto.getPassword()).orElseThrow( // 해당 사용자가 없으면 Throw
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         return members;
     }

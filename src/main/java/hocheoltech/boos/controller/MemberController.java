@@ -131,7 +131,7 @@ public class MemberController {
     })
     public String login(@RequestBody MembersLoginDto membersLoginDto){
         log.info("login , user Id = {}", membersLoginDto.getId());
-        Members loginMembers = memberService.findMember(membersLoginDto.getId());
+        Members loginMembers = memberService.findMember(membersLoginDto);
         return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
     }
 

@@ -32,6 +32,8 @@ class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
+    @Autowired
+    MembersRepository membersRepository;
 
     @Autowired
     BusinessCategoryRepository businessCategoryRepository;
@@ -77,7 +79,7 @@ class MemberServiceTest {
         memberService.deleteMember(mdto);
 
         //then
-        Members member = memberService.findMember("cy123");
+        Members member = membersRepository.findById("cy123").get();
     }
     @Test
     void updateMember(){
@@ -90,7 +92,7 @@ class MemberServiceTest {
                 .nickname("nyeonge")
                 .build();
         memberService.modifyMember(updateMembersDto);
-        Members member = memberService.findMember("ailiartsua");
+        Members member = membersRepository.findById("cy123").get();
         //then
         assertThat(member.getPassword()).isEqualTo("qw1621");
 

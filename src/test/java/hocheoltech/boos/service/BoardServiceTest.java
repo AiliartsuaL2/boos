@@ -8,6 +8,7 @@ import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
 import hocheoltech.boos.repository.CategoryRepository;
+import hocheoltech.boos.repository.MembersRepository;
 import org.assertj.core.api.Assertions;
 import org.hibernate.sql.Update;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ class BoardServiceTest {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    MembersRepository membersRepository;
+
     @Test
     @Transactional
     void createBoard() { // 등록일시 저장안됨, 확인 필요
@@ -48,7 +52,7 @@ class BoardServiceTest {
         long seq = 1L;
 
             for (int i = 1; i < 40; i++) {
-                String nickname = memberService.findMember(writer).getNickname();
+                String nickname = membersRepository.findById(writer).get().getNickname();
                 CreateBoardDto board = CreateBoardDto.builder()
                         .title("테스트 제목" + i)
                         .content("테스트 내용" + i)
@@ -110,8 +114,8 @@ class BoardServiceTest {
         Optional<Category> categoryOptional = categoryRepository.findById(3L);
         Category category = categoryOptional.get();
 
-        Members noneOwner = memberService.findMember("ailiartsua");
-        Members boardOwner = memberService.findMember("luvsole3");
+        Members noneOwner = membersRepository.findById("ailiartsua").get();
+        Members boardOwner = membersRepository.findById("luvsole3").get();
 
         UpdateBoardDto updateBoardDto = UpdateBoardDto.builder()
                 .boardCategory(category)
