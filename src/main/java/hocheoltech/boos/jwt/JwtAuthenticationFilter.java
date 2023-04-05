@@ -28,22 +28,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException, JwtException {
         // 헤더에서 JWT 를 받아옴
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-        // 유효한 토큰인지 확인 ,, 여기서 Throw 처리하기
-
-        try {
+        if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            chain.doFilter(request, response); // 걸려있는 필터를 호출 시키는 메서드
-        }
-        catch(SignatureException e){
-            throw new JwtException(ErrorMessage.WRONG_TYPE_TOKEN.getMsg());
-        }catch (MalformedJwtException e){
-            throw new JwtException(ErrorMessage.UNSUPPORTED_TOKEN.getMsg());
-        }catch (ExpiredJwtException e) {
-            throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMsg());
-        }catch(IllegalArgumentException e){
-            throw new JwtException(ErrorMessage.UNKNOWN_ERROR.getMsg());
-
-        }
+        } // else 타는경우 doFIlter 내부에서 exception 후 CustomAuthenticationEntryPoint로 감
+        // 로그인 정상 > if문 안타고 chain.doFilter 타서 createToken?
+        // 토큰 정상인경우 >>
+        // 토큰 잘못된경우 try- catch문 타고서,, error
+        chain.doFilter(request, response); // 걸려있는 필터를 호출 시키는 메서드
     }
 }

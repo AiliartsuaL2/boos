@@ -43,8 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // JwtAuthenticationFilter를 UserIdPasswordAuthenticationFilter 전에 넣는다 + 토큰에 저장된 유저정보를 활용하여야 하기 때문에 CustomUserDetailService 클래스를 생성
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), // 필터를 등록함, 파라미터 - 1번째 : 커스텀한 필터링, 2번쨰 : 필터링전 커스텀 필터링 수행
                         UsernamePasswordAuthenticationFilter.class)
-
-                //  jwtExceptionFilter를 JwtAuthenticationFilter 전에 넣는다 // 유저 인증 전, Exception 발생 종류에 따라 분기처리하여 Client에게 전달
                 .addFilterBefore(jwtExceptionFilter,JwtAuthenticationFilter.class); // jwt 에러처리를 위한 필터등록
     }
 }

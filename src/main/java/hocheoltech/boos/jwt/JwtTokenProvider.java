@@ -1,10 +1,9 @@
 package hocheoltech.boos.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import hocheoltech.boos.exception.ErrorMessage;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Slf4j
 @Component // 빈등록을 해줘야함
 public class JwtTokenProvider {    private String secretKey = "myprojectsecret";
 
@@ -66,8 +66,18 @@ public class JwtTokenProvider {    private String secretKey = "myprojectsecret";
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
+        }catch (SignatureException e) {
+            log.info("SignatureException");
+            throw new JwtException(ErrorMessage.WRONG_TYPE_TOKEN.getMsg());
+        } catch (MalformedJwtException e) {
+            log.info("MalformedJwtException");
+            throw new JwtException(ErrorMessage.UNSUPPORTED_TOKEN.getMsg());
+        } catch (ExpiredJwtException e) {
+            log.info("ExpiredJwtException");
+            throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMsg());
+        } catch (IllegalArgumentException e) {
+            log.info("IllegalArgumentException");
+            throw new JwtException(ErrorMessage.UNKNOWN_ERROR.getMsg());
         }
     }
 }
