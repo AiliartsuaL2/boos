@@ -1,5 +1,6 @@
 package hocheoltech.boos.service;
 
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Comment;
 import hocheoltech.boos.domain.Members;
@@ -16,6 +17,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,8 +43,8 @@ class CommentServiceTest {
         //given
 
         CommentDto co = CommentDto.builder()
-                .boardSeq("249")
-                .writerId("juho123")
+                .boardSeq("3")
+                .writerId("cy123")
                 .anonymousYn("N")
                 .content("댓글 테스트")
                 .build();
@@ -52,6 +54,23 @@ class CommentServiceTest {
 
         //then
         assertThat("juho123").isEqualTo(comment.getMembers().getId());
+
+    }
+    @Test
+    void deleteComment(){
+        //given
+        CommentDto commentDto = CommentDto.builder()
+                .seq("5")
+                .writerId("cy123")
+                .build();
+
+        //when
+        commentService.deleteComment(commentDto);
+        //then
+        Comment comment1 = commentRepository.findById(5L).get();
+        assertThat(comment1.getDeleteYn()).isEqualTo(TFCode.TRUE);
+
+
 
     }
 }

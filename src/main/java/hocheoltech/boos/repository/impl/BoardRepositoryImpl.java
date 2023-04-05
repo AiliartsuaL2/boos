@@ -6,6 +6,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
 import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.repository.BoardRepositoryCustom;
@@ -48,7 +49,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(membersNicknameContains(boardListDto.getWriter())
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
-                        .and(boardContentContains(boardListDto.getContent())))
+                        .and(boardContentContains(boardListDto.getContent()))
+                        .and(membersBoard.members.withdrawalYn.eq(TFCode.FALSE)) // 탈퇴처리된 회원
+                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물
+                )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(boardSort(pageable))
@@ -60,7 +64,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(membersNicknameContains(boardListDto.getWriter())
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
-                        .and(boardContentContains(boardListDto.getContent())))
+                        .and(boardContentContains(boardListDto.getContent()))
+                        .and(membersBoard.members.withdrawalYn.eq(TFCode.FALSE)) // 탈퇴처리된 회원
+                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물
+                )
                 .fetchOne();
 
         List<BoardListDto> collect = boardList.stream()

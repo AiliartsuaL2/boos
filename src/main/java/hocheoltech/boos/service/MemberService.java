@@ -74,10 +74,9 @@ public class MemberService implements UserDetailsService {
     }
     @Transactional
     public void deleteMember(String id){
-        if(!membersRepository.existsById(id)){
-            throw new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg());
-        }
-        membersRepository.deleteById(id);
+        Members members = membersRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+        members.withdrawalMember(); // withdrawal컬럼(탈퇴) Y처리,,
     }
     @Transactional
     public void modifyMember(UpdateMembersDto updateMembersDto){

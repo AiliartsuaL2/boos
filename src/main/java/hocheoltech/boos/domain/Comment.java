@@ -3,6 +3,7 @@ package hocheoltech.boos.domain;
 
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.common.converter.TFCodeConverter;
+import hocheoltech.boos.dto.CommentDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -55,6 +56,10 @@ public class Comment {
         this.members = members;
         this.members.getComments().add(this);
         this.deleteYn = TFCode.FALSE;
+    }
+
+    public void deleteComment(){
+        this.deleteYn = TFCode.TRUE;
     }
 
 

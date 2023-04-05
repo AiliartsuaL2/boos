@@ -1,5 +1,6 @@
 package hocheoltech.boos.service;
 
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
@@ -63,14 +64,15 @@ class BoardServiceTest {
     @Test
     void deleteBoard() {
         //given
-        long boardSeq = 250L;
-        String membersId = "luvsole4";
+        long boardSeq = 3L;
+        String membersId = "luvsole";
 
         //when
         boardService.deleteBoard(boardSeq,membersId);
 
         //then
-//        Board boardDetail = boardService.getBoardDetail(boardSeq); // 존재하지 않는 게시판 출력,
+        Board boardDetail = boardService.getBoardDetail(3L);
+        assertThat(boardDetail.getDeleteYn()).isEqualTo(TFCode.TRUE);
 
 
     }

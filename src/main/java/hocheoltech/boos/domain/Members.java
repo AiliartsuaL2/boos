@@ -53,8 +53,8 @@ public class Members implements UserDetails {
     // 닉네임
     @Column(length = 10)
     private String nickname;
-    // 탈퇴여부
 
+    // 탈퇴여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode withdrawalYn;
@@ -80,10 +80,16 @@ public class Members implements UserDetails {
         this.withdrawalYn = TFCode.FALSE;
     }
 
+    //업데이트 처리 메서드
     public void updateMemberInfo(String password, String nickname){
         this.password = password;
         this.name = name;
         this.nickname = nickname;
+    }
+
+    //탈퇴처리 메서드
+    public void withdrawalMember(){
+        withdrawalYn = TFCode.TRUE;
     }
 
 

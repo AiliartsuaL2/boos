@@ -64,7 +64,7 @@ class MemberServiceTest {
     @Test
     void deleteMember() {
         //given
-        String id = "juho74";
+        String id = "cy123";
         memberService.deleteMember(id);
 
 

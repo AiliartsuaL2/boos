@@ -66,7 +66,7 @@ public class BoardService {
     public void deleteBoard(long boardSeq, String membersId){
         Board board = boardRepository.findBoardBySeqAndWriter(boardSeq, membersId).orElseThrow( // 해당 게시판 자체가 없는지 확인 및 영속처리
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-        boardRepository.delete(board);
+        board.deleteBoard(); // 영속성 프레임워크에 의해 자동 update쿼리
     }
 
     // 게시글 수정

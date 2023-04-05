@@ -87,4 +87,10 @@ public class Board {
         this.modifyYn = TFCode.TRUE;
         this.modifyTime = LocalDateTime.now();
     }
+
+    // comment의 deleteYn Column을 Y로 바꿔야 하는지,,,, 안바꿔도 화면에 나오지 않으니 괜찮겠지..??
+    public void deleteBoard(){
+        this.deleteYn = TFCode.TRUE;
+    }
+
 }

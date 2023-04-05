@@ -48,10 +48,8 @@ public class CommentService {
     public void deleteComment(CommentDto commentDto){
         Members members = membersRepository.findById(commentDto.getWriterId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
-        int result = commentRepository.deleteBySeqAndMembersId(Long.parseLong(commentDto.getSeq()), members.getId());
-        if(result == 0){
-            throw new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
-        }
+        Comment comment = commentRepository.findCommentBySeqAndMembers(Long.parseLong(commentDto.getSeq()), members).orElseThrow(
+                () -> new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg()));
+        comment.deleteComment(); // deleteYn 컬럼 y처리, 영속성 프레임워크에 의해 자동 업데이트 쿼리,,
     }
-
 }
