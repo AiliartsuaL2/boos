@@ -45,6 +45,11 @@ public class CommentController {
 
     @DeleteMapping("/v1/comment")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "댓글삭제 메서드", description = "댓글삭제 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+    })
     public String deleteComment(@RequestBody CommentDto commentDto,
                                 @RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken);

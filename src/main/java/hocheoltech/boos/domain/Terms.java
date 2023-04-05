@@ -19,7 +19,7 @@ public class Terms {
     @Column(name = "TERMS_SEQ")
     private long seq;
 
-    // 약관 종류
+    // 약관 종류 ,, 단방향
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TERMS_CATEGORY_SEQ")
     private TermsCategory termsCategory;

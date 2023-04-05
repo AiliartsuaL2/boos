@@ -1,5 +1,7 @@
 package hocheoltech.boos.domain;
 
+import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.common.converter.TFCodeConverter;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,9 +17,13 @@ public class TermsCategory {
     @Column(name = "TERMS_CATEGORY_SEQ")
     private Long seq;
 
-    @Column(length = 10)
+    @Column(length = 50)
     private String title;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode requiredYn;
 }

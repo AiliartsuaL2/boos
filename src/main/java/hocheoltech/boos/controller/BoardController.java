@@ -56,7 +56,8 @@ public class BoardController {
      * @return Json
      */
     @GetMapping("/v1/boardList")
-    @Operation(summary = "게시판 불러오기", description = "게시판 리스트 불러오는 메서드입니다. ")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "게시판 리스트 불러오기", description = "게시판 리스트 불러오는 메서드입니다. ")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
@@ -72,10 +73,14 @@ public class BoardController {
 
     @DeleteMapping("/v1/board")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "게시판 삭제", description = "게시판을 삭제하는 메서드입니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
+    })
     public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken, String boardSeq) {
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
         boardService.deleteBoard(Long.parseLong(boardSeq),membersId);
         return "게시판이 성공적으로 삭제되었습니다.";
     }
-
 }

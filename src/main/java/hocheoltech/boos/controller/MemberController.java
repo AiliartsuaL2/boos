@@ -125,6 +125,7 @@ public class MemberController {
 
     @PostMapping("/v1/login")
     @Operation(summary = "로그인 메서드", description = "로그인 메서드입니다.")
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
@@ -137,6 +138,7 @@ public class MemberController {
 
     @DeleteMapping("/v1/member")
     @Operation(summary = "회원탈퇴 메서드", description = "회원탈퇴 메서드입니다.")
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
