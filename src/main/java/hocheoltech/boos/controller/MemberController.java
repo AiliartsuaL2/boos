@@ -2,11 +2,10 @@ package hocheoltech.boos.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.dto.MembersJoinDto;
-import hocheoltech.boos.dto.MembersLoginDto;
-import hocheoltech.boos.dto.OpenApiCallDto;
+import hocheoltech.boos.dto.members.MembersJoinDto;
+import hocheoltech.boos.dto.members.MembersLoginDto;
+import hocheoltech.boos.dto.common.OpenApiCallDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.repository.MembersRepository;
@@ -29,8 +28,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.RejectedExecutionException;
@@ -50,8 +47,8 @@ public class MemberController {
     @PostMapping("/v1/member")
     @Operation(summary = "회원가입 메서드", description = "회원가입 메서드입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = MembersJoinDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public ResponseEntity<MembersJoinDto> createMember(@RequestBody MembersJoinDto membersJoinDto) throws Exception, RuntimeException {
 
@@ -127,8 +124,8 @@ public class MemberController {
     @Operation(summary = "로그인 메서드", description = "로그인 메서드입니다.")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public String login(@RequestBody MembersLoginDto membersLoginDto){
         log.info("login , user Id = {}", membersLoginDto.getId());
@@ -140,8 +137,8 @@ public class MemberController {
     @Operation(summary = "회원탈퇴 메서드", description = "회원탈퇴 메서드입니다.")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public String deleteMember(@RequestBody MembersLoginDto membersLoginDto,
                                @RequestHeader(value = "Authorization") String jwtToken){

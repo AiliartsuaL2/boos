@@ -1,14 +1,13 @@
 package hocheoltech.boos.service;
 
 
-import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.Terms;
-import hocheoltech.boos.dto.LoginTermsDto;
-import hocheoltech.boos.dto.MembersJoinDto;
-import hocheoltech.boos.dto.MembersLoginDto;
-import hocheoltech.boos.dto.UpdateMembersDto;
+import hocheoltech.boos.dto.terms.LoginTermsDto;
+import hocheoltech.boos.dto.members.MembersJoinDto;
+import hocheoltech.boos.dto.members.MembersLoginDto;
+import hocheoltech.boos.dto.members.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;

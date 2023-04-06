@@ -1,25 +1,17 @@
 package hocheoltech.boos.service;
 
-import hocheoltech.boos.common.converter.TFCode;
-import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.dto.MembersJoinDto;
-import hocheoltech.boos.dto.MembersLoginDto;
-import hocheoltech.boos.dto.UpdateMembersDto;
+import hocheoltech.boos.dto.members.MembersJoinDto;
+import hocheoltech.boos.dto.members.MembersLoginDto;
+import hocheoltech.boos.dto.members.UpdateMembersDto;
 import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import static java.time.LocalDate.parse;
 import static org.assertj.core.api.Assertions.assertThat;

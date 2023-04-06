@@ -5,19 +5,20 @@ import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
-import hocheoltech.boos.dto.*;
+import hocheoltech.boos.dto.board.BoardDetailDto;
+import hocheoltech.boos.dto.board.BoardListDto;
+import hocheoltech.boos.dto.board.CreateBoardDto;
+import hocheoltech.boos.dto.board.UpdateBoardDto;
+import hocheoltech.boos.dto.comment.CommentDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,11 +1,11 @@
 package hocheoltech.boos.controller;
 
 
-import hocheoltech.boos.domain.Board;
-import hocheoltech.boos.dto.BoardDetailDto;
-import hocheoltech.boos.dto.BoardListDto;
-import hocheoltech.boos.dto.CreateBoardDto;
-import hocheoltech.boos.dto.PageRequest;
+import hocheoltech.boos.dto.board.BoardDetailDto;
+import hocheoltech.boos.dto.board.BoardListDto;
+import hocheoltech.boos.dto.board.CreateBoardDto;
+import hocheoltech.boos.dto.board.PageRequest;
+import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+@Tag(name = "게시판", description = "게시판 관련 api 입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -38,8 +40,8 @@ public class BoardController {
     @PostMapping("/v1/board")
     @Operation(summary = "게시글 작성 메서드", description = "게시글 작성 메서드입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
+            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = CreateBoardDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public ResponseEntity<CreateBoardDto> createBoard(@RequestBody CreateBoardDto createBoardDto,
                                                     @RequestHeader(value = "Authorization") String jwtToken){
@@ -51,6 +53,10 @@ public class BoardController {
 
     @GetMapping("/v1/board/{boardSeq}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = BoardDetailDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
     public ResponseEntity<BoardDetailDto> getBoardDetail(@PathVariable String boardSeq,
                                           @RequestHeader(value = "Authorization", required = false) String jwtToken){
         String membersId = "";
@@ -73,8 +79,8 @@ public class BoardController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "게시판 리스트 불러오기", description = "게시판 리스트 불러오는 메서드입니다. ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = BoardListDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public Page<BoardListDto> getBoardList(PageRequest pageRequest,
                                            @RequestBody BoardListDto boardListDto){
@@ -89,8 +95,8 @@ public class BoardController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "게시판 삭제", description = "게시판을 삭제하는 메서드입니다. ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Board.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Board.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken, String boardSeq) {
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출

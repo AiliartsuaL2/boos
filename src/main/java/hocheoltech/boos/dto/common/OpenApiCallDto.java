@@ -1,4 +1,4 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.common;
 
 import lombok.Builder;
 import lombok.Getter;

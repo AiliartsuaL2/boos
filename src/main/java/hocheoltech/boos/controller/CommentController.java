@@ -1,8 +1,7 @@
 package hocheoltech.boos.controller;
 
-import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.dto.BoardListDto;
-import hocheoltech.boos.dto.CommentDto;
+import hocheoltech.boos.dto.comment.CommentDto;
+import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +29,8 @@ public class CommentController {
     @PostMapping("/v1/comment")
     @Operation(summary = "댓글작성 메서드", description = "댓글작성 메서드입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+            @ApiResponse(responseCode = "201", description = "successful operation", content = @Content(schema = @Schema(implementation = CommentDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto commentDto,
                                                   @RequestHeader(value = "Authorization") String jwtToken){
@@ -47,8 +46,8 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "댓글삭제 메서드", description = "댓글삭제 메서드입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Members.class))),
-            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = Members.class)))
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public String deleteComment(@RequestBody CommentDto commentDto,
                                 @RequestHeader(value = "Authorization") String jwtToken){

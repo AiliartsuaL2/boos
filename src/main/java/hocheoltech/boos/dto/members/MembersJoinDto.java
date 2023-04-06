@@ -1,8 +1,6 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.members;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import hocheoltech.boos.domain.BusinessCategory;
-import hocheoltech.boos.domain.Terms;
+import hocheoltech.boos.dto.terms.LoginTermsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

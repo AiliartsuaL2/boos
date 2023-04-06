@@ -3,7 +3,7 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Comment;
 import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.dto.CommentDto;
+import hocheoltech.boos.dto.comment.CommentDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BoardRepository;
 import hocheoltech.boos.repository.CommentRepository;

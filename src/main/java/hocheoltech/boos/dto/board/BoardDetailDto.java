@@ -1,7 +1,6 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.board;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import hocheoltech.boos.domain.Comment;
+import hocheoltech.boos.dto.comment.CommentDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

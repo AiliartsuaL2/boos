@@ -3,11 +3,10 @@ package hocheoltech.boos.domain;
 
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.common.converter.TFCodeConverter;
-import hocheoltech.boos.dto.UpdateBoardDto;
+import hocheoltech.boos.dto.board.UpdateBoardDto;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

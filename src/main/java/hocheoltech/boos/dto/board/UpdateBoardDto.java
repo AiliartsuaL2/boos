@@ -1,6 +1,5 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.board;
 
-import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import lombok.*;
 

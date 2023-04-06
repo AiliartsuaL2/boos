@@ -1,4 +1,4 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hocheoltech.boos.domain.MembersBoard;
@@ -24,6 +24,7 @@ public class CreateBoardDto {
     private String writer;
 
     @JsonIgnore
+    @Builder.Default
     private List<MembersBoard> membersBoardList = new ArrayList<>();
 
     //카테고리

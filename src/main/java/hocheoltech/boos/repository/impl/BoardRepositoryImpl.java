@@ -1,21 +1,17 @@
 package hocheoltech.boos.repository.impl;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
-import hocheoltech.boos.dto.BoardListDto;
+import hocheoltech.boos.dto.board.BoardListDto;
 import hocheoltech.boos.repository.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

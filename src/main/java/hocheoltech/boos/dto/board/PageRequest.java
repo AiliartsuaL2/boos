@@ -1,4 +1,4 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.board;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;

@@ -1,4 +1,4 @@
-package hocheoltech.boos.dto;
+package hocheoltech.boos.dto.terms;
 
 import lombok.*;
 

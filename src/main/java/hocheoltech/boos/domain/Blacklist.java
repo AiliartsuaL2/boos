@@ -19,12 +19,12 @@ public class Blacklist {
 
     // 차단한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "blocker_id" , insertable = false, updatable = false)
+    @JoinColumn(name= "blocker_id")
     private Members blockerId;
 
     // 차단당한 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "blocked_id" , insertable = false, updatable = false)
+    @JoinColumn(name= "blocked_id")
     private Members blockedId;
 
     // 차단 일시

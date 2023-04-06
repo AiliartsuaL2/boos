@@ -1,15 +1,10 @@
 package hocheoltech.boos.service;
 
 import hocheoltech.boos.common.converter.TFCode;
-import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Comment;
-import hocheoltech.boos.domain.Members;
-import hocheoltech.boos.dto.CommentDto;
+import hocheoltech.boos.dto.comment.CommentDto;
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.repository.BoardRepository;
 import hocheoltech.boos.repository.CommentRepository;
-import hocheoltech.boos.repository.MembersRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,10 +12,8 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
