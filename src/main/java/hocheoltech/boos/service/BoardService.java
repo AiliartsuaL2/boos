@@ -1,12 +1,11 @@
 package hocheoltech.boos.service;
 
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.MembersBoard;
-import hocheoltech.boos.dto.BoardListDto;
-import hocheoltech.boos.dto.CreateBoardDto;
-import hocheoltech.boos.dto.UpdateBoardDto;
+import hocheoltech.boos.dto.*;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -83,10 +83,32 @@ public class BoardService {
         return boardList;
     }
 
-    public Board getBoardDetail(long seq){
+    public BoardDetailDto getBoardDetail(long seq){
+
         Board board = boardRepository.findBoardWithCategory(seq).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-        return board;
+
+        BoardDetailDto boardDetailDto = BoardDetailDto.builder()
+                .seq(board.getSeq())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .writer(board.getWriter())
+                .regTime(board.getRegTime())
+                .modifyTime(board.getModifyTime())
+                .categorySeq(String.valueOf(board.getCategory().getSeq()))
+                .modifyYn((board.getModifyYn().equals(TFCode.TRUE)) ? "Y" : "N")
+                .deleteYn((board.getDeleteYn().equals(TFCode.TRUE)) ? "Y" : "N")
+                .commentList(board.getComments().stream().map(c -> CommentDto.builder()
+                        .boardSeq(String.valueOf(c.getBoard().getSeq()))
+                        .seq(String.valueOf(c.getSeq()))
+                        .writerId(c.getMembers().getId())
+                        .anonymousYn((c.getAnonymousYn().equals(TFCode.TRUE))?"Y":"N")
+                        .regTime(c.getRegTime())
+                        .content(c.getContent())
+                        .build()).collect(Collectors.toList()))
+                .build();
+
+        return boardDetailDto;
     }
 
 }

@@ -2,6 +2,7 @@ package hocheoltech.boos.controller;
 
 
 import hocheoltech.boos.domain.Board;
+import hocheoltech.boos.dto.BoardDetailDto;
 import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.PageRequest;
@@ -46,6 +47,19 @@ public class BoardController {
 
         CreateBoardDto board = boardService.createBoard(createBoardDto, membersId);
         return new ResponseEntity<>(board, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/v1/board/{boardSeq}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<BoardDetailDto> getBoardDetail(@PathVariable String boardSeq,
+                                          @RequestHeader(value = "Authorization", required = false) String jwtToken){
+        String membersId = "";
+        if(jwtToken != null){
+            membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+        }
+        BoardDetailDto boardDetail = boardService.getBoardDetail(Long.parseLong(boardSeq));
+
+        return new ResponseEntity<>(boardDetail, HttpStatus.CREATED);
     }
 
 

@@ -4,6 +4,7 @@ import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.Category;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.dto.BoardDetailDto;
 import hocheoltech.boos.dto.BoardListDto;
 import hocheoltech.boos.dto.CreateBoardDto;
 import hocheoltech.boos.dto.UpdateBoardDto;
@@ -75,8 +76,8 @@ class BoardServiceTest {
         boardService.deleteBoard(boardSeq,membersId);
 
         //then
-        Board boardDetail = boardService.getBoardDetail(3L);
-        assertThat(boardDetail.getDeleteYn()).isEqualTo(TFCode.TRUE);
+        BoardDetailDto boardDetailDto = boardService.getBoardDetail(3L);
+        assertThat(boardDetailDto.getDeleteYn()).isEqualTo("Y");
 
 
     }
@@ -97,7 +98,7 @@ class BoardServiceTest {
         //given
         long seq = 249L;
         //when
-        Board boardDetail = boardService.getBoardDetail(seq);
+        BoardDetailDto boardDetail = boardService.getBoardDetail(seq);
 //        String categoryName = boardDetail.getCategory().getCategoryName(); // DTO로 변환하던지 아니면 아래처럼 join해서 가져오던지 처리를 해야함.
         //then
         assertThat(boardDetail.getTitle()).isEqualTo("수정된 제목");

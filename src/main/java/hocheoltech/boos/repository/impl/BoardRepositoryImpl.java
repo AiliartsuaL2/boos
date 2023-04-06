@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import static hocheoltech.boos.domain.QBoard.board;
 import static hocheoltech.boos.domain.QCategory.category;
+import static hocheoltech.boos.domain.QComment.comment;
 import static hocheoltech.boos.domain.QMembersBoard.membersBoard;
 
 @Repository
@@ -35,7 +36,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     @Override
     public Optional<Board> findBoardWithCategory(Long boardSeq){
         Board resultBoard = queryFactory.selectFrom(board)
-                .join(board.category, category).fetchJoin()
+                .join(board.comments, comment).fetchJoin()
                 .where(board.seq.eq(boardSeq))
                 .fetchOne();
         return Optional.ofNullable(resultBoard);
