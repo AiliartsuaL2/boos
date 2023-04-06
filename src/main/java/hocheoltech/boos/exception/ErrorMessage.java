@@ -25,6 +25,7 @@ public enum ErrorMessage {
     ACCESS_DENIED(HttpStatus.UNAUTHORIZED,"알 수 없는 이유로 요청이 거절되었습니다."),
 
 
+    DO_NOT_BLOCKED_SELF(HttpStatus.BAD_REQUEST,"자기 자신은 차단 할 수 없습니다."),
     NOT_BLOCKED_MEMBERS(HttpStatus.BAD_REQUEST,"차단한 사용자가 아닙니다."),
     ALREADY_BLOCKED_MEMBERS(HttpStatus.BAD_REQUEST,"이미 차단한 사용자 입니다."),
     NOT_EXIST_BLACKLIST(HttpStatus.BAD_REQUEST,"차단한 사용자가 없습니다.");

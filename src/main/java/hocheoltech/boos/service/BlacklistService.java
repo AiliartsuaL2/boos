@@ -31,6 +31,9 @@ public class BlacklistService {
         if(blackListRepository.existsBlacklistByBlockerIdAndBlockedId(blockerId,blockedId)){
             throw new IllegalArgumentException(ErrorMessage.ALREADY_BLOCKED_MEMBERS.getMsg());
         }
+        else if(blockerId.equals(blockedId)){ // blockedId는 필수값이니 equals 앞에 두고 npe 방지
+            throw new IllegalArgumentException(ErrorMessage.DO_NOT_BLOCKED_SELF.getMsg());
+        }
 
         Blacklist blacklist = Blacklist.builder()
                 .blockerId(blocker)
