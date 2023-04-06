@@ -56,7 +56,7 @@ public class Members implements UserDetails {
 
 
     @Builder
-    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, LocalDate openTime, String nickname, List<Terms> terms){
+    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, LocalDate openTime, String nickname){
         this.id = id;
         this.password = password;
         this.name = name;
@@ -67,7 +67,7 @@ public class Members implements UserDetails {
         this.joinTime = LocalDateTime.now();
         this.comments = new ArrayList<>();
         this.membersBoards = new ArrayList<>();
-        this.terms = terms;
+        this.terms = new ArrayList<>();
         this.sendMessages = new ArrayList<>();
         this.recipientMessages = new ArrayList<>();
         this.blockList = new ArrayList<>();

@@ -29,7 +29,6 @@ public class Terms {
     @Column(columnDefinition = "char")
     private TFCode agreeYn;
 
-
     // 동의 일시
     private LocalDateTime agreeTime;
 

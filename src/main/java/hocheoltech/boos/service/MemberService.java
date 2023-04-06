@@ -4,12 +4,15 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.BusinessCategory;
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.domain.Terms;
+import hocheoltech.boos.dto.LoginTermsDto;
 import hocheoltech.boos.dto.MembersJoinDto;
 import hocheoltech.boos.dto.MembersLoginDto;
 import hocheoltech.boos.dto.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.repository.BusinessCategoryRepository;
 import hocheoltech.boos.repository.MembersRepository;
+import hocheoltech.boos.repository.TermsCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,7 @@ public class MemberService implements UserDetailsService {
 //    private final MemberMapper memberMapper;
     private final MembersRepository membersRepository;
     private final BusinessCategoryRepository businessCategoryRepository;
+    private final TermsCategoryRepository termsCategoryRepository;
 
     // 회원가입
     @Transactional
@@ -44,6 +51,9 @@ public class MemberService implements UserDetailsService {
 
         LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
 
+        List<LoginTermsDto> dtoTermsList = membersJoinDto.getTermsList();
+        ArrayList<Terms> termsList = new ArrayList<>();
+
         Members members = Members.builder()
                 .id(membersJoinDto.getId())
                 .password(membersJoinDto.getPassword())
@@ -52,8 +62,13 @@ public class MemberService implements UserDetailsService {
                 .businessCategory(businessCategory)
                 .nickname(membersJoinDto.getNickname())
                 .openTime(openTime)
-                .terms(membersJoinDto.getTermsList())
                 .build();
+
+        dtoTermsList.stream().map(d -> Terms.builder()
+                .termsCategory(termsCategoryRepository.findById(Long.parseLong(d.getTermsCategorySeq())).get())
+                .agreeYn(d.getAgreeYn())
+                .members(members)
+                .build()).collect(Collectors.toList());
 
         Members savedMembers = membersRepository.save(members);
         String openTime2 = savedMembers.getOpenTime().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -64,6 +79,7 @@ public class MemberService implements UserDetailsService {
                 .businessRegNum(savedMembers.getBusinessRegNum())
                 .businessCategory(savedMembers.getBusinessCategory().getCategoryName())
                 .openTime(openTime2)
+//                .termsList(dtoTermsList)
                 .build();
 
         return membersDto;

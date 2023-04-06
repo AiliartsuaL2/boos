@@ -24,6 +24,5 @@ public class MembersJoinDto {
     private String businessCategory;
     private String openTime;
     @Builder.Default
-    @JsonIgnore
-    private List<Terms> termsList = new ArrayList<>();
+    private List<LoginTermsDto> termsList = new ArrayList<>();
 }
