@@ -54,8 +54,8 @@ public class MessageController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public Page<MessageDto> getReceiptedBoardList(PageRequest pageRequest,
-                                               @RequestBody SearchMessageDto searchMessageDto,
-                                               @RequestHeader(value = "Authorization") String jwtToken){
+                                                      @RequestBody SearchMessageDto searchMessageDto,
+                                                      @RequestHeader(value = "Authorization") String jwtToken){
         Pageable pageable = pageRequest.of();
         String membersId = jwtTokenProvider.getUserPk(jwtToken);
         searchMessageDto.setReceiptId(membersId);

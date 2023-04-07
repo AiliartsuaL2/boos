@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class SearchMessageDto {
 
     private String receiptNickname;
+    private String senderNickname;
     private String senderId;
     private String receiptId;
     private String content;

@@ -1,10 +1,13 @@
 package hocheoltech.boos.dto.message;
 
+import com.querydsl.core.annotations.QueryProjection;
+import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
@@ -14,15 +17,20 @@ public class MessageDto {
     private String messageSeq;
     private String senderId;
     private String receiptId;
+    private String senderNickname;
+    private String receiptNickname;
     private String content;
     private String sendTime;
 
-    public MessageDto(Message message){
-        this.messageSeq = String.valueOf(message.getSeq());
-        this.senderId = message.getSenderId().getId();
-        this.receiptId = message.getRecipientId().getId();
-        this.content = message.getContent();
-        this.sendTime = message.getSendTime().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    @QueryProjection
+    public MessageDto(long messageSeq, String senderId, String receiptId,String senderNickname,String receiptNickname, String content, LocalDateTime sendTime){
+        this.messageSeq = String.valueOf(messageSeq);
+        this.senderId = senderId;
+        this.receiptId = receiptId;
+        this.senderNickname = senderNickname;
+        this.receiptNickname = receiptNickname;
+        this.content = content;
+        this.sendTime = sendTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
 }

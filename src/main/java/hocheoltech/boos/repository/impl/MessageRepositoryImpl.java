@@ -5,8 +5,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
-import hocheoltech.boos.domain.Message;
 import hocheoltech.boos.dto.message.MessageDto;
+import hocheoltech.boos.dto.message.QMessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.repository.Custom.MessageRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static hocheoltech.boos.domain.QBoard.board;
-import static hocheoltech.boos.domain.QMembersBoard.membersBoard;
 import static hocheoltech.boos.domain.QMessage.message;
 import static hocheoltech.boos.domain.QMembers.members;
 
@@ -32,18 +28,39 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     @Override
     public Page<MessageDto> findSendedMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
-        List<Message> messageList = queryFactory.selectFrom(message)
+
+        List<MessageDto> messageList = queryFactory.select(new QMessageDto(
+                        message.seq,
+                        message.senderId.id,
+                        message.recipientId.id,
+                        message.senderId.nickname,
+                        message.recipientId.nickname,
+                        message.content,
+                        message.sendTime))
+                .from(message)
                 .join(message.recipientId, members)
                 .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
-                        .and(message.deleteYn.eq(TFCode.FALSE))
-                )
+                        .and(message.deleteYn.eq(TFCode.FALSE)))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(messageSort(pageable))
                 .fetch();
+
+//        List<Message> messageList = queryFactory.selectFrom(message)
+//                .join(message.recipientId, members)
+//                .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
+//                        .and(messageContentContains(searchMessageDto.getContent()))
+//                        .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
+//                        .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
+//                        .and(message.deleteYn.eq(TFCode.FALSE))
+//                )
+//                .limit(pageable.getPageSize())
+//                .offset(pageable.getOffset())
+//                .orderBy(messageSort(pageable))
+//                .fetch();
 
         Long count = queryFactory.select(message.count())
                 .from(message)
@@ -56,19 +73,29 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 )
                 .fetchOne();
 
-        List<MessageDto> collect = messageList.stream()
-                .map(MessageDto::new)
-                .collect(Collectors.toList()); // message entity를 dto로 변환
+//        List<MessageDto> collect = messageList.stream()
+//                .map(m -> new MessageDto())
+//                .collect(Collectors.toList()); // message entity를 dto로 변환
 
-        return new PageImpl<>(collect, pageable, count);
+        return new PageImpl<>(messageList, pageable, count);
     }
 
     @Override
     public Page<MessageDto> findReceiptedMessageList(SearchMessageDto searchMessageDto, Pageable pageable) {
-        List<Message> messageList = queryFactory.selectFrom(message)
+        List<MessageDto> messageList = queryFactory.select(new QMessageDto(
+                        message.seq,
+                        message.senderId.id,
+                        message.recipientId.id,
+                        message.senderId.nickname,
+                        message.recipientId.nickname,
+                        message.content,
+                        message.sendTime))
+                .from(message)
+                .join(message.senderId, members)
                 .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageSenderIdContains(searchMessageDto.getSenderId()))
+                        .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
                         .and(message.deleteYn.eq(TFCode.FALSE))
                 )
                 .limit(pageable.getPageSize())
@@ -78,19 +105,21 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
         Long count = queryFactory.select(message.count())
                 .from(message)
+                .join(message.senderId, members)
                 .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
                         .and(messageContentContains(searchMessageDto.getContent())) // 내용으로 검색
                         .and(messageSenderIdContains(searchMessageDto.getSenderId())) // 보낸사람 검색
+                        .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
                         .and(message.deleteYn.eq(TFCode.FALSE))
                 )
                 .fetchOne();
 
 
-        List<MessageDto> collect = messageList.stream()
-                .map(MessageDto::new)
-                .collect(Collectors.toList()); // message entity를 dto로 변환
+//        List<MessageDto> collect = messageList.stream()
+//                .map(m -> new MessageDto())
+//                .collect(Collectors.toList()); // message entity를 dto로 변환
 
-        return new PageImpl<>(collect, pageable, count);
+        return new PageImpl<>(messageList, pageable, count);
     }
 
 
@@ -109,6 +138,10 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     private BooleanExpression messageRecipientNicknameContains(String nickname) {
         return nickname != null ? message.recipientId.nickname.contains(nickname) : null;
     }
+    private BooleanExpression messageSenderNicknameContains(String nickname) {
+        return nickname != null ? message.senderId.nickname.contains(nickname) : null;
+    }
+
 
 
     private OrderSpecifier<?> messageSort(Pageable pageable) {
