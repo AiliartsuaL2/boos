@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
 import hocheoltech.boos.dto.board.BoardListDto;
+import hocheoltech.boos.dto.board.QBoardListDto;
 import hocheoltech.boos.repository.Custom.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -40,9 +41,18 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     @Override
     public PageImpl<BoardListDto> findBoardListPaging(BoardListDto boardListDto , Pageable pageable) {
-        List<Board> boardList = queryFactory.selectFrom(board)
-                .join(board.membersBoards, membersBoard).fetchJoin()
-                .join(board.category, category).fetchJoin()
+
+        List<BoardListDto> resultList = queryFactory.select(new QBoardListDto(board.seq,
+                        board.title,
+                        board.content,
+                        membersBoard.members.nickname,
+                        board.category.categoryName,
+                        board.regTime,
+                        board.modifyYn,
+                        board.modifyTime)).
+                from(board)
+                .join(board.membersBoards, membersBoard)
+                .join(board.category, category)
                 .where(membersNicknameContains(boardListDto.getWriter())
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
@@ -53,6 +63,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .offset(pageable.getOffset())
                 .orderBy(boardSort(pageable))
                 .fetch();
+
         Long count = queryFactory.select(board.count())
                 .from(board)
                 .join(board.membersBoards, membersBoard)
@@ -65,11 +76,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 )
                 .fetchOne();
 
-        List<BoardListDto> collect = boardList.stream()
-                .map(BoardListDto::new)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(collect, pageable, count);
+        return new PageImpl<>(resultList, pageable, count);
     }
 
 

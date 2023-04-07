@@ -1,11 +1,14 @@
 package hocheoltech.boos.dto.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.querydsl.core.annotations.QueryProjection;
+import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Board;
 import hocheoltech.boos.domain.MembersBoard;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,24 +35,24 @@ public class BoardListDto {
     private String categoryName;
 
     // 작성일시
-    private LocalDateTime regTime;
+    private String regTime;
 
     // 수정 여부
     private String modifyYn;
 
     // 수정 일시
-    private LocalDateTime modifyTime;
+    private String modifyTime;
 
-    public BoardListDto(Board board) {
-        seq = board.getSeq();
-        title = board.getTitle();
-        content = board.getContent();
-        writer = board.getWriter();
-        membersBoardList = board.getMembersBoards();
-        categoryName = board.getCategory().getCategoryName();
-        regTime = board.getRegTime();
-        modifyYn = board.getModifyYn().getValue();
-        modifyTime = board.getModifyTime();
+    @QueryProjection
+    public BoardListDto(long seq, String title, String content, String writer, String categoryName, LocalDateTime regTime, TFCode modifyYn, LocalDateTime modifyTime) {
+        this.seq = seq;
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+        this.categoryName = categoryName;
+        this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        this.modifyYn = TFCode.TRUE.equals(modifyYn)?"Y":"N";
+        this.modifyTime = modifyTime != null?modifyTime.format(DateTimeFormatter.ofPattern("yyyyMMdd")):null;
     }
 
 }
