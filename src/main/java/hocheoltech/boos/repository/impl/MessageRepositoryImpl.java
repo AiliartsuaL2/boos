@@ -30,6 +30,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    //Todo N+1 생각해보기
     @Override
     public Page<MessageDto> findMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
         List<Message> messageList = queryFactory.selectFrom(message)
