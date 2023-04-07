@@ -3,11 +3,10 @@ package hocheoltech.boos.repository.impl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.domain.Blacklist;
 import hocheoltech.boos.dto.blacklist.BlacklistDto;
-import hocheoltech.boos.repository.BlacklistRepositoryCustom;
+import hocheoltech.boos.repository.Custom.BlacklistRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,8 +1,8 @@
 package hocheoltech.boos.repository;
 
 import hocheoltech.boos.domain.Members;
+import hocheoltech.boos.repository.Custom.MembersRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 

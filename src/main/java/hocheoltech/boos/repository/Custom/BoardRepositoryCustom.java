@@ -1,4 +1,4 @@
-package hocheoltech.boos.repository;
+package hocheoltech.boos.repository.Custom;
 
 
 import hocheoltech.boos.domain.Board;

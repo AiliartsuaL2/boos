@@ -1,6 +1,8 @@
 package hocheoltech.boos.domain;
 
 
+import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.common.converter.TFCodeConverter;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,7 +23,7 @@ public class Message {
 
     // 발신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "SENDER_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "SENDER_SEQ")
     private Members senderId;
 
     // 내용
@@ -30,8 +32,12 @@ public class Message {
 
     // 수신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "RECIPIENT_SEQ" , insertable = false, updatable = false)
+    @JoinColumn(name= "RECIPIENT_SEQ")
     private Members recipientId;
+
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode deleteYn;
 
     // 발신일시
     private LocalDateTime sendTime;
@@ -44,5 +50,11 @@ public class Message {
         this.recipientId = recipient;
         this.senderId.getSendMessages().add(this);
         this.recipientId.getRecipientMessages().add(this);
+        this.deleteYn = TFCode.FALSE;
     }
+
+    public void deleteMessage(){
+        this.deleteYn = TFCode.TRUE;
+    }
+
 }

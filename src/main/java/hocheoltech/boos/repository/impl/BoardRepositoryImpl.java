@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
 import hocheoltech.boos.dto.board.BoardListDto;
-import hocheoltech.boos.repository.BoardRepositoryCustom;
+import hocheoltech.boos.repository.Custom.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
