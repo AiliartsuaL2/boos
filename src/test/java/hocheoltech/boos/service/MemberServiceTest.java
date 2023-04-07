@@ -33,10 +33,6 @@ class MemberServiceTest {
 
     @Test
     void save(){
-        BusinessCategory businessCategory = BusinessCategory.builder()
-                .categoryName("쇼핑몰")
-                .build();
-        businessCategoryRepository.save(businessCategory);
 
         for (int i = 3; i < 50; i++) {
             MembersJoinDto m = MembersJoinDto.builder()
@@ -45,7 +41,7 @@ class MemberServiceTest {
                     .businessRegNum("5678910212")
                     .name("김정아")
                     .nickname("luvsole" + i)
-                    .openTime("2022-12-06")
+                    .openTime("20221206")
                     .password("123123")
                     .build();
             memberService.saveMember(m);

@@ -23,7 +23,7 @@ public class Message {
 
     // 발신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "SENDER_SEQ")
+    @JoinColumn(name= "SENDER_ID")
     private Members senderId;
 
     // 내용
@@ -32,7 +32,7 @@ public class Message {
 
     // 수신자 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "RECIPIENT_SEQ")
+    @JoinColumn(name= "RECIPIENT_ID")
     private Members recipientId;
 
     @Convert(converter = TFCodeConverter.class)

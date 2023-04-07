@@ -29,21 +29,38 @@ public class MessageController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MessageService messageService;
 
-    @GetMapping("/v1/message")
+    @GetMapping("/v1/message/sended")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "쪽지 보관함 불러오기", description = "쪽지 보관함을 불러오는 메서드입니다. ")
+    @Operation(summary = "보낸 편지함 불러오기", description = "보낸 편지함을 불러오는 메서드입니다. ")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = MessageDto.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public Page<MessageDto> getBoardList(PageRequest pageRequest,
+    public Page<MessageDto> getSendedBoardList(PageRequest pageRequest,
                                          @RequestBody SearchMessageDto searchMessageDto,
                                          @RequestHeader(value = "Authorization") String jwtToken){
 
         Pageable pageable = pageRequest.of();
         String membersId = jwtTokenProvider.getUserPk(jwtToken);
         searchMessageDto.setSenderId(membersId);
-        Page<MessageDto> messageList = messageService.getMessageList(searchMessageDto, pageable);
+        Page<MessageDto> messageList = messageService.getSendedMessageList(searchMessageDto, pageable);
         return messageList;
     }
+    @GetMapping("/v1/message/receipt")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "받은 편지함 불러오기", description = "받은 편지함을 불러오는 메서드입니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = MessageDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    public Page<MessageDto> getReceiptedBoardList(PageRequest pageRequest,
+                                               @RequestBody SearchMessageDto searchMessageDto,
+                                               @RequestHeader(value = "Authorization") String jwtToken){
+        Pageable pageable = pageRequest.of();
+        String membersId = jwtTokenProvider.getUserPk(jwtToken);
+        searchMessageDto.setReceiptId(membersId);
+        Page<MessageDto> messageList = messageService.getReceiptedMessageList(searchMessageDto, pageable);
+        return messageList;
+    }
+
 }

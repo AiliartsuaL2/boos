@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MessageRepositoryCustom {
-    Page<MessageDto> findMessageList(SearchMessageDto SearchMessageDto, Pageable pageable);
+    Page<MessageDto> findSendedMessageList(SearchMessageDto SearchMessageDto, Pageable pageable);
+    Page<MessageDto> findReceiptedMessageList(SearchMessageDto searchMessageDto, Pageable pageable);
 
 }

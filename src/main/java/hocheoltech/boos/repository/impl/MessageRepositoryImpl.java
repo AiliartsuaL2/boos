@@ -30,11 +30,10 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    //Todo N+1 생각해보기
     @Override
-    public Page<MessageDto> findMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
+    public Page<MessageDto> findSendedMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
         List<Message> messageList = queryFactory.selectFrom(message)
-                .join(message.senderId, members)
+                .join(message.recipientId, members)
                 .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
@@ -48,8 +47,9 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
         Long count = queryFactory.select(message.count())
                 .from(message)
-                .join(message.senderId, members)
-                .where(messageContentContains(searchMessageDto.getContent())
+                .join(message.recipientId, members)
+                .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
+                        .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
                         .and(message.deleteYn.eq(TFCode.FALSE))
@@ -58,13 +58,48 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
         List<MessageDto> collect = messageList.stream()
                 .map(MessageDto::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // message entity를 dto로 변환
+
+        return new PageImpl<>(collect, pageable, count);
+    }
+
+    @Override
+    public Page<MessageDto> findReceiptedMessageList(SearchMessageDto searchMessageDto, Pageable pageable) {
+        List<Message> messageList = queryFactory.selectFrom(message)
+                .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
+                        .and(messageContentContains(searchMessageDto.getContent()))
+                        .and(messageSenderIdContains(searchMessageDto.getSenderId()))
+                        .and(message.deleteYn.eq(TFCode.FALSE))
+                )
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .orderBy(messageSort(pageable))
+                .fetch();
+
+        Long count = queryFactory.select(message.count())
+                .from(message)
+                .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
+                        .and(messageContentContains(searchMessageDto.getContent())) // 내용으로 검색
+                        .and(messageSenderIdContains(searchMessageDto.getSenderId())) // 보낸사람 검색
+                        .and(message.deleteYn.eq(TFCode.FALSE))
+                )
+                .fetchOne();
+
+
+        List<MessageDto> collect = messageList.stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList()); // message entity를 dto로 변환
+
         return new PageImpl<>(collect, pageable, count);
     }
 
 
     private BooleanExpression messageContentContains(String content) {
         return content != null ? message.content.contains(content) : null;
+    }
+
+    private BooleanExpression messageSenderIdContains(String sender) {
+        return sender != null ? message.senderId.id.contains(sender) : null;
     }
 
     private BooleanExpression messageRecipientIdContains(String recipient) {

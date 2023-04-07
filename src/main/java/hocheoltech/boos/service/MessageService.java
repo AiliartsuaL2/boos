@@ -47,8 +47,15 @@ public class MessageService {
         message.deleteMessage();
     }
 
-    public Page<MessageDto> getMessageList(SearchMessageDto searchMessageDto , Pageable pageable){
-        Page<MessageDto> messageList = messageRepository.findMessageList(searchMessageDto, pageable);
+    // 보낸 쪽지함
+    public Page<MessageDto> getSendedMessageList(SearchMessageDto searchMessageDto , Pageable pageable){
+        Page<MessageDto> messageList = messageRepository.findSendedMessageList(searchMessageDto, pageable);
+        return messageList;
+    }
+
+    // 받은 쪽지함
+    public Page<MessageDto> getReceiptedMessageList(SearchMessageDto searchMessageDto , Pageable pageable){
+        Page<MessageDto> messageList = messageRepository.findReceiptedMessageList(searchMessageDto, pageable);
         return messageList;
     }
 

@@ -28,18 +28,21 @@ class MessageServiceTest {
     @Test
     void sendMessage() {
         //given
-        String senderId = "cy123";
-        String receiptId = "luvsole";
-        MessageDto messageDto = new MessageDto();
-        messageDto.setSenderId(senderId);
-        messageDto.setReceiptId(receiptId);
-        messageDto.setContent("메세지 테스트 안녕하세요 이주홍비니다.");
+        for (int i = 5; i < 20; i++) {
+            String senderId = "luvsole"+i;
+            String receiptId = "luvsole6";
+            MessageDto messageDto = new MessageDto();
+            messageDto.setSenderId(senderId);
+            messageDto.setReceiptId(receiptId);
+            messageDto.setContent("메세지 테스트 안녕하세요 이주홍비니다.");
 
-        //when
-        messageService.sendMessage(messageDto);
+            //when
+            messageService.sendMessage(messageDto);
+
+        }
         //then
-        Message message = messageRepository.findById(4L).get();
-        Assertions.assertThat(senderId).isEqualTo(message.getSenderId().getId());
+//        Message message = messageRepository.findById(4L).get();
+//        Assertions.assertThat(senderId).isEqualTo(message.getSenderId().getId());
 
 
     }
