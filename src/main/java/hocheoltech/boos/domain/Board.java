@@ -37,17 +37,17 @@ public class Board {
     
     // 작성일시
     private LocalDateTime regTime;
-    
+
+    //작성자(닉네임),, 비정규화 진행 (members 테이블과 정규화 시키면 쿼리작업이 너무 커짐)
+    @Column(length = 10)
+    private String writer;
+
     // 수정 여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode modifyYn;
 
-    //작성자(닉네임)
-    @Column(length = 10)
-    private String writer;
-
-    // 수정 일시
+    // 수정일시
     private LocalDateTime modifyTime;
 
     //삭제여부
@@ -55,6 +55,8 @@ public class Board {
     @Column(columnDefinition = "char")
     private TFCode deleteYn;
 
+    //삭제일시
+    private LocalDateTime deleteTime;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<MembersBoard> membersBoards;
@@ -87,9 +89,13 @@ public class Board {
         this.modifyTime = LocalDateTime.now();
     }
 
-    // comment의 deleteYn Column을 Y로 바꿔야 하는지,,,, 안바꿔도 화면에 나오지 않으니 괜찮겠지..??
+    // comment의 deleteYn Column을 Y로 바꿔줌
     public void deleteBoard(){
         this.deleteYn = TFCode.TRUE;
+        this.deleteTime = LocalDateTime.now();
+        for (Comment comment : this.comments) {
+            comment.deleteComment();
+        }
     }
 
 }

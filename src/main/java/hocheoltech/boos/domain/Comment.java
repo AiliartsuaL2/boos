@@ -33,6 +33,10 @@ public class Comment {
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode deleteYn;
+
+    //삭제일시
+    private LocalDateTime deleteTime;
+
     // 게시판
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="BOARD_SEQ") // 외래키가 있는쪽이 연관관계 주인
@@ -56,6 +60,7 @@ public class Comment {
 
     public void deleteComment(){
         this.deleteYn = TFCode.TRUE;
+        this.deleteTime = LocalDateTime.now();
     }
 
 

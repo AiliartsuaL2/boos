@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class BoardService {
     private final MembersRepository membersRepository;
     private final MembersBoardRepository membersBoardRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
 
     // 게시글 등록
@@ -84,32 +86,12 @@ public class BoardService {
         return boardList;
     }
 
+    // 게시판 상세 조회
     public BoardDetailDto getBoardDetail(long seq){
-
-        Board board = boardRepository.findBoardWithCategory(seq).orElseThrow(
+        BoardDetailDto boardDetailDto = boardRepository.findBoardDetail(seq).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-
-        BoardDetailDto boardDetailDto = BoardDetailDto.builder()
-                .seq(board.getSeq())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .writer(board.getWriter())
-                .regTime(board.getRegTime())
-                .modifyTime(board.getModifyTime())
-                .categorySeq(String.valueOf(board.getCategory().getSeq()))
-                .modifyYn((board.getModifyYn().equals(TFCode.TRUE)) ? "Y" : "N")
-                .deleteYn((board.getDeleteYn().equals(TFCode.TRUE)) ? "Y" : "N")
-                .commentList(board.getComments().stream().map(c -> CommentDto.builder()
-                        .boardSeq(String.valueOf(c.getBoard().getSeq()))
-                        .seq(String.valueOf(c.getSeq()))
-                        .writerId(c.getMembers().getId())
-                        .anonymousYn((c.getAnonymousYn().equals(TFCode.TRUE))?"Y":"N")
-                        .regTime(c.getRegTime())
-                        .content(c.getContent())
-                        .build()).collect(Collectors.toList()))
-                .build();
-
+        List<CommentDto> commentList = commentRepository.findCommentListByBoardSeq(seq);
+        boardDetailDto.setCommentList(commentList);
         return boardDetailDto;
     }
-
 }

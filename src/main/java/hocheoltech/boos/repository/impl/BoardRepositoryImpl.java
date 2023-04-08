@@ -6,7 +6,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
+import hocheoltech.boos.dto.board.BoardDetailDto;
 import hocheoltech.boos.dto.board.BoardListDto;
+import hocheoltech.boos.dto.board.QBoardDetailDto;
 import hocheoltech.boos.dto.board.QBoardListDto;
 import hocheoltech.boos.repository.Custom.BoardRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +33,22 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<Board> findBoardWithCategory(Long boardSeq){
-        Board resultBoard = queryFactory.selectFrom(board)
-                .join(board.comments, comment).fetchJoin()
+    public Optional<BoardDetailDto> findBoardDetail(Long boardSeq){
+        BoardDetailDto boardDetailDto = queryFactory.select(new QBoardDetailDto(
+                        board.seq,
+                        board.title,
+                        board.content,
+                        board.writer,
+                        board.regTime,
+                        board.category.categoryName,
+                        board.modifyYn,
+                        board.deleteYn,
+                        board.modifyTime))
+                .from(board)
+                .join(board.category, category)
                 .where(board.seq.eq(boardSeq))
                 .fetchOne();
-        return Optional.ofNullable(resultBoard);
+        return Optional.ofNullable(boardDetailDto);
     }
 
     @Override

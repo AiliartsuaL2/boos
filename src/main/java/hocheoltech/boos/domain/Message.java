@@ -38,6 +38,8 @@ public class Message {
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode deleteYn;
+    //삭제일시
+    private LocalDateTime deleteTime;
 
     // 발신일시
     private LocalDateTime sendTime;
@@ -55,6 +57,7 @@ public class Message {
 
     public void deleteMessage(){
         this.deleteYn = TFCode.TRUE;
+        this.deleteTime = LocalDateTime.now();
     }
 
 }

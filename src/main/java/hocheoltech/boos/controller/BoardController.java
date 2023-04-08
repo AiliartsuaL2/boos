@@ -65,7 +65,7 @@ public class BoardController {
         }
         BoardDetailDto boardDetail = boardService.getBoardDetail(Long.parseLong(boardSeq));
 
-        return new ResponseEntity<>(boardDetail, HttpStatus.CREATED);
+        return new ResponseEntity<>(boardDetail, HttpStatus.OK);
     }
 
 

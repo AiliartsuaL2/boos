@@ -51,7 +51,10 @@ public class BlacklistService {
     }
 
     public List<BlacklistDto> getMembersBlacklist(String membersId){
-        List<BlacklistDto> blacklist = blackListRepository.findBlacklistByMembersId(membersId); // 사용자는 jwt로 인증하기 때문에 에러처리 없이 진행
+        if(!membersRepository.existsById(membersId)){
+            throw new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg());
+        }
+        List<BlacklistDto> blacklist = blackListRepository.findBlacklistByMembersId(membersId);
         if(blacklist.size() == 0){
             throw new NoSuchElementException(ErrorMessage.NOT_EXIST_BLACKLIST.getMsg());
         }
