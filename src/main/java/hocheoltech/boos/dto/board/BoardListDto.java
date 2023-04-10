@@ -52,7 +52,7 @@ public class BoardListDto {
         this.categoryName = categoryName;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         this.modifyYn = TFCode.TRUE.equals(modifyYn)?"Y":"N";
-        this.modifyTime = modifyTime != null?modifyTime.format(DateTimeFormatter.ofPattern("yyyyMMdd")):null;
+        this.modifyTime = modifyTime != null ? modifyTime.format(DateTimeFormatter.ofPattern("yyyyMMdd")) : null;
     }
 
 }

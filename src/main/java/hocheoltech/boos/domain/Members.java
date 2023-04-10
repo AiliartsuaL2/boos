@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,13 +57,13 @@ public class Members implements UserDetails {
 
 
     @Builder
-    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, LocalDate openTime, String nickname){
+    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, String openTime, String nickname){
         this.id = id;
         this.password = password;
         this.name = name;
         this.businessCategory = businessCategory;
         this.businessRegNum = businessRegNum;
-        this.openTime = openTime;
+        this.openTime = LocalDate.parse(openTime, DateTimeFormatter.ofPattern("yyyyMMdd"));
         this.nickname = nickname;
         this.joinTime = LocalDateTime.now();
         this.comments = new ArrayList<>();

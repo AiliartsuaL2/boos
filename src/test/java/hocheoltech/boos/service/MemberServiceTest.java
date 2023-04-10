@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static java.time.LocalDate.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,18 +37,18 @@ class MemberServiceTest {
     @Test
     void save(){
 
-        for (int i = 3; i < 50; i++) {
-            MembersJoinDto m = MembersJoinDto.builder()
-                    .id("luvsole" + i)
-                    .businessCategory("쇼핑몰")
-                    .businessRegNum("5678910212")
-                    .name("김정아")
-                    .nickname("luvsole" + i)
-                    .openTime("20221206")
-                    .password("123123")
-                    .build();
-            memberService.saveMember(m);
-        }
+        LocalDate openTime = LocalDate.parse("20230410", DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        MembersJoinDto build = MembersJoinDto.builder()
+                .id("ailiartsua")
+                .name("이주호")
+                .password("qw1621")
+                .businessCategory("쇼핑몰")
+                .businessRegNum("123456789")
+                .openTime(openTime)
+                .build();
+        MembersJoinDto membersJoinDto = memberService.saveMember(build);
+        assertThat(membersJoinDto.getId()).isEqualTo("ailiartsua");
     }
 
     @Test
@@ -56,7 +59,7 @@ class MemberServiceTest {
     @Test
     void deleteMember() {
         //given
-        String id = "cy123";
+        String id = "ailiartsua";
         MembersLoginDto mdto = MembersLoginDto.builder()
                 .id(id)
                 .password("qw1621")
@@ -67,7 +70,7 @@ class MemberServiceTest {
         memberService.deleteMember(mdto);
 
         //then
-        Members member = membersRepository.findById("cy123").get();
+        Members member = membersRepository.findById(id).get();
     }
     @Test
     void updateMember(){

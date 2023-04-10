@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MembersJoinDto {
@@ -21,6 +23,17 @@ public class MembersJoinDto {
     private String businessRegNum;
     private String businessCategory;
     private String openTime;
-    @Builder.Default
-    private List<LoginTermsDto> termsList = new ArrayList<>();
+    private List<LoginTermsDto> termsList ;
+
+    @Builder
+    public MembersJoinDto(String id, String name, String nickname, String password, String businessRegNum, String businessCategory, LocalDate openTime){
+        this.id = id;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.businessRegNum = businessRegNum;
+        this.businessCategory = businessCategory;
+        this.openTime = openTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        termsList = new ArrayList<>();
+    }
 }

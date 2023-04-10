@@ -48,10 +48,7 @@ public class MemberService implements UserDetailsService {
         BusinessCategory businessCategory = businessCategoryRepository.findByCategoryName(membersJoinDto.getBusinessCategory()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BUSINESS_CATEGORY_NAME.getMsg()));
 
-        LocalDate openTime = LocalDate.parse(membersJoinDto.getOpenTime(), DateTimeFormatter.ofPattern("yyyyMMdd"));
-
         List<LoginTermsDto> dtoTermsList = membersJoinDto.getTermsList();
-        ArrayList<Terms> termsList = new ArrayList<>();
 
         Members members = Members.builder()
                 .id(membersJoinDto.getId())
@@ -60,7 +57,7 @@ public class MemberService implements UserDetailsService {
                 .businessRegNum(membersJoinDto.getBusinessRegNum())
                 .businessCategory(businessCategory)
                 .nickname(membersJoinDto.getNickname())
-                .openTime(openTime)
+                .openTime(membersJoinDto.getOpenTime())
                 .build();
 
         dtoTermsList.stream().map(d -> Terms.builder()
@@ -70,15 +67,14 @@ public class MemberService implements UserDetailsService {
                 .build()).collect(Collectors.toList());
 
         Members savedMembers = membersRepository.save(members);
-        String openTime2 = savedMembers.getOpenTime().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
         MembersJoinDto membersDto = MembersJoinDto.builder()
                 .id(savedMembers.getId())
                 .name(savedMembers.getName())
                 .nickname(savedMembers.getNickname())
                 .businessRegNum(savedMembers.getBusinessRegNum())
                 .businessCategory(savedMembers.getBusinessCategory().getCategoryName())
-                .openTime(openTime2)
-//                .termsList(dtoTermsList)
+                .openTime(savedMembers.getOpenTime())
                 .build();
 
         return membersDto;
