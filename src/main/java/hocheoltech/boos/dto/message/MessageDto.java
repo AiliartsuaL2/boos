@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.Message;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,16 @@ public class MessageDto {
     private String receiptNickname;
     private String content;
     private String sendTime;
+
+    @Builder
+    public MessageDto(String senderId, String receiptId,String senderNickname,String receiptNickname, String content){
+        this.senderId = senderId;
+        this.receiptId = receiptId;
+        this.senderNickname = senderNickname;
+        this.receiptNickname = receiptNickname;
+        this.content = content;
+    }
+
 
     @QueryProjection
     public MessageDto(long messageSeq, String senderId, String receiptId,String senderNickname,String receiptNickname, String content, LocalDateTime sendTime){

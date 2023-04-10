@@ -6,6 +6,7 @@ import hocheoltech.boos.dto.board.BoardListDto;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.exception.ErrorMessage;
+import hocheoltech.boos.repository.BlacklistRepository;
 import hocheoltech.boos.repository.MembersRepository;
 import hocheoltech.boos.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,17 @@ import java.util.concurrent.RejectedExecutionException;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final MembersRepository membersRepository;
+    private final BlacklistRepository blacklistRepository;
 
     @Transactional
     public void sendMessage(MessageDto messageDto){
         Members sender = membersRepository.findById(messageDto.getSenderId()).orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         Members receipt = membersRepository.findById(messageDto.getReceiptId()).orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
+
+        if(blacklistRepository.existsBlacklistByBlockerIdAndBlockedId(sender.getId(),receipt.getId())){ // 차단한 사용자이면 쪽지 보내기를 못하게 처리
+            throw new RejectedExecutionException(ErrorMessage.REJECTED_MESSAGE_BY_BLOCK.getMsg());
+        }
+
         Message message = Message.builder()
                 .sender(sender)
                 .recipient(receipt)

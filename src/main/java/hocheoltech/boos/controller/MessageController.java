@@ -29,6 +29,16 @@ public class MessageController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MessageService messageService;
 
+    @PostMapping("/v1/message")
+    public String saveMessage(@RequestBody MessageDto messageDto,
+                              @RequestHeader(value = "Authorization") String jwtToken){
+        String membersId = jwtTokenProvider.getUserPk(jwtToken);
+        messageDto.setSenderId(membersId);
+
+        messageService.sendMessage(messageDto);
+
+        return "메세지가 성공적으로 전송되었습니다.";
+    }
     @GetMapping("/v1/message/sended")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "보낸 편지함 불러오기", description = "보낸 편지함을 불러오는 메서드입니다. ")
