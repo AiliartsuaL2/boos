@@ -40,7 +40,7 @@ class BoardServiceTest {
     void createBoard() { // 등록일시 저장안됨, 확인 필요
         //given
 
-        String writer = "luvsole3";
+        String writer = "luvsole6";
         long seq = 1L;
 
             for (int i = 1; i < 40; i++) {

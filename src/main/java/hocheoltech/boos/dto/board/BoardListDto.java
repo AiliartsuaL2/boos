@@ -27,10 +27,6 @@ public class BoardListDto {
     private String content;
     private String writer;
 
-    @JsonIgnore
-    @Builder.Default
-    private List<MembersBoard> membersBoardList = new ArrayList<>();
-
     //카테고리
     private String categoryName;
 
@@ -42,6 +38,10 @@ public class BoardListDto {
 
     // 수정 일시
     private String modifyTime;
+
+    // 현재 사용자
+
+    private String nowMembersId;
 
     @QueryProjection
     public BoardListDto(long seq, String title, String content, String writer, String categoryName, LocalDateTime regTime, TFCode modifyYn, LocalDateTime modifyTime) {

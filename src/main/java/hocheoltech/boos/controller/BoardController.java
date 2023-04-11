@@ -83,10 +83,12 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     public Page<BoardListDto> getBoardList(PageRequest pageRequest,
-                                           @RequestBody BoardListDto boardListDto){
-
+                                           @RequestBody BoardListDto boardListDto,
+                                           @RequestHeader(value = "Authorization",required = false) String jwtToken){
         Pageable pageable = pageRequest.of();
-
+        if(jwtToken != null){ // 사용자가 로그인 되어 있으면 차단한 사용자의 게시물을 숨기기 위해
+            boardListDto.setNowMembersId(jwtTokenProvider.getUserPk(jwtToken));
+        }
         Page<BoardListDto> boardList = boardService.getBoardList(boardListDto, pageable);
         return boardList;
     }

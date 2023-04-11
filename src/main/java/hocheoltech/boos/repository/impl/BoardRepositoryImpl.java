@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static hocheoltech.boos.domain.QBlacklist.blacklist;
 import static hocheoltech.boos.domain.QBoard.board;
 import static hocheoltech.boos.domain.QCategory.category;
 import static hocheoltech.boos.domain.QComment.comment;
+import static hocheoltech.boos.domain.QMembers.members;
 import static hocheoltech.boos.domain.QMembersBoard.membersBoard;
 
 @Repository
@@ -64,11 +66,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.modifyTime)).
                 from(board)
                 .join(board.membersBoards, membersBoard)
+                .join(membersBoard.members, members)
+                .leftJoin(members.blockedList, blacklist)
                 .join(board.category, category)
                 .where(membersNicknameContains(boardListDto.getWriter())
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
                         .and(boardContentContains(boardListDto.getContent()))
+                        .and(isNowMembersBlocked(boardListDto.getNowMembersId()))
                         .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .limit(pageable.getPageSize())
@@ -79,11 +84,14 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         Long count = queryFactory.select(board.count())
                 .from(board)
                 .join(board.membersBoards, membersBoard)
+                .join(membersBoard.members, members)
+                .leftJoin(members.blockedList, blacklist)
                 .join(board.category, category)
                 .where(membersNicknameContains(boardListDto.getWriter())
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
                         .and(boardContentContains(boardListDto.getContent()))
+                        .and(isNowMembersBlocked(boardListDto.getNowMembersId()))
                         .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .fetchOne();
@@ -91,6 +99,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return new PageImpl<>(resultList, pageable, count);
     }
 
+    // 현재 사용자가 차단한 사용자 게시물 여부
+    private BooleanExpression isNowMembersBlocked(String nowMembersId) {
+        return nowMembersId != null ? blacklist.blockerId.id.ne(nowMembersId).or(blacklist.blockerId.isNull()) : null;
+    }
 
     private BooleanExpression categoryNameContains(String categoryName) {
         return categoryName != null ? board.category.categoryName.contains(categoryName) : null;
