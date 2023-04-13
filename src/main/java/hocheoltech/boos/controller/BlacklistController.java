@@ -45,7 +45,7 @@ public class BlacklistController {
 
     @Operation(summary = "사용자 차단 해제", description = "차단된 사용자를 해제하는 메서드입니다. ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = BoardListDto.class))),
+            @ApiResponse(responseCode = "200", description = "successful operation"),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
     @DeleteMapping("/v1/blacklist")
@@ -59,8 +59,13 @@ public class BlacklistController {
         return String.format("%s 회원이 정상적으로 차단 해제 되었습니다.", idToBlock);
     }
 
-
+    @Operation(summary = "차단 목록 확인", description = "차단 목록을 확인하는 메서드입니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation"),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
     @GetMapping("/v1/blacklist")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<BlacklistDto>> getBlackList(@RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
         List<BlacklistDto> membersBlacklist = blacklistService.getMembersBlacklist(membersId);
