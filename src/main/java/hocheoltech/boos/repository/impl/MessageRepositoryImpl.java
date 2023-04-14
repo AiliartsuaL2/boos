@@ -42,9 +42,9 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                         message.sendTime))
                 .from(message)
                 .join(message.senderId, members)
-                .join(members.blockList, blacklist)
+                .join(members.blockedList, blacklist) // 본인이 차단한사람을 join
                 .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인이 보낸 쪽지만,
-                        .and(message.recipientId.ne(blacklist.blockedId)) // 본인이 보낸 쪽지의 수신자가 차단한사람이면 나오지 않게
+                        .and(message.recipientId.ne(blacklist.blockedId)) // 본인이 보낸 쪽지의 수신자가 본인이 차단한사람이면 나오지 않게
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
@@ -59,7 +59,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                 .join(message.senderId, members)
                 .join(members.blockList, blacklist)
                 .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
-                        .and(message.recipientId.ne(blacklist.blockedId))// 본인이 보낸 쪽지의 수신자가 차단한사람이면 나오지 않게
+                        .and(message.recipientId.ne(blacklist.blockedId))// 본인이 보낸 쪽지의 수신자가 본인이 차단한사람이면 나오지 않게
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
@@ -83,13 +83,12 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                         message.sendTime))
                 .from(message)
                 .join(message.recipientId, members)
-                .join(members.blockList, blacklist)
                 .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
-                        .and(message.senderId.ne(blacklist.blockedId))
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageSenderIdContains(searchMessageDto.getSenderId()))
                         .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
                         .and(message.deleteYn.eq(TFCode.FALSE))
+                        .and(message.showInboxYn.eq(TFCode.TRUE)) // 사용자를 차단한 기간동안 해당 사용자가 보낸 메세지는 보이지 않게
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -99,13 +98,12 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         Long count = queryFactory.select(message.count())
                 .from(message)
                 .join(message.senderId, members)
-                .join(members.blockList, blacklist)
                 .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
-                        .and(message.senderId.ne(blacklist.blockedId))
                         .and(messageContentContains(searchMessageDto.getContent())) // 내용으로 검색
                         .and(messageSenderIdContains(searchMessageDto.getSenderId())) // 보낸사람 검색
                         .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
                         .and(message.deleteYn.eq(TFCode.FALSE))
+                        .and(message.showInboxYn.eq(TFCode.TRUE))
                 )
                 .fetchOne();
 

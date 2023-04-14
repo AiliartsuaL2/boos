@@ -28,8 +28,17 @@ public class MessageService {
     private final MembersRepository membersRepository;
     private final BlacklistRepository blacklistRepository;
 
+
+    /**
+     * 비즈니스 로직
+     * 보낸 사람 : 차단한 사람에게는 메세지를 정상적으로 보냈다는 메세지와 함께 보낸 쪽지함에도 이력이 있어야함,
+     * 받은 사람 : 차단한 사람에게는 메세지를 보낼 수 없다는 메세지를 보내고, 차단한 사람이 보낸 쪽지는 보관함에 보이지 않게 처리해야함,
+     * >> 차단당한 사람이 차단한 사람에게 메세지를 보낼경우,
+     *  - 메세지를 보내고,
+     */
     @Transactional
     public void sendMessage(MessageDto messageDto){
+
         Members sender = membersRepository.findById(messageDto.getSenderId()).orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         Members receipt = membersRepository.findById(messageDto.getReceiptId()).orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
 
@@ -37,11 +46,14 @@ public class MessageService {
             throw new RejectedExecutionException(ErrorMessage.REJECTED_MESSAGE_BY_BLOCK.getMsg());
         }
 
-        Message message = Message.builder()
+        Message.MessageBuilder tmpMsg = Message.builder()
                 .sender(sender)
                 .recipient(receipt)
-                .content(messageDto.getContent())
-                .build();
+                .content(messageDto.getContent());
+        // 차단 당한사람이 차단한 사람에게 메세지를 보낸경우 False 설정
+        tmpMsg.showInboxYn(blacklistRepository.existsBlacklistByBlockerIdAndBlockedId(messageDto.getReceiptId(),messageDto.getSenderId()) ? "N" : "Y");
+        Message message = tmpMsg.build();
+
         messageRepository.save(message);
     }
 

@@ -35,9 +35,16 @@ public class Message {
     @JoinColumn(name= "RECIPIENT_ID")
     private Members recipientId;
 
+    // 삭제 여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
     private TFCode deleteYn;
+
+    // 수신함 표시 여부
+    @Convert(converter = TFCodeConverter.class)
+    @Column(columnDefinition = "char")
+    private TFCode showInboxYn;
+
     //삭제일시
     private LocalDateTime deleteTime;
 
@@ -45,7 +52,7 @@ public class Message {
     private LocalDateTime sendTime;
 
     @Builder
-    public Message(Members sender, String content ,Members recipient){
+    public Message(Members sender, String content ,Members recipient, String showInboxYn){
         this.content = content;
         this.sendTime = LocalDateTime.now();
         this.senderId = sender;
@@ -53,6 +60,7 @@ public class Message {
         this.senderId.getSendMessages().add(this);
         this.recipientId.getRecipientMessages().add(this);
         this.deleteYn = TFCode.FALSE;
+        this.showInboxYn = "Y".equals(showInboxYn) ? TFCode.TRUE : TFCode.FALSE;
     }
 
     public void deleteMessage(){

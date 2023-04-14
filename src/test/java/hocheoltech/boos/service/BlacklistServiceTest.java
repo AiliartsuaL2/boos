@@ -32,8 +32,8 @@ class BlacklistServiceTest {
     @Test
     void createBlackList() {
         //given
-        String blockedId = "luvsole13";
-        String blockerId = "luvsole6";
+        String blockedId = "luvsole5";
+        String blockerId = "luvsole13";
         //when
         blacklistService.createBlackList(blockerId,blockedId);
         //then
