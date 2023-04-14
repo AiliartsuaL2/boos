@@ -32,6 +32,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     @Override
     public Page<MessageDto> findSendedMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
 
+        //Todo 보낸 쪽지함에서 본인이 차단한 사용자의 이력을 보이지 않게끔 처리해야함
         List<MessageDto> messageList = queryFactory.select(new QMessageDto(
                         message.seq,
                         message.senderId.id,
