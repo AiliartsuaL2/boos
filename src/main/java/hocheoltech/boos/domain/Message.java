@@ -35,37 +35,37 @@ public class Message {
     @JoinColumn(name= "RECIPIENT_ID")
     private Members recipientId;
 
-    // 삭제 여부
+    // 보낸 쪽지함 삭제 여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
-    private TFCode deleteYn;
+    private TFCode sentBoxDeleteYn;
 
-    // 수신함 표시 여부
+    // 받은 쪽지함 삭제 여부
     @Convert(converter = TFCodeConverter.class)
     @Column(columnDefinition = "char")
-    private TFCode showInboxYn;
-
-    //삭제일시
-    private LocalDateTime deleteTime;
+    private TFCode inBoxDeleteYn;
 
     // 발신일시
     private LocalDateTime sendTime;
 
     @Builder
-    public Message(Members sender, String content ,Members recipient, String showInboxYn){
+    public Message(Members sender, String content ,Members recipient, String blockedYn){
         this.content = content;
         this.sendTime = LocalDateTime.now();
         this.senderId = sender;
         this.recipientId = recipient;
         this.senderId.getSendMessages().add(this);
         this.recipientId.getRecipientMessages().add(this);
-        this.deleteYn = TFCode.FALSE;
-        this.showInboxYn = "Y".equals(showInboxYn) ? TFCode.TRUE : TFCode.FALSE;
+        this.sentBoxDeleteYn = TFCode.FALSE;
+        this.inBoxDeleteYn = "Y".equals(blockedYn) ? TFCode.TRUE : TFCode.FALSE;
     }
 
-    public void deleteMessage(){
-        this.deleteYn = TFCode.TRUE;
-        this.deleteTime = LocalDateTime.now();
+    public void deleteMessage(String box){
+        if("sent".equals(box)){
+            sentBoxDeleteYn = TFCode.TRUE;
+        }else{
+            inBoxDeleteYn = TFCode.TRUE;
+        }
     }
 
 }

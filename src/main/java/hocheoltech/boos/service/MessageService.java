@@ -3,6 +3,7 @@ package hocheoltech.boos.service;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.Message;
 import hocheoltech.boos.dto.board.BoardListDto;
+import hocheoltech.boos.dto.message.DeleteMessageDto;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.exception.ErrorMessage;
@@ -51,19 +52,21 @@ public class MessageService {
                 .recipient(receipt)
                 .content(messageDto.getContent());
         // 차단 당한사람이 차단한 사람에게 메세지를 보낸경우 False 설정
-        tmpMsg.showInboxYn(blacklistRepository.existsBlacklistByBlockerIdAndBlockedId(messageDto.getReceiptId(),messageDto.getSenderId()) ? "N" : "Y");
+        tmpMsg.blockedYn(blacklistRepository.existsBlacklistByBlockerIdAndBlockedId(messageDto.getReceiptId(),messageDto.getSenderId()) ? "Y" : "N");
         Message message = tmpMsg.build();
 
         messageRepository.save(message);
     }
 
     @Transactional
-    public void deleteMessage(MessageDto messageDto){
-        Message message = messageRepository.findById(Long.parseLong(messageDto.getMessageSeq())).orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MESSAGE.getMsg()));
-        if(!message.getSenderId().getId().equals(messageDto.getSenderId())){
-            throw new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg());
+    public void deleteMessage(DeleteMessageDto deleteMessageDto){
+        String membersId = deleteMessageDto.getMembersId();
+        String boxLocation = deleteMessageDto.getBoxLocation();
+        for (Long messageSeq : deleteMessageDto.getMessageSeqList()) {
+            Message message = messageRepository.findMessage(messageSeq,membersId,boxLocation)
+                    .orElseThrow(() -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MESSAGE.getMsg()));
+            message.deleteMessage(boxLocation);
         }
-        message.deleteMessage();
     }
 
     // 보낸 쪽지함

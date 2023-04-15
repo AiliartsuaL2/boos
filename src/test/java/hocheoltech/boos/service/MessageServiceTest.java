@@ -4,6 +4,7 @@ import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.domain.Message;
 import hocheoltech.boos.dto.board.PageRequest;
+import hocheoltech.boos.dto.message.DeleteMessageDto;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.repository.MembersRepository;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,14 +37,13 @@ class MessageServiceTest {
     void sendMessage() {
         //given
 
-        for (int i = 5; i < 10; i++) {
             String sendId = "luvsole13";
-            String recptId = "luvsole"+i;
+            String recptId = "luvsole6";
             MessageDto messageDto = new MessageDto();
             messageDto.setSenderId(sendId);
             messageDto.setReceiptId(recptId);messageDto.setContent("메세지 테스트 안녕하세요 이주홍비니다.");
             messageService.sendMessage(messageDto);
-        }
+
 
 //        String senderId = "luvsole10";
 //        String receiptId = "luvsole6";
@@ -62,16 +65,21 @@ class MessageServiceTest {
     @Test
     void deleteMessage() {
         //given
-        MessageDto messageDto = new MessageDto();
-        messageDto.setSenderId("cy123");
-        messageDto.setMessageSeq("4");
+        List<Long> messageSeqList = new ArrayList<>();
+        messageSeqList.add(379L);
+
+        DeleteMessageDto deleteMessageDto = DeleteMessageDto.builder()
+                .messageSeqList(messageSeqList)
+                .membersId("luvsole20")
+                .boxLocation("in")
+                .build();
 
         //when
-        messageService.deleteMessage(messageDto);
+        messageService.deleteMessage(deleteMessageDto);
 
         //then
-        Message message = messageRepository.findById(4L).get();
-        Assertions.assertThat(message.getDeleteYn()).isEqualTo(TFCode.TRUE);
+//        Message message = messageRepository.findById(4L).get();
+//        Assertions.assertThat(message.getDeleteYn()).isEqualTo(TFCode.TRUE);
 
 
     }

@@ -22,14 +22,17 @@ public class MessageDto {
     private String receiptNickname;
     private String content;
     private String sendTime;
+    private String boxLocation;
 
     @Builder
-    public MessageDto(String senderId, String receiptId,String senderNickname,String receiptNickname, String content){
+    public MessageDto(String messageSeq, String senderId, String receiptId,String senderNickname,String receiptNickname, String content, String boxLocation){
+        this.messageSeq = messageSeq;
         this.senderId = senderId;
         this.receiptId = receiptId;
         this.senderNickname = senderNickname;
         this.receiptNickname = receiptNickname;
         this.content = content;
+        this.boxLocation = boxLocation;
     }
 
 

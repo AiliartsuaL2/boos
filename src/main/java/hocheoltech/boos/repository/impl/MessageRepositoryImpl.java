@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
+import hocheoltech.boos.domain.Message;
 import hocheoltech.boos.domain.QBlacklist;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.QMessageDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static hocheoltech.boos.domain.QBlacklist.blacklist;
 import static hocheoltech.boos.domain.QMessage.message;
@@ -29,10 +31,27 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+
+    @Override
+    public Optional<Message> findMessage(Long seq, String membersId, String boxLocation) {
+        Message resultMessage = null;
+        if("sent".equals(boxLocation)){
+            resultMessage = queryFactory.selectFrom(message)
+                    .join(message.senderId,members).fetchJoin()
+                    .where(members.id.eq(membersId)
+                            .and(message.seq.eq(seq))).fetchOne();
+
+        }else if("in".equals(boxLocation)){
+            resultMessage = queryFactory.selectFrom(message)
+                    .join(message.recipientId,members).fetchJoin()
+                    .where(members.id.eq(membersId)
+                            .and(message.seq.eq(seq))).fetchOne();
+        }
+        return Optional.ofNullable(resultMessage);
+    }
+
     @Override
     public Page<MessageDto> findSendedMessageList(SearchMessageDto searchMessageDto , Pageable pageable) {
-
-        //Todo 보낸 쪽지함에서 본인이 차단한 사용자의 이력을 보이지 않게끔 처리해야함
         List<MessageDto> messageList = queryFactory.select(new QMessageDto(
                         message.seq,
                         message.senderId.id,
@@ -43,13 +62,13 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                         message.sendTime))
                 .from(message)
                 .join(message.senderId, members)
-                .join(members.blockedList, blacklist) // 본인이 차단한사람을 join
+                .join(members.blockList, blacklist) // 본인이 차단한사람을 join
                 .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인이 보낸 쪽지만,
-                        .and(message.recipientId.ne(blacklist.blockedId)) // 본인이 보낸 쪽지의 수신자가 본인이 차단한사람이면 나오지 않게
+                        .and(message.recipientId.ne(blacklist.blockedId)) // 본인이 보낸 쪽지의 수신자가 본인이 차단한 사람이면 나오지 않게
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
-                        .and(message.deleteYn.eq(TFCode.FALSE)))
+                        .and(message.sentBoxDeleteYn.eq(TFCode.FALSE)))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(messageSort(pageable))
@@ -58,14 +77,13 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         Long count = queryFactory.select(message.count())
                 .from(message)
                 .join(message.senderId, members)
-                .join(members.blockList, blacklist)
-                .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인쪽지만,
-                        .and(message.recipientId.ne(blacklist.blockedId))// 본인이 보낸 쪽지의 수신자가 본인이 차단한사람이면 나오지 않게
+                .join(members.blockList, blacklist) // 본인이 차단한사람을 join
+                .where(message.senderId.id.eq(searchMessageDto.getSenderId()) // 본인이 보낸 쪽지만,
+                        .and(message.recipientId.ne(blacklist.blockedId)) // 본인이 보낸 쪽지의 수신자가 본인이 차단한 사람이면 나오지 않게
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageRecipientIdContains(searchMessageDto.getReceiptId()))
                         .and(messageRecipientNicknameContains(searchMessageDto.getReceiptNickname()))
-                        .and(message.deleteYn.eq(TFCode.FALSE))
-                )
+                        .and(message.sentBoxDeleteYn.eq(TFCode.FALSE)))
                 .fetchOne();
 
         return new PageImpl<>(messageList, pageable, count);
@@ -88,8 +106,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
                         .and(messageContentContains(searchMessageDto.getContent()))
                         .and(messageSenderIdContains(searchMessageDto.getSenderId()))
                         .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
-                        .and(message.deleteYn.eq(TFCode.FALSE))
-                        .and(message.showInboxYn.eq(TFCode.TRUE)) // 사용자를 차단한 기간동안 해당 사용자가 보낸 메세지는 보이지 않게
+                        .and(message.inBoxDeleteYn.eq(TFCode.FALSE))
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -98,20 +115,14 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
 
         Long count = queryFactory.select(message.count())
                 .from(message)
-                .join(message.senderId, members)
+                .join(message.recipientId, members)
                 .where(message.recipientId.id.eq(searchMessageDto.getReceiptId()) // 본인쪽지만,
-                        .and(messageContentContains(searchMessageDto.getContent())) // 내용으로 검색
-                        .and(messageSenderIdContains(searchMessageDto.getSenderId())) // 보낸사람 검색
+                        .and(messageContentContains(searchMessageDto.getContent()))
+                        .and(messageSenderIdContains(searchMessageDto.getSenderId()))
                         .and(messageSenderNicknameContains(searchMessageDto.getSenderNickname()))
-                        .and(message.deleteYn.eq(TFCode.FALSE))
-                        .and(message.showInboxYn.eq(TFCode.TRUE))
+                        .and(message.inBoxDeleteYn.eq(TFCode.FALSE))
                 )
                 .fetchOne();
-
-
-//        List<MessageDto> collect = messageList.stream()
-//                .map(m -> new MessageDto())
-//                .collect(Collectors.toList()); // message entity를 dto로 변환
 
         return new PageImpl<>(messageList, pageable, count);
     }

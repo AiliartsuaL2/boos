@@ -2,6 +2,7 @@ package hocheoltech.boos.controller;
 
 import hocheoltech.boos.dto.board.BoardListDto;
 import hocheoltech.boos.dto.board.PageRequest;
+import hocheoltech.boos.dto.message.DeleteMessageDto;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.exception.ErrorMessage;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Tag(name = "쪽지", description = "쪽지 관련 api 입니다.")
@@ -39,7 +42,19 @@ public class MessageController {
 
         return "메세지가 성공적으로 전송되었습니다.";
     }
-    @GetMapping("/v1/message/sended")
+
+    // 쪽지함 다중 삭제의 경우 단건 삭제 url을 다중으로 호출하는것보다는 list로 받아서 서비스에서 for문으로 돌리는게 효율적일 것 같음,,
+    @DeleteMapping("/v1/message")
+    public String removeMessage(@RequestBody DeleteMessageDto deleteMessageDto,
+                                @RequestHeader(value = "Authorization") String jwtToken){
+        String membersId = jwtTokenProvider.getUserPk(jwtToken);
+
+        deleteMessageDto.setMembersId(membersId);
+        messageService.deleteMessage(deleteMessageDto);
+
+        return "메세지가 성공적으로 삭제되었습니다.";
+    }
+    @GetMapping("/v1/message/sent")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "보낸 편지함 불러오기", description = "보낸 편지함을 불러오는 메서드입니다. ")
     @ApiResponses(value = {
