@@ -32,10 +32,13 @@ class BlacklistServiceTest {
     @Test
     void createBlackList() {
         //given
-        String blockedId = "luvsole5";
-        String blockerId = "luvsole13";
+        for (int i = 33; i <36 ; i++) {
+            String blockerId = "luvsole6";
+            String blockedId = "luvsole"+i;
+            blacklistService.createBlackList(blockerId,blockedId);
+
+        }
         //when
-        blacklistService.createBlackList(blockerId,blockedId);
         //then
 //        List<BlacklistDto> blacklistDtos = blacklistService.getMembersBlacklist(blockerId);
 //

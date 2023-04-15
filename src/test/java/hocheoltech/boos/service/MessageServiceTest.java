@@ -36,13 +36,21 @@ class MessageServiceTest {
     @Test
     void sendMessage() {
         //given
-
-            String sendId = "luvsole13";
-            String recptId = "luvsole6";
+        for (int i = 5; i < 20; i++) {
+            String recptId = "luvsole20";
             MessageDto messageDto = new MessageDto();
-            messageDto.setSenderId(sendId);
+            messageDto.setSenderId("luvsole"+i);
             messageDto.setReceiptId(recptId);messageDto.setContent("메세지 테스트 안녕하세요 이주홍비니다.");
             messageService.sendMessage(messageDto);
+
+        }
+
+//            String sendId = "luvsole13";
+//            String recptId = "luvsole6";
+//            MessageDto messageDto = new MessageDto();
+//            messageDto.setSenderId(sendId);
+//            messageDto.setReceiptId(recptId);messageDto.setContent("메세지 테스트 안녕하세요 이주홍비니다.");
+//            messageService.sendMessage(messageDto);
 
 
 //        String senderId = "luvsole10";
@@ -66,11 +74,12 @@ class MessageServiceTest {
     void deleteMessage() {
         //given
         List<Long> messageSeqList = new ArrayList<>();
-        messageSeqList.add(379L);
+        messageSeqList.add(385L);
+
 
         DeleteMessageDto deleteMessageDto = DeleteMessageDto.builder()
                 .messageSeqList(messageSeqList)
-                .membersId("luvsole20")
+                .membersId("luvsole26")
                 .boxLocation("in")
                 .build();
 
