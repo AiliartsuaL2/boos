@@ -3,6 +3,7 @@ package hocheoltech.boos.repository.impl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hocheoltech.boos.common.converter.TFCode;
 import hocheoltech.boos.domain.*;
@@ -67,14 +68,17 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 from(board)
                 .join(board.membersBoards, membersBoard)
                 .join(membersBoard.members, members)
-                .leftJoin(members.blockedList, blacklist)
                 .join(board.category, category)
-                .where(membersNicknameContains(boardListDto.getWriter())
-                        .and(categoryNameContains(boardListDto.getCategoryName()))
-                        .and(boardTitleContains(boardListDto.getTitle()))
-                        .and(boardContentContains(boardListDto.getContent()))
-                        .and(isNowMembersBlocked(boardListDto.getNowMembersId()))
-                        .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
+                .where(board.seq.notIn(JPAExpressions // 차단된 사용자 목록에 있는 board seq는 표시 안함
+                                        .select(board.seq)
+                                        .from(board)
+                                        .join(blacklist).on(members.eq(blacklist.blockedId))
+                                        .where(blacklist.blockerId.id.eq(boardListDto.getNowMembersId())))
+                                .and(membersNicknameContains(boardListDto.getWriter()))
+                                .and(categoryNameContains(boardListDto.getCategoryName()))
+                                .and(boardTitleContains(boardListDto.getTitle()))
+                                .and(boardContentContains(boardListDto.getContent()))
+                                .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -85,13 +89,16 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .from(board)
                 .join(board.membersBoards, membersBoard)
                 .join(membersBoard.members, members)
-                .leftJoin(members.blockedList, blacklist)
                 .join(board.category, category)
-                .where(membersNicknameContains(boardListDto.getWriter())
+                .where(board.seq.notIn(JPAExpressions // 차단된 사용자 목록에 있는 board seq는 표시 안함
+                                        .select(board.seq)
+                                        .from(board)
+                                        .join(blacklist).on(members.eq(blacklist.blockedId))
+                                        .where(blacklist.blockerId.id.eq(boardListDto.getNowMembersId())))
+                        .and(membersNicknameContains(boardListDto.getWriter()))
                         .and(categoryNameContains(boardListDto.getCategoryName()))
                         .and(boardTitleContains(boardListDto.getTitle()))
                         .and(boardContentContains(boardListDto.getContent()))
-                        .and(isNowMembersBlocked(boardListDto.getNowMembersId()))
                         .and(board.deleteYn.eq(TFCode.FALSE)) // 삭제처리된 게시물은 표시안함
                 )
                 .fetchOne();
@@ -99,10 +106,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return new PageImpl<>(resultList, pageable, count);
     }
 
-    // 현재 사용자가 차단한 사용자 게시물 여부
-    private BooleanExpression isNowMembersBlocked(String nowMembersId) {
-        return nowMembersId != null ? blacklist.blockerId.id.ne(nowMembersId).or(blacklist.blockerId.isNull()) : null;
-    }
 
     private BooleanExpression categoryNameContains(String categoryName) {
         return categoryName != null ? board.category.categoryName.contains(categoryName) : null;
