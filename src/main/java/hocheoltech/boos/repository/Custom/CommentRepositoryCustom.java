@@ -5,5 +5,5 @@ import hocheoltech.boos.dto.comment.CommentDto;
 import java.util.List;
 
 public interface CommentRepositoryCustom {
-    List<CommentDto> findCommentListByBoardSeq(long boardSeq);
+    List<CommentDto> findCommentListByBoardSeq(long boardSeq, String membersId);
 }

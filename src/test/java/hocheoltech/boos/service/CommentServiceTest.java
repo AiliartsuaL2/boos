@@ -37,7 +37,7 @@ class CommentServiceTest {
 
         CommentDto co = CommentDto.builder()
                 .boardSeq(3L)
-                .writer("cy123")
+                .membersId("luvsole34")
                 .anonymousYn(TFCode.FALSE)
                 .content("댓글 테스트")
                 .build();
@@ -54,7 +54,7 @@ class CommentServiceTest {
         //given
         CommentDto commentDto = CommentDto.builder()
                 .seq(5L)
-                .writer("cy123")
+                .membersId("cy123")
                 .anonymousYn(TFCode.FALSE)
                 .build();
 

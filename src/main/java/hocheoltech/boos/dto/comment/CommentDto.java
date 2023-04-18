@@ -14,18 +14,18 @@ import java.time.format.DateTimeFormatter;
 public class CommentDto {
     private String seq;
     private String boardSeq;
-    //작성자 닉네임
-    private String writer;
+    //작성자 Id
+    private String membersId;
     private String content;
     private String regTime ;
     private String anonymousYn;
 
     @Builder
     @QueryProjection
-    public CommentDto(long seq, long boardSeq, String writer, String content,LocalDateTime regTime,TFCode anonymousYn){
+    public CommentDto(long seq, long boardSeq, String membersId, String content,LocalDateTime regTime,TFCode anonymousYn){
         this.seq = String.valueOf(seq);
         this.boardSeq = String.valueOf(boardSeq);
-        this.writer = writer;
+        this.membersId = membersId;
         this.content = content;
         this.regTime = regTime == null ? LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                                        : regTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));

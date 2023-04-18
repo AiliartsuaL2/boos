@@ -59,11 +59,11 @@ public class BoardController {
     })
     public ResponseEntity<BoardDetailDto> getBoardDetail(@PathVariable String boardSeq,
                                           @RequestHeader(value = "Authorization", required = false) String jwtToken){
-        String membersId = "";
+        String membersId = ""; // 검색조건 null 체크
         if(jwtToken != null){
             membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
         }
-        BoardDetailDto boardDetail = boardService.getBoardDetail(Long.parseLong(boardSeq));
+        BoardDetailDto boardDetail = boardService.getBoardDetail(Long.parseLong(boardSeq),membersId);
 
         return new ResponseEntity<>(boardDetail, HttpStatus.OK);
     }
@@ -86,6 +86,7 @@ public class BoardController {
                                            @RequestBody BoardListDto boardListDto,
                                            @RequestHeader(value = "Authorization",required = false) String jwtToken){
         Pageable pageable = pageRequest.of();
+        boardListDto.setNowMembersId(""); // 게시판 리스트 검색 조건 null 처리
         if(jwtToken != null){ // 사용자가 로그인 되어 있으면 차단한 사용자의 게시물을 숨기기 위해
             boardListDto.setNowMembersId(jwtTokenProvider.getUserPk(jwtToken));
         }

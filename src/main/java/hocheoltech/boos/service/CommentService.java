@@ -27,7 +27,7 @@ public class CommentService {
 
     @Transactional// CUD 상세 레벨엔 readOnly false(default)
     public CommentDto createComment(CommentDto commentDto){
-        Members members = membersRepository.findById(commentDto.getWriter()).orElseThrow(
+        Members members = membersRepository.findById(commentDto.getMembersId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
         );
         Board board = boardRepository.findById(Long.parseLong(commentDto.getBoardSeq())).orElseThrow(
@@ -46,7 +46,7 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(CommentDto commentDto){
-        Members members = membersRepository.findById(commentDto.getWriter()).orElseThrow(
+        Members members = membersRepository.findById(commentDto.getMembersId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg()));
         Comment comment = commentRepository.findCommentBySeqAndMembers(Long.parseLong(commentDto.getSeq()), members).orElseThrow(
                 () -> new RejectedExecutionException(ErrorMessage.UNAUTHORIZED_PERMISSION.getMsg()));

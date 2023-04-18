@@ -87,10 +87,10 @@ public class BoardService {
     }
 
     // 게시판 상세 조회
-    public BoardDetailDto getBoardDetail(long seq){
+    public BoardDetailDto getBoardDetail(long seq, String membersId){
         BoardDetailDto boardDetailDto = boardRepository.findBoardDetail(seq).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_BOARD.getMsg()));
-        List<CommentDto> commentList = commentRepository.findCommentListByBoardSeq(seq);
+        List<CommentDto> commentList = commentRepository.findCommentListByBoardSeq(seq, membersId);
         boardDetailDto.setCommentList(commentList);
         return boardDetailDto;
     }

@@ -37,7 +37,7 @@ public class CommentController {
         // 헤더를 이용해서 membersSeq를 확인해야함
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
 
-        commentDto.setWriter(membersId);
+        commentDto.setMembersId(membersId);
         CommentDto comment = commentService.createComment(commentDto);
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
@@ -52,7 +52,7 @@ public class CommentController {
     public String deleteComment(@RequestBody CommentDto commentDto,
                                 @RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken);
-        commentDto.setWriter(membersId);
+        commentDto.setMembersId(membersId);
 
         commentService.deleteComment(commentDto);
         return "댓글이 정상적으로 삭제되었습니다.";
