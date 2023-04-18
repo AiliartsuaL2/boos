@@ -1,10 +1,7 @@
 package hocheoltech.boos.controller;
 
 
-import hocheoltech.boos.dto.board.BoardDetailDto;
-import hocheoltech.boos.dto.board.BoardListDto;
-import hocheoltech.boos.dto.board.CreateBoardDto;
-import hocheoltech.boos.dto.board.PageRequest;
+import hocheoltech.boos.dto.board.*;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.service.BoardService;
@@ -53,6 +50,28 @@ public class BoardController {
 
     @GetMapping("/v1/board/{boardSeq}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "게시글 수정 메서드", description = "게시글 수정 메서드입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = BoardDetailDto.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    public String modifyBoardDetail(@PathVariable String boardSeq,
+                                                         @RequestBody UpdateBoardDto updateBoardDto,
+                                                         @RequestHeader(value = "Authorization", required = false) String jwtToken){
+        String membersId = ""; // 검색조건 null 체크
+        if(jwtToken != null){
+            membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+        }
+        updateBoardDto.setBoardSeq(Long.parseLong(boardSeq));
+        updateBoardDto.setMembersId(membersId);
+        boardService.updateBoard(updateBoardDto);
+
+        return "게시글이 성공적으로 수정되었습니다.";
+    }
+
+
+    @GetMapping("/v1/board/{boardSeq}")
+    @Operation(summary = "게시글 상세 조회 메서드", description = "게시글 상세 조회 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = BoardDetailDto.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))

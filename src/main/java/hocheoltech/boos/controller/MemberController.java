@@ -6,6 +6,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.dto.members.MembersJoinDto;
 import hocheoltech.boos.dto.members.MembersLoginDto;
 import hocheoltech.boos.dto.common.OpenApiCallDto;
+import hocheoltech.boos.dto.members.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
 import hocheoltech.boos.jwt.JwtTokenProvider;
 import hocheoltech.boos.repository.MembersRepository;
@@ -149,6 +150,22 @@ public class MemberController {
 
         memberService.deleteMember(membersLoginDto);
         return "정상적으로 탈퇴처리 되었습니다.";
+    }
+
+    @PutMapping("/v1/member")
+    @Operation(summary = "회원정보 수정 메서드", description = "회원정보 수정 메서드입니다.")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
+    })
+    public String modifyMember(@RequestBody UpdateMembersDto updateMembersDto,
+                               @RequestHeader(value = "Authorization") String jwtToken){
+        String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
+        log.info("modifyMember , user Id = {}", membersId);
+        updateMembersDto.setId(membersId);
+        memberService.modifyMember(updateMembersDto);
+        return "정상적으로 수정되었습니다.";
     }
 
 }

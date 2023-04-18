@@ -96,6 +96,9 @@ public class MemberService implements UserDetailsService {
         Members members = membersRepository.findById(updateMembersDto.getId()).orElseThrow(
                 () -> new NoSuchElementException(ErrorMessage.NOT_EXIST_MEMBER.getMsg())
         );
+        if(members.getPassword() == updateMembersDto.getPassword()){ // 기존 사용하던 비밀번호인경우
+            throw new RejectedExecutionException(ErrorMessage.BEFORE_USED_PASSWORD.getMsg());
+        }
         members.updateMemberInfo(updateMembersDto.getPassword(),updateMembersDto.getNickname());
     }
 

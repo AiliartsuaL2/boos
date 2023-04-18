@@ -4,12 +4,14 @@ import hocheoltech.boos.domain.Category;
 import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 
 public class UpdateBoardDto {
     private String membersId;
+
     private Long boardSeq;
     private String boardTitle;
     private String boardContent;
