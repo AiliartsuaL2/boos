@@ -8,7 +8,9 @@ import hocheoltech.boos.dto.members.MembersLoginDto;
 import hocheoltech.boos.dto.common.OpenApiCallDto;
 import hocheoltech.boos.dto.members.UpdateMembersDto;
 import hocheoltech.boos.exception.ErrorMessage;
+import hocheoltech.boos.service.JwtService;
 import hocheoltech.boos.jwt.JwtTokenProvider;
+import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.repository.MembersRepository;
 import hocheoltech.boos.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +46,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtService jwtService;
 
     @PostMapping("/v1/member")
     @Operation(summary = "회원가입 메서드", description = "회원가입 메서드입니다.")
@@ -128,10 +131,14 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public String login(@RequestBody MembersLoginDto membersLoginDto){
+    public Token login(@RequestBody MembersLoginDto membersLoginDto){
         log.info("login , user Id = {}", membersLoginDto.getId());
         Members loginMembers = memberService.findMember(membersLoginDto);
-        return jwtTokenProvider.createToken(loginMembers.getUsername(), loginMembers.getRoles());
+
+        Token tokenDto = jwtTokenProvider.createTokenWithRefresh(loginMembers.getUsername(), loginMembers.getRoles());
+        jwtService.login(tokenDto);
+
+        return tokenDto;
     }
 
     @DeleteMapping("/v1/member")

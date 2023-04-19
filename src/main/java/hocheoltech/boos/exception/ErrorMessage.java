@@ -2,7 +2,6 @@ package hocheoltech.boos.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
 @Getter
 public enum ErrorMessage {
     INCORRECT_MEMBER_INFO(HttpStatus.BAD_REQUEST, "회원 정보가 일치하지 않습니다."),
@@ -31,7 +30,9 @@ public enum ErrorMessage {
     ALREADY_BLOCKED_MEMBERS(HttpStatus.BAD_REQUEST,"이미 차단한 사용자 입니다."),
     NOT_EXIST_BLACKLIST(HttpStatus.BAD_REQUEST,"차단한 사용자가 없습니다."),
     REJECTED_MESSAGE_BY_BLOCK(HttpStatus.BAD_REQUEST,"차단한 사용자에게는 메세지를 전송하실 수 없습니다."),
-    BEFORE_USED_PASSWORD (HttpStatus.BAD_REQUEST, "기존에 사용하던 비밀번호입니다.");
+    BEFORE_USED_PASSWORD (HttpStatus.BAD_REQUEST, "기존에 사용하던 비밀번호입니다."),
+    NOT_EXIST_REFRESHTOKEN(HttpStatus.BAD_REQUEST, "RefreshToken이 존재하지 않습니다.") ;
+
     private final String msg;
     private final HttpStatus httpStatus;
     private final int code;
