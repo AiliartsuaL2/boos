@@ -48,7 +48,7 @@ public class BoardController {
         return new ResponseEntity<>(board, HttpStatus.CREATED);
     }
 
-    @GetMapping("/v1/board/{boardSeq}")
+    @PutMapping("/v1/board/{boardSeq}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "게시글 수정 메서드", description = "게시글 수정 메서드입니다.")
     @ApiResponses(value = {

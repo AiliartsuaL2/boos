@@ -12,8 +12,8 @@ public class RefreshApiResponseMessage {
     String accessToken;
 
     public RefreshApiResponseMessage(Map<String, String> map) {
-        this.message = map.get(message);
-        this.status = map.get(status);
-        this.accessToken = map.get(accessToken);
+        this.message = map.get("message");
+        this.status = map.get("status");
+        this.accessToken = map.get("accessToken");
     }
 }

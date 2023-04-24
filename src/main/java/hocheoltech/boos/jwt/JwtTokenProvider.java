@@ -125,7 +125,7 @@ public class JwtTokenProvider {
     public String  validateRefreshToken(RefreshToken refreshTokenObj) {
         String refreshToken = refreshTokenObj.getRefreshToken();
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(refreshToken);
             if (!claims.getBody().getExpiration().before(new Date())) {
                 return recreationAccessToken(claims.getBody().get("sub").toString(), claims.getBody().get("roles"));
             }
