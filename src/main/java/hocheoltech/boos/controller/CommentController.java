@@ -42,17 +42,20 @@ public class CommentController {
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/v1/comment")
+    @DeleteMapping("/v1/comment/{seq}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "댓글삭제 메서드", description = "댓글삭제 메서드입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public String deleteComment(@RequestBody CommentDto commentDto,
+    public String deleteComment(@PathVariable long seq,
                                 @RequestHeader(value = "Authorization") String jwtToken){
         String membersId = jwtTokenProvider.getUserPk(jwtToken);
-        commentDto.setMembersId(membersId);
+        CommentDto commentDto = CommentDto.builder()
+                .membersId(membersId)
+                .seq(seq)
+                .build();
 
         commentService.deleteComment(commentDto);
         return "댓글이 정상적으로 삭제되었습니다.";

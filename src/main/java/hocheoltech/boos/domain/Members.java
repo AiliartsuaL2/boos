@@ -79,7 +79,6 @@ public class Members implements UserDetails {
     //업데이트 처리 메서드
     public void updateMemberInfo(String password, String nickname){
         this.password = password;
-        this.name = name;
         this.nickname = nickname;
     }
 
