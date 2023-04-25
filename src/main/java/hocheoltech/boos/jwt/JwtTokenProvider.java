@@ -23,13 +23,11 @@ import java.util.List;
 @Component // 빈등록을 해줘야함
 public class JwtTokenProvider {
 
-    // 암호화키는 매우 중요하므로 따로 빼서 관리, git에 올리지 않도록 주의
-    @Value("ailiartsua")
-    private String accessSecretKey ;
+    // 암호화키는 매우 중요하므로 따로 빼서 관리, Todo @Value 이용해서 빈으로 값 받기
+    private String accessSecretKey = "ailiartsua";
 
-    // 암호화키는 매우 중요하므로 따로 빼서 관리, git에 올리지 않도록 주의
-    @Value("luvsole")
-    private String refreshSecretKey ;
+    // 암호화키는 매우 중요하므로 따로 빼서 관리, Todo @Value 이용해서 빈으로 값 받기
+    private String refreshSecretKey = "luvsole";
 
 
     // accessToken 기한
