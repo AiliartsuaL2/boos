@@ -5,6 +5,7 @@ import hocheoltech.boos.exception.ErrorMessage;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +23,13 @@ import java.util.List;
 @Component // 빈등록을 해줘야함
 public class JwtTokenProvider {
 
+    // 암호화키는 매우 중요하므로 따로 빼서 관리, git에 올리지 않도록 주의
+    @Value("ailiartsua")
+    private String accessSecretKey ;
 
-    private String accessSecretKey = "ailiartsua";
-    private String refreshSecretKey = "luvsole";
+    // 암호화키는 매우 중요하므로 따로 빼서 관리, git에 올리지 않도록 주의
+    @Value("luvsole")
+    private String refreshSecretKey ;
 
 
     // accessToken 기한
@@ -41,6 +46,7 @@ public class JwtTokenProvider {
         accessSecretKey = Base64.getEncoder().encodeToString(accessSecretKey.getBytes());
     }
 
+    // 토큰에 저장할 유저 pk와 권한 리스트를 매개변수로 받아 access, refresh토큰을 생성하여 tokenDto 만들어 반환
     public Token createTokenWithRefresh(String userPk, List<String> roles){
         Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위, 보통 여기서 user를 식별하는 값을 넣는다.
         claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
@@ -68,7 +74,7 @@ public class JwtTokenProvider {
     }
 
 
-    // JWT 토큰에서 인증 정보 조회
+    // JWT 토큰에서 시크릿 키로 검증 후 권한 목록을 가져옴
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -84,7 +90,7 @@ public class JwtTokenProvider {
         return request.getHeader("Authorization");
     }
 
-    // 토큰의 유효성 + 만료일자 확인
+    // access 토큰의 유효성 + 만료일자 확인
     public boolean validateAccessToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(jwtToken);
@@ -104,6 +110,7 @@ public class JwtTokenProvider {
         }
     }
 
+    // refresh 토큰의 유효성 + 만료일자 확인
     public String  validateRefreshToken(RefreshToken refreshTokenObj) {
         String refreshToken = refreshTokenObj.getRefreshToken();
         try {
@@ -127,6 +134,7 @@ public class JwtTokenProvider {
         return null;
     }
 
+    // refresh 토큰을 확인하여 access토큰을 재발급해줌
     public String recreationAccessToken(String userId, Object roles){
 
         Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
