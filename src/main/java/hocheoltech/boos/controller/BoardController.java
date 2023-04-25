@@ -113,16 +113,16 @@ public class BoardController {
         return boardList;
     }
 
-    @DeleteMapping("/v1/board")
+    @DeleteMapping("/v1/board/{seq}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "게시판 삭제", description = "게시판을 삭제하는 메서드입니다. ")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorMessage.class)))
     })
-    public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken, String boardSeq) {
+    public String deleteBoard(@RequestHeader(value = "Authorization") String jwtToken, @PathVariable long boardSeq) {
         String membersId = jwtTokenProvider.getUserPk(jwtToken); // 헤더 정보(jwt)로 membersId 추출
-        boardService.deleteBoard(Long.parseLong(boardSeq),membersId);
+        boardService.deleteBoard(boardSeq,membersId);
         return "게시판이 성공적으로 삭제되었습니다.";
     }
 }
