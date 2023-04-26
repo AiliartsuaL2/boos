@@ -1,0 +1,3 @@
+[submodule "boos-private"]
+	path = boos-private
+	url = https://github.com/AiliartsuaL2/boos-private

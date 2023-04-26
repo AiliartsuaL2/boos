@@ -65,6 +65,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+task copyPrivate(type: Copy) {
+	copy {
+		from './boos-private/private'
+		include "*.yml"
+		into 'src/main/resources'
+	}
+}
+
 // QueryDSL
 def generated = 'src/main/generated'
 
