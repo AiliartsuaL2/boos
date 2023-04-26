@@ -68,7 +68,7 @@ tasks.named('test') {
 task copyPrivate(type: Copy) {
 	copy {
 		from './boos-private/private'
-		include "*.yml"
+		include "application.yml"
 		into 'src/main/resources'
 	}
 }
