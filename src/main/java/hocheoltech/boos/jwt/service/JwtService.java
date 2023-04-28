@@ -1,9 +1,9 @@
-package hocheoltech.boos.service;
+package hocheoltech.boos.jwt.service;
 
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.jwt.JwtTokenProvider;
+import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.domain.RefreshToken;
-import hocheoltech.boos.repository.RefreshTokenRepository;
+import hocheoltech.boos.jwt.repository.RefreshTokenRepository;
 import hocheoltech.boos.jwt.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

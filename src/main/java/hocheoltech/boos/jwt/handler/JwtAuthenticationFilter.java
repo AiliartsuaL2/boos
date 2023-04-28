@@ -1,10 +1,6 @@
-package hocheoltech.boos.jwt;
+package hocheoltech.boos.jwt.handler;
 
-import hocheoltech.boos.exception.ErrorMessage;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

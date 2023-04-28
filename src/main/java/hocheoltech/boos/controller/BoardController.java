@@ -3,7 +3,7 @@ package hocheoltech.boos.controller;
 
 import hocheoltech.boos.dto.board.*;
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.jwt.JwtTokenProvider;
+import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

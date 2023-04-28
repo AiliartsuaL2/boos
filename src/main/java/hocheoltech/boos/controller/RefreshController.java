@@ -1,7 +1,7 @@
 package hocheoltech.boos.controller;
 
 import hocheoltech.boos.dto.common.RefreshApiResponseMessage;
-import hocheoltech.boos.service.JwtService;
+import hocheoltech.boos.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

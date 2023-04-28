@@ -1,9 +1,9 @@
 package hocheoltech.boos.config;
 
 
-import hocheoltech.boos.jwt.JwtAuthenticationFilter;
-import hocheoltech.boos.jwt.JwtExceptionFilter;
-import hocheoltech.boos.jwt.JwtTokenProvider;
+import hocheoltech.boos.jwt.handler.JwtAuthenticationFilter;
+import hocheoltech.boos.jwt.handler.JwtExceptionFilter;
+import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

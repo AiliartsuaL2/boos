@@ -1,12 +1,11 @@
 package hocheoltech.boos.controller;
 
-import hocheoltech.boos.dto.board.BoardListDto;
 import hocheoltech.boos.dto.board.PageRequest;
 import hocheoltech.boos.dto.message.DeleteMessageDto;
 import hocheoltech.boos.dto.message.MessageDto;
 import hocheoltech.boos.dto.message.SearchMessageDto;
 import hocheoltech.boos.exception.ErrorMessage;
-import hocheoltech.boos.jwt.JwtTokenProvider;
+import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,8 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Tag(name = "쪽지", description = "쪽지 관련 api 입니다.")

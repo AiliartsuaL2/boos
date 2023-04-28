@@ -1,4 +1,4 @@
-package hocheoltech.boos.repository;
+package hocheoltech.boos.jwt.repository;
 
 import hocheoltech.boos.domain.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;

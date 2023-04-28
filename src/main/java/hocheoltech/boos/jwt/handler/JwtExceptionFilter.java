@@ -1,4 +1,4 @@
-package hocheoltech.boos.jwt;
+package hocheoltech.boos.jwt.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hocheoltech.boos.exception.ErrorMessage;
