@@ -1,10 +1,17 @@
 package hocheoltech.boos.controller;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class TestController {
@@ -15,10 +22,5 @@ public class TestController {
     @GetMapping("/member/login")
     public String loginPage(){
         return "/member/login.html";
-    }
-    @GetMapping("/oauth/kakao/callback")
-    @ResponseBody
-    public String kakaoTest(String code){
-        return "인증완료 코드값 : "+code;
     }
 }
