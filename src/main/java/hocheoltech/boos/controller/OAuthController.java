@@ -1,5 +1,12 @@
 package hocheoltech.boos.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import hocheoltech.boos.oauth.dto.KakaoOAuth2Token;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 
 @RestController
 @RequestMapping("/oauth")
+@Slf4j
 public class OAuthController {
     @GetMapping("/kakao/callback")
     public String kakaoTest(String code){
@@ -47,7 +55,22 @@ public class OAuthController {
                 kakaoTokenRequest, // 요청할 때 보낼 데이터
                 String.class // 요청 시 반환되는 데이터 타입
         );
-        return "카카오 토큰 요청 완료 : 토큰 요청에 대한 응답 : "+response;
-    }
+        // UnderScoreCase To Camel GsonBuilder
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+        KakaoOAuth2Token kakaoOAuth2Token = gson.fromJson(response.getBody(), KakaoOAuth2Token.class);
+        log.info("카카오 액세스 토큰 : "+kakaoOAuth2Token.getAccessToken());
 
+        RestTemplate rt2 = new RestTemplate();
+
+        headers.add("Authorization","Bearer "+kakaoOAuth2Token.getAccessToken());
+
+        kakaoTokenRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> response2 = rt2.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoTokenRequest, // 요청시 보낼 데이터
+                String.class // 요청시 반환 데이터 타입
+        );
+        return response2.getBody();
+    }
 }
