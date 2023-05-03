@@ -55,9 +55,13 @@ public class Members implements UserDetails {
     @Column(length = 10)
     private String nickname;
 
+    @Column(length = 50)
+    private String email;
+
+
 
     @Builder
-    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, String openTime, String nickname){
+    public Members(String id, String password, String name, BusinessCategory businessCategory, String businessRegNum, String openTime, String nickname, String email){
         this.id = id;
         this.password = password;
         this.name = name;
@@ -74,6 +78,7 @@ public class Members implements UserDetails {
         this.blockList = new ArrayList<>();
         this.blockedList = new ArrayList<>();
         this.roles = new ArrayList<>();
+        this.email = email;
     }
 
     //업데이트 처리 메서드

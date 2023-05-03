@@ -135,7 +135,7 @@ public class MemberController {
         log.info("login , user Id = {}", membersLoginDto.getId());
         Members loginMembers = memberService.findMember(membersLoginDto);
 
-        Token tokenDto = jwtTokenProvider.createTokenWithRefresh(loginMembers.getUsername(), loginMembers.getRoles());
+        Token tokenDto = jwtTokenProvider.createTokenWithRefresh(loginMembers.getId(), loginMembers.getRoles());
         jwtService.login(tokenDto);
 
         return tokenDto;
