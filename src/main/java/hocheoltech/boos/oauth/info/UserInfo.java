@@ -12,7 +12,7 @@ public enum UserInfo {
             "http://localhost:8080/oauth/kakao/callback",
             "3boIieKSCSaBpPfVWI2aNv4Y5yAlIFHS",
             "https://kauth.kakao.com/oauth/token",
-            "https://kauth.kakao.com/oauth/token"
+            "https://kapi.kakao.com/v2/user/me"
     ),
     GOOGLE_INFO(
             "authorization_code",

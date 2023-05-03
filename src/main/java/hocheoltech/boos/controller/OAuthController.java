@@ -28,9 +28,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OAuthController {
     private final OAuthService oauthService;
 
-    @GetMapping("/test")
-    public String test(){
-        KakaoOAuth2Token kakaoAccessToken = oauthService.getKakaoAccessToken("");
+    @GetMapping("/kakao/callback")
+    public String test(String code){
+        KakaoOAuth2Token kakaoAccessToken = oauthService.getKakaoAccessToken(code);
         String userKakaoInfo = oauthService.getUserKakaoInfo(kakaoAccessToken);
         return userKakaoInfo;
     }
