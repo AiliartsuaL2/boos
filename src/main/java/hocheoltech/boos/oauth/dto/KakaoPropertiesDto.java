@@ -7,9 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class KakaoAcountDto {
+public class KakaoPropertiesDto {
     private String nickname;
     private String profileImage;
     private String thumbnailImage;
-    private String email;
 }

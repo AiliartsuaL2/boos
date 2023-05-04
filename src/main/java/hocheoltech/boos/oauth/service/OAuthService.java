@@ -31,13 +31,14 @@ public class OAuthService {
 
     public Token kakaoLogin(String kakaoAccessToken){
         KakaoUserInfo userKakaoInfo = getUserKakaoInfo(kakaoAccessToken);
-        String email = Optional.ofNullable(userKakaoInfo.getKakaoAcountDto().getEmail()).orElse("none");
+        String email = Optional.ofNullable(userKakaoInfo.getKakaoAccount().getEmail()).orElse("none");
         Members members = membersRepository.findMembersByEmail(email).orElse(null);
         // 신규회원인경우 회원 새로 생성
         if(members == null){
             Members newMembers = Members.builder()
+                    .id(UUID.randomUUID().toString().replace("-", ""))
                     .email(email)
-                    .nickname(userKakaoInfo.getKakaoAcountDto().getNickname())
+                    .nickname(userKakaoInfo.getProperties().getNickname())
                     .build();
             members = membersRepository.save(newMembers);
         }

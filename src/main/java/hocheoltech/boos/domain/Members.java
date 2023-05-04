@@ -67,7 +67,7 @@ public class Members implements UserDetails {
         this.name = name;
         this.businessCategory = businessCategory;
         this.businessRegNum = businessRegNum;
-        this.openTime = LocalDate.parse(openTime, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        this.openTime = openTime != null ?LocalDate.parse(openTime, DateTimeFormatter.ofPattern("yyyyMMdd")) : null;
         this.nickname = nickname;
         this.joinTime = LocalDateTime.now();
         this.comments = new ArrayList<>();
