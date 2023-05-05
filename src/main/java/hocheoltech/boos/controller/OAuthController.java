@@ -18,7 +18,7 @@ public class OAuthController {
 
     @GetMapping("/kakao/login")
     public Token kakaoLogin(String code){
-        KakaoOAuth2Token kakaoAccessToken = oauthServiceKakao.getKakaoAccessToken(code);
+        KakaoOAuth2Token kakaoAccessToken = oauthServiceKakao.getAccessToken(code);
         Token token = oauthServiceKakao.login(kakaoAccessToken.getAccessToken());
         return token;
     }
