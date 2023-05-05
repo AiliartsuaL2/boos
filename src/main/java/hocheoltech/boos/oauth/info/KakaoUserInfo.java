@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 @Builder
-public class KakaoUserInfo {
+public class KakaoUserInfo extends UserInfo{
     private long id;
     private String connectedAt;
     private KakaoPropertiesDto properties;
