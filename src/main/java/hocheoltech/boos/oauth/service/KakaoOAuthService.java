@@ -66,7 +66,7 @@ public class KakaoOAuthService implements OAuthService{
                 .queryParam("client_secret", OAuthInfo.KAKAO_INFO.getClientSecret())
                 .queryParam("code", code);
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 uriComponentsBuilder.toUriString(),
                 HttpMethod.POST,
                 request,
@@ -75,7 +75,7 @@ public class KakaoOAuthService implements OAuthService{
 
         // UnderScoreCase To Camel GsonBuilder,, KakaoOAuth2Token 객체에 매핑
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-        KakaoOAuth2Token kakaoOAuth2Token = gson.fromJson(responseEntity.getBody(), KakaoOAuth2Token.class);
+        KakaoOAuth2Token kakaoOAuth2Token = gson.fromJson(response.getBody(), KakaoOAuth2Token.class);
         log.info("카카오 액세스 토큰 : " + kakaoOAuth2Token.getAccessToken());
 
         return kakaoOAuth2Token;

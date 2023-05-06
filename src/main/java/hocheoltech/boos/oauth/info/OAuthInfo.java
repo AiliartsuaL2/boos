@@ -15,12 +15,12 @@ public enum OAuthInfo {
             "https://kapi.kakao.com/v2/user/me"
     ),
     GOOGLE_INFO(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            "authorization_code",
+            "900804701090-sk6rt9ah5cp1tmg6ppudj48ki2hs29co.apps.googleusercontent.com",
+            "http://localhost:8080/oauth/google/login",
+            "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",
+            "https://oauth2.googleapis.com/token",
+            "https://www.googleapis.com/oauth2/v2/userinfo"
     ),
     GITHUB_INFO(
             null,
