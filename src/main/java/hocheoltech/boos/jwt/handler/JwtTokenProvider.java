@@ -27,11 +27,11 @@ public class JwtTokenProvider {
     // 암호화키는 매우 중요하므로 따로 빼서 관리, application.yml의 @Value 사용 및 git 분리
 
     @Value("${jwt.secret-key.access-token}")
-    private String accessSecretKey = "ailiartsua";
+    private String accessSecretKey ;
 
     // 암호화키는 매우 중요하므로 따로 빼서 관리, application.yml의 @Value 사용 및 git 분리
     @Value("${jwt.secret-key.refresh-token}")
-    private String refreshSecretKey = "luvsole";
+    private String refreshSecretKey ;
 
 
     // accessToken 기한

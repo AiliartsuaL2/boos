@@ -7,11 +7,8 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GoogleUserInfo;
-import hocheoltech.boos.oauth.info.KakaoUserInfo;
 import hocheoltech.boos.oauth.info.OAuthInfo;
-import hocheoltech.boos.oauth.info.UserInfo;
-import hocheoltech.boos.oauth.token.GoogleOAuth2Token;
-import hocheoltech.boos.oauth.token.OAuth2Token;
+import hocheoltech.boos.oauth.token.GoogleOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -50,7 +45,7 @@ public class GoogleOAuthService implements OAuthService {
     }
 
     @Override
-    public GoogleOAuth2Token getAccessToken(String code) {
+    public GoogleOAuthToken getAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
 
         // 헤더 설정
@@ -80,10 +75,10 @@ public class GoogleOAuthService implements OAuthService {
 
         // UnderScoreCase To Camel GsonBuilder,, googleOAuth2Token 객체에 매핑
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
-        GoogleOAuth2Token googleOAuth2Token = gson.fromJson(response.getBody(), GoogleOAuth2Token.class);
-        log.info("구글 액세스 토큰 : " + googleOAuth2Token.getAccessToken());
+        GoogleOAuthToken googleOAuthToken = gson.fromJson(response.getBody(), GoogleOAuthToken.class);
+        log.info("구글 액세스 토큰 : " + googleOAuthToken.getAccessToken());
 
-        return googleOAuth2Token;
+        return googleOAuthToken;
     }
 
     @Override

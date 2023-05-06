@@ -2,14 +2,13 @@ package hocheoltech.boos.oauth.info;
 
 import hocheoltech.boos.oauth.dto.KaKaoAccountDto;
 import hocheoltech.boos.oauth.dto.KakaoPropertiesDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
+@ToString
 public class KakaoUserInfo extends UserInfo{
     private long id;
     private String connectedAt;

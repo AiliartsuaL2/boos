@@ -7,11 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class KakaoOAuth2Token extends OAuth2Token {
+public class GoogleOAuthToken extends OAuthToken {
     private String accessToken;
-    private String tokenType;
-    private String refreshToken;
     private int expiresIn;
+    private String tokenType;
     private String scope;
-    private int refreshTokenExpiresIn;
+    private String refreshToken;
 }

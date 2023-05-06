@@ -24,11 +24,11 @@ public enum OAuthInfo {
     ),
     GITHUB_INFO(
             null,
-            null,
-            null,
-            null,
-            null,
-            null
+            "Iv1.d98b981d52444256",
+            "http://localhost:8080/oauth/github/login",
+            "db299ed5f0df814dfaa953d7adc9acbd3ad3f1b1",
+            "https://github.com/login/oauth/access_token",
+            "https://api.github.com/user"
     );
 
     private final String grantType ;
@@ -37,5 +37,12 @@ public enum OAuthInfo {
     private final String clientSecret ;
     private final String tokenUrl ;
     private final String infoUrl ;
+
+    //    @ConfigurationProperties(prefix = "kakao")
+//    public void setKakaoInfo(String clientId, String clientSecret, String redirectUri) {
+//        this.clientId = clientId;
+//        this.clientSecret = clientSecret;
+//        this.redirectUri = redirectUri;
+//    }
 
 }
