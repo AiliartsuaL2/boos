@@ -8,9 +8,11 @@ import hocheoltech.boos.oauth.token.GithubOAuthToken;
 import hocheoltech.boos.oauth.token.GoogleOAuthToken;
 import hocheoltech.boos.oauth.token.KakaoOAuthToken;
 import hocheoltech.boos.oauth.service.KakaoOAuthService;
+import hocheoltech.boos.oauth.token.OAuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
@@ -22,28 +24,26 @@ public class OAuthController {
     private final GoogleOAuthService googleOAuthService;
     private final GithubOAuthService githubOAuthService;
 
-    @GetMapping("/kakao/login")
-    public String kakaoLogin(String code){
-        KakaoOAuthToken kakaoOAuthToken = kakaoOAuthService.getAccessToken(code);
-        Token token = kakaoOAuthService.login(kakaoOAuthToken.getAccessToken());
+    @GetMapping("/{socialType}/login")
+    public String oAuthLogin(@PathVariable String socialType, String code){
+        Token token = null;
         Gson gson = new Gson();
+
+        if("kakao".equals(socialType)){
+            log.info("kakao social login 진입");
+            KakaoOAuthToken kakaoAccessTOken = kakaoOAuthService.getAccessToken(code);
+            token = kakaoOAuthService.login(kakaoAccessTOken.getAccessToken());
+        }
+        else if("google".equals(socialType)){
+            log.info("google social login 진입");
+            GoogleOAuthToken googleAccessToken = googleOAuthService.getAccessToken(code);
+            token = googleOAuthService.login(googleAccessToken.getAccessToken());
+        }
+        else if("github".equals(socialType)){
+            log.info("github social login 진입");
+            GithubOAuthToken githubAccessToken = githubOAuthService.getAccessToken(code);
+            token = githubOAuthService.login(githubAccessToken.getAccessToken());
+        }
         return gson.toJson(token);
     }
-
-    @GetMapping("/google/login")
-    public String googleLogin(String code){
-        GoogleOAuthToken googleOAuthToken = googleOAuthService.getAccessToken(code);
-        Token token = googleOAuthService.login(googleOAuthToken.getAccessToken());
-        Gson gson = new Gson();
-        return gson.toJson(token);
-    }
-
-    @GetMapping("/github/login")
-    public String githubLogin(String code){
-        GithubOAuthToken githubOAuthToken = githubOAuthService.getAccessToken(code);
-        Token token = githubOAuthService.login(githubOAuthToken.getAccessToken());
-        Gson gson = new Gson();
-        return gson.toJson(token);
-    }
-
 }
