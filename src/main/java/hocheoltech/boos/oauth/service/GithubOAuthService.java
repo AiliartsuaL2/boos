@@ -8,7 +8,8 @@ import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GithubUserInfo;
 import hocheoltech.boos.oauth.info.OAuthInfo;
-import hocheoltech.boos.oauth.info.Test;
+import hocheoltech.boos.oauth.info.OAuthProperties;
+import hocheoltech.boos.oauth.info.SocialType;
 import hocheoltech.boos.oauth.token.GithubOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.*;
 public class GithubOAuthService implements OAuthService{
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuthProperties oauthProperties;
 
 
     @Override
@@ -59,7 +61,9 @@ public class GithubOAuthService implements OAuthService{
         headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
         HttpEntity request = new HttpEntity(headers);
 
-        System.out.println("githubInfo = " + Test.githubInfo.clientId);
+        String clientId = oauthProperties.getSocial().get(SocialType.GITHUB).getClientId();
+        System.out.println("clientId = " + clientId);
+
 
         // Uri 빌더 사용
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(OAuthInfo.GITHUB_INFO.getTokenUrl())
