@@ -28,7 +28,6 @@ public class GoogleOAuthService implements OAuthService {
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthProperties oAuthProperties;
-    OAuthProperties.Social properties = oAuthProperties.getGoogle(); // properties.clientId 이런식으로 할 지,, 고민해보기
 
     @Override
     public Token login(String accessToken) {
