@@ -1,26 +1,29 @@
 package hocheoltech.boos.oauth.properties;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-import java.util.Map;
 
-@Component
 @ConfigurationProperties(prefix = "oauth")
-@Getter @Setter
-//TODO Setter 말고 Constructor로 처리하기
+@ConstructorBinding
+@AllArgsConstructor
+@Getter
 public class OAuthProperties {
-    private Map<SocialType, Social> social;
+    private final Social kakao;
+    private final Social google;
+    private final Social github;
+
+    @RequiredArgsConstructor
     @Getter
-    @Setter
     public static class Social {
-        private String grantType = "authorization_code";
-        private String clientId;
-        private String clientSecret;
-        private String redirectUri ;
-        private String tokenUrl ;
-        private String infoUrl ;
+        private final String grantType = "authorization_code";
+        private final String clientId;
+        private final String clientSecret;
+        private final String redirectUri ;
+        private final String tokenUrl ;
+        private final String infoUrl ;
     }
 }

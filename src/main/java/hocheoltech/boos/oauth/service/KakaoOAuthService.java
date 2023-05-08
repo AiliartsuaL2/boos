@@ -10,7 +10,6 @@ import hocheoltech.boos.oauth.properties.OAuthProperties;
 import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.KakaoOAuthToken;
 import hocheoltech.boos.oauth.info.KakaoUserInfo;
-import hocheoltech.boos.oauth.info.OAuthInfo;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,11 +59,11 @@ public class KakaoOAuthService implements OAuthService{
         HttpEntity request = new HttpEntity(headers);
 
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getSocial().get(SocialType.KAKAO).getTokenUrl())
-                .queryParam("grant_type", oAuthProperties.getSocial().get(SocialType.KAKAO).getGrantType())
-                .queryParam("client_id", oAuthProperties.getSocial().get(SocialType.KAKAO).getClientId())
-                .queryParam("redirect_uri", oAuthProperties.getSocial().get(SocialType.KAKAO).getRedirectUri())
-                .queryParam("client_secret", oAuthProperties.getSocial().get(SocialType.KAKAO).getClientSecret())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getKakao().getTokenUrl())
+                .queryParam("grant_type", oAuthProperties.getKakao().getGrantType())
+                .queryParam("client_id",oAuthProperties.getKakao().getClientId())
+                .queryParam("redirect_uri", oAuthProperties.getKakao().getRedirectUri())
+                .queryParam("client_secret", oAuthProperties.getKakao().getClientSecret())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -94,7 +93,7 @@ public class KakaoOAuthService implements OAuthService{
         HttpEntity request = new HttpEntity(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                OAuthInfo.KAKAO_INFO.getInfoUrl(),
+                oAuthProperties.getKakao().getInfoUrl(),
                 HttpMethod.POST,
                 request, // 요청시 보낼 데이터
                 String.class // 요청시 반환 데이터 타입

@@ -7,9 +7,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GoogleUserInfo;
-import hocheoltech.boos.oauth.info.OAuthInfo;
 import hocheoltech.boos.oauth.properties.OAuthProperties;
-import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.GoogleOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,8 @@ public class GoogleOAuthService implements OAuthService {
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthProperties oAuthProperties;
+    OAuthProperties.Social properties = oAuthProperties.getGoogle(); // properties.clientId 이런식으로 할 지,, 고민해보기
+
     @Override
     public Token login(String accessToken) {
         GoogleUserInfo googleUserInfo = getUserInfo(accessToken);
@@ -62,11 +62,11 @@ public class GoogleOAuthService implements OAuthService {
          로 Redirect URL을 생성하는 로직을 구성
          */
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getSocial().get(SocialType.GOOGLE).getTokenUrl())
-                .queryParam("grant_type", oAuthProperties.getSocial().get(SocialType.GOOGLE).getGrantType())
-                .queryParam("client_id", oAuthProperties.getSocial().get(SocialType.GOOGLE).getClientId())
-                .queryParam("client_secret", oAuthProperties.getSocial().get(SocialType.GOOGLE).getClientSecret())
-                .queryParam("redirect_uri", oAuthProperties.getSocial().get(SocialType.GOOGLE).getRedirectUri())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getGoogle().getTokenUrl())
+                .queryParam("grant_type", oAuthProperties.getGoogle().getGrantType())
+                .queryParam("client_id",  oAuthProperties.getGoogle().getClientId())
+                .queryParam("client_secret",  oAuthProperties.getGoogle().getClientSecret())
+                .queryParam("redirect_uri",  oAuthProperties.getGoogle().getRedirectUri())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -96,7 +96,7 @@ public class GoogleOAuthService implements OAuthService {
         HttpEntity request = new HttpEntity(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                OAuthInfo.GOOGLE_INFO.getInfoUrl(),
+                oAuthProperties.getGoogle().getInfoUrl(),
                 HttpMethod.GET,
                 request, // 요청시 보낼 데이터
                 String.class // 요청시 반환 데이터 타입

@@ -7,9 +7,7 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GithubUserInfo;
-import hocheoltech.boos.oauth.info.OAuthInfo;
 import hocheoltech.boos.oauth.properties.OAuthProperties;
-import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.GithubOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +25,7 @@ import java.util.*;
 public class GithubOAuthService implements OAuthService{
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final OAuthProperties oauthProperties;
-
+    private final OAuthProperties oAuthProperties;
 
     @Override
     public Token login(String accessToken) {
@@ -62,10 +59,10 @@ public class GithubOAuthService implements OAuthService{
         HttpEntity request = new HttpEntity(headers);
 
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oauthProperties.getSocial().get(SocialType.GITHUB).getTokenUrl())
-                .queryParam("client_id", oauthProperties.getSocial().get(SocialType.GITHUB).getClientId())
-                .queryParam("redirect_uri", oauthProperties.getSocial().get(SocialType.GITHUB).getRedirectUri())
-                .queryParam("client_secret", oauthProperties.getSocial().get(SocialType.GITHUB).getClientSecret())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getGithub().getTokenUrl())
+                .queryParam("client_id", oAuthProperties.getGithub().getClientId())
+                .queryParam("redirect_uri", oAuthProperties.getGithub().getRedirectUri())
+                .queryParam("client_secret", oAuthProperties.getGithub().getClientSecret())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -95,7 +92,7 @@ public class GithubOAuthService implements OAuthService{
         HttpEntity request = new HttpEntity(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                OAuthInfo.GITHUB_INFO.getInfoUrl(),
+                oAuthProperties.getGithub().getInfoUrl(),
                 HttpMethod.GET,
                 request, // 요청시 보낼 데이터
                 String.class // 요청시 반환 데이터 타입
