@@ -1,4 +1,4 @@
-package hocheoltech.boos.oauth.info;
+package hocheoltech.boos.oauth.properties;
 
 public enum SocialType {
     GITHUB,

@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
+import hocheoltech.boos.oauth.properties.OAuthProperties;
+import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.KakaoOAuthToken;
 import hocheoltech.boos.oauth.info.KakaoUserInfo;
 import hocheoltech.boos.oauth.info.OAuthInfo;
@@ -27,6 +29,7 @@ public class KakaoOAuthService implements OAuthService{
 
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuthProperties oAuthProperties;
 
     @Override
     public Token login(String accessToken){
@@ -57,11 +60,11 @@ public class KakaoOAuthService implements OAuthService{
         HttpEntity request = new HttpEntity(headers);
 
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(OAuthInfo.KAKAO_INFO.getTokenUrl())
-                .queryParam("grant_type", OAuthInfo.KAKAO_INFO.getGrantType())
-                .queryParam("client_id", OAuthInfo.KAKAO_INFO.getClientId())
-                .queryParam("redirect_uri", OAuthInfo.KAKAO_INFO.getRedirectUri())
-                .queryParam("client_secret", OAuthInfo.KAKAO_INFO.getClientSecret())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getSocial().get(SocialType.KAKAO).getTokenUrl())
+                .queryParam("grant_type", oAuthProperties.getSocial().get(SocialType.KAKAO).getGrantType())
+                .queryParam("client_id", oAuthProperties.getSocial().get(SocialType.KAKAO).getClientId())
+                .queryParam("redirect_uri", oAuthProperties.getSocial().get(SocialType.KAKAO).getRedirectUri())
+                .queryParam("client_secret", oAuthProperties.getSocial().get(SocialType.KAKAO).getClientSecret())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(

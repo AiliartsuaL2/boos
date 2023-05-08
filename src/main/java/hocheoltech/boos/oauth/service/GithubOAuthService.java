@@ -8,8 +8,8 @@ import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GithubUserInfo;
 import hocheoltech.boos.oauth.info.OAuthInfo;
-import hocheoltech.boos.oauth.info.OAuthProperties;
-import hocheoltech.boos.oauth.info.SocialType;
+import hocheoltech.boos.oauth.properties.OAuthProperties;
+import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.GithubOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,15 +61,11 @@ public class GithubOAuthService implements OAuthService{
         headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
         HttpEntity request = new HttpEntity(headers);
 
-        String clientId = oauthProperties.getSocial().get(SocialType.GITHUB).getClientId();
-        System.out.println("clientId = " + clientId);
-
-
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(OAuthInfo.GITHUB_INFO.getTokenUrl())
-                .queryParam("client_id", OAuthInfo.GITHUB_INFO.getClientId())
-                .queryParam("redirect_uri", OAuthInfo.GITHUB_INFO.getRedirectUri())
-                .queryParam("client_secret", OAuthInfo.GITHUB_INFO.getClientSecret())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oauthProperties.getSocial().get(SocialType.GITHUB).getTokenUrl())
+                .queryParam("client_id", oauthProperties.getSocial().get(SocialType.GITHUB).getClientId())
+                .queryParam("redirect_uri", oauthProperties.getSocial().get(SocialType.GITHUB).getRedirectUri())
+                .queryParam("client_secret", oauthProperties.getSocial().get(SocialType.GITHUB).getClientSecret())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(

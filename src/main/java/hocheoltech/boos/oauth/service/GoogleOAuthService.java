@@ -8,6 +8,8 @@ import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.info.GoogleUserInfo;
 import hocheoltech.boos.oauth.info.OAuthInfo;
+import hocheoltech.boos.oauth.properties.OAuthProperties;
+import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.GoogleOAuthToken;
 import hocheoltech.boos.repository.MembersRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class GoogleOAuthService implements OAuthService {
     private final MembersRepository membersRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuthProperties oAuthProperties;
     @Override
     public Token login(String accessToken) {
         GoogleUserInfo googleUserInfo = getUserInfo(accessToken);
@@ -59,11 +62,11 @@ public class GoogleOAuthService implements OAuthService {
          로 Redirect URL을 생성하는 로직을 구성
          */
         // Uri 빌더 사용
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(OAuthInfo.GOOGLE_INFO.getTokenUrl())
-                .queryParam("grant_type", OAuthInfo.GOOGLE_INFO.getGrantType())
-                .queryParam("client_id", OAuthInfo.GOOGLE_INFO.getClientId())
-                .queryParam("client_secret", OAuthInfo.GOOGLE_INFO.getClientSecret())
-                .queryParam("redirect_uri", OAuthInfo.GOOGLE_INFO.getRedirectUri())
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(oAuthProperties.getSocial().get(SocialType.GOOGLE).getTokenUrl())
+                .queryParam("grant_type", oAuthProperties.getSocial().get(SocialType.GOOGLE).getGrantType())
+                .queryParam("client_id", oAuthProperties.getSocial().get(SocialType.GOOGLE).getClientId())
+                .queryParam("client_secret", oAuthProperties.getSocial().get(SocialType.GOOGLE).getClientSecret())
+                .queryParam("redirect_uri", oAuthProperties.getSocial().get(SocialType.GOOGLE).getRedirectUri())
                 .queryParam("code", code);
 
         ResponseEntity<String> response = restTemplate.exchange(
