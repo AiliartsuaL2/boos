@@ -7,7 +7,6 @@ import hocheoltech.boos.domain.Members;
 import hocheoltech.boos.jwt.Token;
 import hocheoltech.boos.jwt.handler.JwtTokenProvider;
 import hocheoltech.boos.oauth.properties.OAuthProperties;
-import hocheoltech.boos.oauth.properties.SocialType;
 import hocheoltech.boos.oauth.token.KakaoOAuthToken;
 import hocheoltech.boos.oauth.info.KakaoUserInfo;
 import hocheoltech.boos.repository.MembersRepository;
