@@ -46,7 +46,6 @@ public class OAuthController {
             GithubOAuthToken githubAccessToken = githubOAuthService.getAccessToken(code);
             token = githubOAuthService.login(githubAccessToken.getAccessToken());
         }
-        //Todo Refresh Token 확인 로직 생각해보기
         jwtService.login(token);
         return gson.toJson(token);
     }

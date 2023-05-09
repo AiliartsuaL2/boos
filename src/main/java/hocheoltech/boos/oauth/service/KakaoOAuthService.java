@@ -43,7 +43,7 @@ public class KakaoOAuthService implements OAuthService{
                     .build();
             members = membersRepository.save(newMembers);
         }
-        return jwtTokenProvider.createTokenWithRefresh(members.getEmail(), members.getRoles());
+        return jwtTokenProvider.createTokenWithRefresh(members.getId(), members.getRoles());
     }
 
     @Override
