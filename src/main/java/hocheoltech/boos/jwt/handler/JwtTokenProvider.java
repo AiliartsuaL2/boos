@@ -108,7 +108,7 @@ public class JwtTokenProvider {
             throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMsg());
         } catch (IllegalArgumentException e) {
             log.info("IllegalArgumentException");
-            throw new JwtException(ErrorMessage.UNKNOWN_ERROR.getMsg());
+            throw new JwtException(ErrorMessage.UNKNOWN_TOKEN.getMsg());
         }
     }
 
@@ -131,7 +131,7 @@ public class JwtTokenProvider {
             throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMsg());
         } catch (IllegalArgumentException e) {
             log.info("IllegalArgumentException");
-            throw new JwtException(ErrorMessage.UNKNOWN_ERROR.getMsg());
+            throw new JwtException(ErrorMessage.UNKNOWN_TOKEN.getMsg());
         }
         return null;
     }

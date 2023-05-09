@@ -31,8 +31,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
         } catch (JwtException ex) {
             String message = ex.getMessage();
-            if(ErrorMessage.UNKNOWN_ERROR.getMsg().equals(message)) {
-                setResponse(response, ErrorMessage.UNKNOWN_ERROR);
+            if(ErrorMessage.UNKNOWN_TOKEN.getMsg().equals(message)) {
+                setResponse(response, ErrorMessage.UNKNOWN_TOKEN);
             }
             //잘못된 타입의 토큰인 경우
             else if(ErrorMessage.WRONG_TYPE_TOKEN.getMsg().equals(message)) {

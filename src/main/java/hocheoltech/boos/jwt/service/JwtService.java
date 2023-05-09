@@ -25,6 +25,9 @@ public class JwtService {
 
     @Transactional
     public void login(Token tokenDto){
+        if(tokenDto == null){
+            throw new NoSuchElementException(ErrorMessage.UNKNOWN_TOKEN.getMsg());
+        }
         RefreshToken refreshToken = RefreshToken.builder()
                 .keyId(tokenDto.getKeyId())
                 .refreshToken(tokenDto.getRefreshToken())

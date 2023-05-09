@@ -2,6 +2,7 @@ package hocheoltech.boos.controller;
 
 import com.google.gson.Gson;
 import hocheoltech.boos.jwt.Token;
+import hocheoltech.boos.jwt.service.JwtService;
 import hocheoltech.boos.oauth.service.GithubOAuthService;
 import hocheoltech.boos.oauth.service.GoogleOAuthService;
 import hocheoltech.boos.oauth.token.GithubOAuthToken;
@@ -23,7 +24,8 @@ public class OAuthController {
     private final KakaoOAuthService kakaoOAuthService;
     private final GoogleOAuthService googleOAuthService;
     private final GithubOAuthService githubOAuthService;
-
+    private final JwtService jwtService;
+    
     @GetMapping("/{socialType}/login")
     public String oAuthLogin(@PathVariable String socialType, String code){
         Token token = null;
@@ -44,6 +46,8 @@ public class OAuthController {
             GithubOAuthToken githubAccessToken = githubOAuthService.getAccessToken(code);
             token = githubOAuthService.login(githubAccessToken.getAccessToken());
         }
+        //Todo Refresh Token 확인 로직 생각해보기
+        jwtService.login(token);
         return gson.toJson(token);
     }
 }

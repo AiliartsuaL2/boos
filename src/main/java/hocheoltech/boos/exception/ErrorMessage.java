@@ -18,7 +18,7 @@ public enum ErrorMessage {
     NOT_EXIST_BUSINESS_CATEGORY_NAME(HttpStatus.BAD_REQUEST,"존재하지 않는 업종명 입니다."),
     NOT_EXIST_MESSAGE(HttpStatus.BAD_REQUEST, "해당 메세지가 존재하지 않습니다."),
 
-    UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED,"인증 토큰이 존재하지 않습니다."),
+    UNKNOWN_TOKEN(HttpStatus.UNAUTHORIZED,"인증 토큰이 존재하지 않습니다."),
     WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED,"잘못된 토큰 정보입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"만료된 토큰 정보입니다."),
     UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED,"지원하지 않는 토큰 방식입니다."),
